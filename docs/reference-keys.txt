@@ -31,5 +31,12 @@ publication-bias-and-p-hacking
 over--and-mis-interpretation-of-statistical-analyses
 from-identification-to-estimation
 identification-and-estimation
-systems-thinking-and-policy-translation
+estimation-of-causal-effects
+taxonomy-of-estimation-models
+applications-of-causal-inference-in-public-health-and-medical-research
+public-health-policy-evaluation
+environmental-exposure-studies
+health-disparities-research
+prevention-program-evaluation
 final-project-presentations
+final-project

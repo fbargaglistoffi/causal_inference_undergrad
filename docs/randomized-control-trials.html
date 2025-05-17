@@ -207,9 +207,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html"><i class="fa fa-check"></i><b>8</b> From Identification to Estimation</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#identification-and-estimation"><i class="fa fa-check"></i><b>8.1</b> Identification and Estimation</a></li>
+<li class="chapter" data-level="8.2" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#estimation-of-causal-effects"><i class="fa fa-check"></i><b>8.2</b> Estimation of causal effects</a></li>
+<li class="chapter" data-level="8.3" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#taxonomy-of-estimation-models"><i class="fa fa-check"></i><b>8.3</b> Taxonomy of estimation models</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="systems-thinking-and-policy-translation.html"><a href="systems-thinking-and-policy-translation.html"><i class="fa fa-check"></i><b>9</b> Systems Thinking and Policy Translation</a></li>
-<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a></li>
+<li class="chapter" data-level="9" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html"><i class="fa fa-check"></i><b>9</b> Applications of Causal Inference in Public Health and Medical Research</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#public-health-policy-evaluation"><i class="fa fa-check"></i><b>9.1</b> Public health policy evaluation</a></li>
+<li class="chapter" data-level="9.2" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#environmental-exposure-studies"><i class="fa fa-check"></i><b>9.2</b> Environmental exposure studies</a></li>
+<li class="chapter" data-level="9.3" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#health-disparities-research"><i class="fa fa-check"></i><b>9.3</b> Health disparities research</a></li>
+<li class="chapter" data-level="9.4" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#prevention-program-evaluation"><i class="fa fa-check"></i><b>9.4</b> Prevention program evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="final-project-presentations.html"><a href="final-project-presentations.html#final-project"><i class="fa fa-check"></i><b>10.1</b> Final Project</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://www.falcobargaglistoffi.com/" target="blank">Instructor: Falco J. Bargagli-Stoffi</a></li>
 </ul>
@@ -266,54 +277,54 @@ Selected DAG examples from public health studies (provided in class)</p>
 <p>Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.</p>
 <p>In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on patient outcomes. I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.</p>
 <p><strong>Simulated Baseline Data and Treatment Assignment</strong></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="randomized-control-trials.html#cb39-1" tabindex="-1"></a><span class="co"># pacman::p_load(&quot;dplyr&quot;, &quot;ggplot2&quot;)</span></span>
-<span id="cb39-2"><a href="randomized-control-trials.html#cb39-2" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="randomized-control-trials.html#cb39-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb39-4"><a href="randomized-control-trials.html#cb39-4" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="randomized-control-trials.html#cb39-5" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)</span>
-<span id="cb39-6"><a href="randomized-control-trials.html#cb39-6" tabindex="-1"></a></span>
-<span id="cb39-7"><a href="randomized-control-trials.html#cb39-7" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
-<span id="cb39-8"><a href="randomized-control-trials.html#cb39-8" tabindex="-1"></a></span>
-<span id="cb39-9"><a href="randomized-control-trials.html#cb39-9" tabindex="-1"></a>y_0 <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">-</span> <span class="fl">0.3</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">10</span>)</span>
-<span id="cb39-10"><a href="randomized-control-trials.html#cb39-10" tabindex="-1"></a></span>
-<span id="cb39-11"><a href="randomized-control-trials.html#cb39-11" tabindex="-1"></a>y_1 <span class="ot">&lt;-</span> y_0 <span class="sc">-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">5</span>)</span>
-<span id="cb39-12"><a href="randomized-control-trials.html#cb39-12" tabindex="-1"></a></span>
-<span id="cb39-13"><a href="randomized-control-trials.html#cb39-13" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(treatment <span class="sc">==</span> <span class="dv">1</span>, y_1, y_0)</span>
-<span id="cb39-14"><a href="randomized-control-trials.html#cb39-14" tabindex="-1"></a></span>
-<span id="cb39-15"><a href="randomized-control-trials.html#cb39-15" tabindex="-1"></a>rct_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb39-16"><a href="randomized-control-trials.html#cb39-16" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
-<span id="cb39-17"><a href="randomized-control-trials.html#cb39-17" tabindex="-1"></a>  <span class="at">treatment =</span> treatment,</span>
-<span id="cb39-18"><a href="randomized-control-trials.html#cb39-18" tabindex="-1"></a>  <span class="at">y =</span> y</span>
-<span id="cb39-19"><a href="randomized-control-trials.html#cb39-19" tabindex="-1"></a>)</span>
-<span id="cb39-20"><a href="randomized-control-trials.html#cb39-20" tabindex="-1"></a></span>
-<span id="cb39-21"><a href="randomized-control-trials.html#cb39-21" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
-<pre><code>##        age treatment         y
-## 1 63.56339         0 109.05249
-## 2 43.33933         1  75.11519
-## 3 56.13526         0  77.75397
-## 4 54.65999         1  66.55734
-## 5 52.73924         0  85.38610
-## 6 42.51490         0  90.67985</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="randomized-control-trials.html#cb19-1" tabindex="-1"></a><span class="co"># pacman::p_load(&quot;dplyr&quot;, &quot;ggplot2&quot;)</span></span>
+<span id="cb19-2"><a href="randomized-control-trials.html#cb19-2" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="randomized-control-trials.html#cb19-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb19-4"><a href="randomized-control-trials.html#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="randomized-control-trials.html#cb19-5" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)</span>
+<span id="cb19-6"><a href="randomized-control-trials.html#cb19-6" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="randomized-control-trials.html#cb19-7" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb19-8"><a href="randomized-control-trials.html#cb19-8" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="randomized-control-trials.html#cb19-9" tabindex="-1"></a>y_0 <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">-</span> <span class="fl">0.3</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb19-10"><a href="randomized-control-trials.html#cb19-10" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="randomized-control-trials.html#cb19-11" tabindex="-1"></a>y_1 <span class="ot">&lt;-</span> y_0 <span class="sc">-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb19-12"><a href="randomized-control-trials.html#cb19-12" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="randomized-control-trials.html#cb19-13" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(treatment <span class="sc">==</span> <span class="dv">1</span>, y_1, y_0)</span>
+<span id="cb19-14"><a href="randomized-control-trials.html#cb19-14" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="randomized-control-trials.html#cb19-15" tabindex="-1"></a>rct_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb19-16"><a href="randomized-control-trials.html#cb19-16" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
+<span id="cb19-17"><a href="randomized-control-trials.html#cb19-17" tabindex="-1"></a>  <span class="at">treatment =</span> treatment,</span>
+<span id="cb19-18"><a href="randomized-control-trials.html#cb19-18" tabindex="-1"></a>  <span class="at">y =</span> y</span>
+<span id="cb19-19"><a href="randomized-control-trials.html#cb19-19" tabindex="-1"></a>)</span>
+<span id="cb19-20"><a href="randomized-control-trials.html#cb19-20" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="randomized-control-trials.html#cb19-21" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
+<pre><code>##        age treatment        y
+## 1 70.65289         0 70.64327
+## 2 60.26631         0 84.00313
+## 3 56.38332         1 62.38144
+## 4 57.79955         1 55.04975
+## 5 36.34660         0 84.09071
+## 6 40.80364         1 49.72174</code></pre>
 <p><strong>Estimated the Average Treatment Effect (ATE)</strong></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="randomized-control-trials.html#cb41-1" tabindex="-1"></a>ate_estimate <span class="ot">&lt;-</span> rct_data <span class="sc">|&gt;</span></span>
-<span id="cb41-2"><a href="randomized-control-trials.html#cb41-2" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
-<span id="cb41-3"><a href="randomized-control-trials.html#cb41-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_outcome =</span> <span class="fu">mean</span>(y)) <span class="sc">|&gt;</span></span>
-<span id="cb41-4"><a href="randomized-control-trials.html#cb41-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ATE =</span> <span class="fu">diff</span>(mean_outcome)) <span class="sc">|&gt;</span></span>
-<span id="cb41-5"><a href="randomized-control-trials.html#cb41-5" tabindex="-1"></a>  <span class="fu">pull</span>(ATE)</span>
-<span id="cb41-6"><a href="randomized-control-trials.html#cb41-6" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="randomized-control-trials.html#cb41-7" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Estimated ATE: &quot;</span>, <span class="fu">round</span>(ate_estimate, <span class="dv">2</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;Estimated ATE:  -9.38&quot;</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="randomized-control-trials.html#cb21-1" tabindex="-1"></a>ate_estimate <span class="ot">&lt;-</span> rct_data <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="randomized-control-trials.html#cb21-2" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="randomized-control-trials.html#cb21-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_outcome =</span> <span class="fu">mean</span>(y)) <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href="randomized-control-trials.html#cb21-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ATE =</span> <span class="fu">diff</span>(mean_outcome)) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="randomized-control-trials.html#cb21-5" tabindex="-1"></a>  <span class="fu">pull</span>(ATE)</span>
+<span id="cb21-6"><a href="randomized-control-trials.html#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="randomized-control-trials.html#cb21-7" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Estimated ATE: &quot;</span>, <span class="fu">round</span>(ate_estimate, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;Estimated ATE:  -10.17&quot;</code></pre>
 <p><strong>Visualization of the Outcome Distributions</strong></p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="randomized-control-trials.html#cb43-1" tabindex="-1"></a><span class="fu">ggplot</span>(rct_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> y, <span class="at">fill =</span> <span class="fu">as.factor</span>(treatment))) <span class="sc">+</span> </span>
-<span id="cb43-2"><a href="randomized-control-trials.html#cb43-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
-<span id="cb43-3"><a href="randomized-control-trials.html#cb43-3" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb43-4"><a href="randomized-control-trials.html#cb43-4" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribution of Outcomes by Treatment Group&quot;</span>, </span>
-<span id="cb43-5"><a href="randomized-control-trials.html#cb43-5" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Treatment: Control (0) vs Treated (1)&quot;</span>,</span>
-<span id="cb43-6"><a href="randomized-control-trials.html#cb43-6" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Outcome&quot;</span></span>
-<span id="cb43-7"><a href="randomized-control-trials.html#cb43-7" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb43-8"><a href="randomized-control-trials.html#cb43-8" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb43-9"><a href="randomized-control-trials.html#cb43-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="randomized-control-trials.html#cb23-1" tabindex="-1"></a><span class="fu">ggplot</span>(rct_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> y, <span class="at">fill =</span> <span class="fu">as.factor</span>(treatment))) <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="randomized-control-trials.html#cb23-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb23-3"><a href="randomized-control-trials.html#cb23-3" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb23-4"><a href="randomized-control-trials.html#cb23-4" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribution of Outcomes by Treatment Group&quot;</span>, </span>
+<span id="cb23-5"><a href="randomized-control-trials.html#cb23-5" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Treatment: Control (0) vs Treated (1)&quot;</span>,</span>
+<span id="cb23-6"><a href="randomized-control-trials.html#cb23-6" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Outcome&quot;</span></span>
+<span id="cb23-7"><a href="randomized-control-trials.html#cb23-7" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb23-8"><a href="randomized-control-trials.html#cb23-8" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="randomized-control-trials.html#cb23-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="basic-experimental-design-principles" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Basic Experimental Design Principles<a href="randomized-control-trials.html#basic-experimental-design-principles" class="anchor-section" aria-label="Anchor link to header"></a></h2>

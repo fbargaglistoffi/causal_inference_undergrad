@@ -207,9 +207,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html"><i class="fa fa-check"></i><b>8</b> From Identification to Estimation</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#identification-and-estimation"><i class="fa fa-check"></i><b>8.1</b> Identification and Estimation</a></li>
+<li class="chapter" data-level="8.2" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#estimation-of-causal-effects"><i class="fa fa-check"></i><b>8.2</b> Estimation of causal effects</a></li>
+<li class="chapter" data-level="8.3" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#taxonomy-of-estimation-models"><i class="fa fa-check"></i><b>8.3</b> Taxonomy of estimation models</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="systems-thinking-and-policy-translation.html"><a href="systems-thinking-and-policy-translation.html"><i class="fa fa-check"></i><b>9</b> Systems Thinking and Policy Translation</a></li>
-<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a></li>
+<li class="chapter" data-level="9" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html"><i class="fa fa-check"></i><b>9</b> Applications of Causal Inference in Public Health and Medical Research</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#public-health-policy-evaluation"><i class="fa fa-check"></i><b>9.1</b> Public health policy evaluation</a></li>
+<li class="chapter" data-level="9.2" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#environmental-exposure-studies"><i class="fa fa-check"></i><b>9.2</b> Environmental exposure studies</a></li>
+<li class="chapter" data-level="9.3" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#health-disparities-research"><i class="fa fa-check"></i><b>9.3</b> Health disparities research</a></li>
+<li class="chapter" data-level="9.4" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#prevention-program-evaluation"><i class="fa fa-check"></i><b>9.4</b> Prevention program evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="final-project-presentations.html"><a href="final-project-presentations.html#final-project"><i class="fa fa-check"></i><b>10.1</b> Final Project</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://www.falcobargaglistoffi.com/" target="blank">Instructor: Falco J. Bargagli-Stoffi</a></li>
 </ul>
@@ -263,45 +274,45 @@ Additional DAG exercises provided in class</p>
 <p>Confounding is a major challenge in public health and medical research because it can create misleading associations between exposures and outcomes. A confounder is a third variable that is associated with both the exposure and the outcome, potentially distorting the true causal relationship. For example, if we observe that people who carry lighters tend to have higher rates of lung cancer, we might wrongly conclude that carrying a lighter causes cancer. In reality, smoking is the confounding variable: smokers are more likely to carry lighters and also more likely to develop lung cancer. Without properly adjusting for confounders, studies risk producing biased estimates, leading to incorrect conclusions about risk factors, treatments, or interventions.</p>
 <p>Addressing confounding is crucial but not always straightforward. Methods such as stratification, multivariable regression, propensity score matching, and randomized controlled trials (RCTs) are commonly used to try to adjust for or eliminate confounding effects. However, identifying all relevant confounders can be difficult, especially when dealing with observational data where randomization is not possible. Unmeasured or unknown confounders remain a constant threat to validity. Therefore, careful study design, domain knowledge, and sensitivity analyses are essential to minimize the impact of confounding and ensure more reliable and actionable public health research findings.</p>
 <p><strong>Example Setup</strong> Let’s say we want to study the effect of Exercise (X) on Heart Health (Y), but there’s a Genetic Factor (Z) that causes both Exercise and Heart Health. In this case, Z is a confounder, and we should adjust for it.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="observational-studies.html#cb44-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb44-2"><a href="observational-studies.html#cb44-2" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="observational-studies.html#cb44-3" tabindex="-1"></a>genetics <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb44-4"><a href="observational-studies.html#cb44-4" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="observational-studies.html#cb44-5" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="fl">0.6</span> <span class="sc">*</span> genetics <span class="sc">+</span> <span class="fu">rnorm</span>(n) </span>
-<span id="cb44-6"><a href="observational-studies.html#cb44-6" tabindex="-1"></a></span>
-<span id="cb44-7"><a href="observational-studies.html#cb44-7" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="sc">*</span> exercise <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> genetics <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb44-8"><a href="observational-studies.html#cb44-8" tabindex="-1"></a></span>
-<span id="cb44-9"><a href="observational-studies.html#cb44-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(heart_health, exercise, genetics)</span>
-<span id="cb44-10"><a href="observational-studies.html#cb44-10" tabindex="-1"></a></span>
-<span id="cb44-11"><a href="observational-studies.html#cb44-11" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise, <span class="at">data =</span> df)</span>
-<span id="cb44-12"><a href="observational-studies.html#cb44-12" tabindex="-1"></a></span>
-<span id="cb44-13"><a href="observational-studies.html#cb44-13" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
-<pre><code>##   Estimate Std. Error    t value   Pr(&gt;|t|) 
-##  1.0483173  0.0213858 49.0193083  0.0000000</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="observational-studies.html#cb46-1" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> genetics, <span class="at">data =</span> df)</span>
-<span id="cb46-2"><a href="observational-studies.html#cb46-2" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="observational-studies.html#cb46-3" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="observational-studies.html#cb24-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb24-2"><a href="observational-studies.html#cb24-2" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="observational-studies.html#cb24-3" tabindex="-1"></a>genetics <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb24-4"><a href="observational-studies.html#cb24-4" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="observational-studies.html#cb24-5" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="fl">0.6</span> <span class="sc">*</span> genetics <span class="sc">+</span> <span class="fu">rnorm</span>(n) </span>
+<span id="cb24-6"><a href="observational-studies.html#cb24-6" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="observational-studies.html#cb24-7" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="sc">*</span> exercise <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> genetics <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb24-8"><a href="observational-studies.html#cb24-8" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="observational-studies.html#cb24-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(heart_health, exercise, genetics)</span>
+<span id="cb24-10"><a href="observational-studies.html#cb24-10" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="observational-studies.html#cb24-11" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise, <span class="at">data =</span> df)</span>
+<span id="cb24-12"><a href="observational-studies.html#cb24-12" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="observational-studies.html#cb24-13" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
+<pre><code>##    Estimate  Std. Error     t value    Pr(&gt;|t|) 
+##  0.99441785  0.02092428 47.52458309  0.00000000</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="observational-studies.html#cb26-1" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> genetics, <span class="at">data =</span> df)</span>
+<span id="cb26-2"><a href="observational-studies.html#cb26-2" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="observational-studies.html#cb26-3" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##      Estimate    Std. Error       t value      Pr(&gt;|t|) 
-##  8.181965e-01  2.309963e-02  3.542033e+01 1.139372e-213</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="observational-studies.html#cb48-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb48-2"><a href="observational-studies.html#cb48-2" tabindex="-1"></a></span>
-<span id="cb48-3"><a href="observational-studies.html#cb48-3" tabindex="-1"></a>naive_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb48-4"><a href="observational-studies.html#cb48-4" tabindex="-1"></a></span>
-<span id="cb48-5"><a href="observational-studies.html#cb48-5" tabindex="-1"></a>adjusted_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb48-6"><a href="observational-studies.html#cb48-6" tabindex="-1"></a></span>
-<span id="cb48-7"><a href="observational-studies.html#cb48-7" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb48-8"><a href="observational-studies.html#cb48-8" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">&quot;Naive&quot;</span>, <span class="st">&quot;Adjusted&quot;</span>),</span>
-<span id="cb48-9"><a href="observational-studies.html#cb48-9" tabindex="-1"></a>  <span class="at">Estimate =</span> <span class="fu">c</span>(naive_estimate, adjusted_estimate)</span>
-<span id="cb48-10"><a href="observational-studies.html#cb48-10" tabindex="-1"></a>)</span>
-<span id="cb48-11"><a href="observational-studies.html#cb48-11" tabindex="-1"></a></span>
-<span id="cb48-12"><a href="observational-studies.html#cb48-12" tabindex="-1"></a><span class="fu">ggplot</span>(estimates, <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> Estimate, <span class="at">fill =</span> Model)) <span class="sc">+</span></span>
-<span id="cb48-13"><a href="observational-studies.html#cb48-13" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb48-14"><a href="observational-studies.html#cb48-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Comparison of Naive vs Adjusted Estimates&quot;</span>,</span>
-<span id="cb48-15"><a href="observational-studies.html#cb48-15" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Effect of Exercise&quot;</span>,</span>
-<span id="cb48-16"><a href="observational-studies.html#cb48-16" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb48-17"><a href="observational-studies.html#cb48-17" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb48-18"><a href="observational-studies.html#cb48-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+##  7.850907e-01  2.257521e-02  3.477667e+01 1.347795e-207</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="observational-studies.html#cb28-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
+<span id="cb28-2"><a href="observational-studies.html#cb28-2" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="observational-studies.html#cb28-3" tabindex="-1"></a>naive_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb28-4"><a href="observational-studies.html#cb28-4" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="observational-studies.html#cb28-5" tabindex="-1"></a>adjusted_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb28-6"><a href="observational-studies.html#cb28-6" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="observational-studies.html#cb28-7" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-8"><a href="observational-studies.html#cb28-8" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">&quot;Naive&quot;</span>, <span class="st">&quot;Adjusted&quot;</span>),</span>
+<span id="cb28-9"><a href="observational-studies.html#cb28-9" tabindex="-1"></a>  <span class="at">Estimate =</span> <span class="fu">c</span>(naive_estimate, adjusted_estimate)</span>
+<span id="cb28-10"><a href="observational-studies.html#cb28-10" tabindex="-1"></a>)</span>
+<span id="cb28-11"><a href="observational-studies.html#cb28-11" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="observational-studies.html#cb28-12" tabindex="-1"></a><span class="fu">ggplot</span>(estimates, <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> Estimate, <span class="at">fill =</span> Model)) <span class="sc">+</span></span>
+<span id="cb28-13"><a href="observational-studies.html#cb28-13" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb28-14"><a href="observational-studies.html#cb28-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Comparison of Naive vs Adjusted Estimates&quot;</span>,</span>
+<span id="cb28-15"><a href="observational-studies.html#cb28-15" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Effect of Exercise&quot;</span>,</span>
+<span id="cb28-16"><a href="observational-studies.html#cb28-16" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-17"><a href="observational-studies.html#cb28-17" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb28-18"><a href="observational-studies.html#cb28-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>In this simulation, we model a situation where Genetics (Z) is a confounder that influences both Exercise (X) and Heart Health (Y). The naive model, which regresses Heart Health on Exercise without adjusting for Genetics, gives a biased estimate of the effect of Exercise. This happens because part of the observed association is actually due to Genetics, not Exercise itself. When we adjust for Genetics in the second model, the estimate of Exercise’s effect becomes more accurate, isolating its true relationship with Heart Health. This example highlights how failing to account for confounding can lead researchers to overstate or misinterpret causal effects in public health and medical studies.</p>
 </div>
 <div id="exchangeability-positivity-and-consistency" class="section level2 hasAnchor" number="3.2">

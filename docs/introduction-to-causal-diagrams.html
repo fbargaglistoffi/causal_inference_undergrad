@@ -207,9 +207,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html"><i class="fa fa-check"></i><b>8</b> From Identification to Estimation</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#identification-and-estimation"><i class="fa fa-check"></i><b>8.1</b> Identification and Estimation</a></li>
+<li class="chapter" data-level="8.2" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#estimation-of-causal-effects"><i class="fa fa-check"></i><b>8.2</b> Estimation of causal effects</a></li>
+<li class="chapter" data-level="8.3" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#taxonomy-of-estimation-models"><i class="fa fa-check"></i><b>8.3</b> Taxonomy of estimation models</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="systems-thinking-and-policy-translation.html"><a href="systems-thinking-and-policy-translation.html"><i class="fa fa-check"></i><b>9</b> Systems Thinking and Policy Translation</a></li>
-<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a></li>
+<li class="chapter" data-level="9" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html"><i class="fa fa-check"></i><b>9</b> Applications of Causal Inference in Public Health and Medical Research</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#public-health-policy-evaluation"><i class="fa fa-check"></i><b>9.1</b> Public health policy evaluation</a></li>
+<li class="chapter" data-level="9.2" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#environmental-exposure-studies"><i class="fa fa-check"></i><b>9.2</b> Environmental exposure studies</a></li>
+<li class="chapter" data-level="9.3" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#health-disparities-research"><i class="fa fa-check"></i><b>9.3</b> Health disparities research</a></li>
+<li class="chapter" data-level="9.4" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#prevention-program-evaluation"><i class="fa fa-check"></i><b>9.4</b> Prevention program evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="final-project-presentations.html"><a href="final-project-presentations.html#final-project"><i class="fa fa-check"></i><b>10.1</b> Final Project</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://www.falcobargaglistoffi.com/" target="blank">Instructor: Falco J. Bargagli-Stoffi</a></li>
 </ul>
@@ -259,29 +270,29 @@ Examples from public health studies involving confounding adjustment</p>
 <h2><span class="header-section-number">5.1</span> Basic principles of directed acyclic graphs (DAGs)<a href="introduction-to-causal-diagrams.html#basic-principles-of-directed-acyclic-graphs-dags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Directed acyclic graphs (DAGs) are powerful tools in causal inference that visually represent assumptions about how variables are related. In a DAG, nodes represent variables, and arrows (directed edges) represent causal influences from one variable to another. DAGs are acyclic, meaning you cannot return to the same variable by following a sequence of arrows — this prevents feedback loops. The key strength of DAGs lies in their ability to clarify causal pathways, distinguish between confounding and mediation, and identify the variables we need to control for to estimate causal effects accurately. By encoding assumptions explicitly, DAGs help researchers determine whether observed associations reflect true causal relationships or are biased by omitted variables or incorrect conditioning.</p>
 <p>In our simulation, we use a DAG to represent a common public health structure involving diet, exercise, and heart health. Diet is a confounder: it directly influences both how much people exercise and their overall heart health. If we ignore diet when estimating the effect of exercise on heart health, we risk attributing diet’s effect to exercise — leading to confounding bias. The DAG for this scenario includes arrows from diet to both exercise and heart health, and from exercise to heart health. We also introduce selection bias by conditioning on individuals with moderate-to-high exercise levels. In DAG terms, this is equivalent to conditioning on a collider (exercise), which can open a non-causal backdoor path and bias our results. Modeling this setup with a DAG allows us to see clearly that to obtain an unbiased estimate of the causal effect of exercise, we must adjust for diet and avoid conditioning on colliders like selection into the sample.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="introduction-to-causal-diagrams.html#cb55-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb55-2"><a href="introduction-to-causal-diagrams.html#cb55-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
-<span id="cb55-3"><a href="introduction-to-causal-diagrams.html#cb55-3" tabindex="-1"></a><span class="co"># library(ggdag)</span></span>
-<span id="cb55-4"><a href="introduction-to-causal-diagrams.html#cb55-4" tabindex="-1"></a><span class="co"># library(dagitty)</span></span>
-<span id="cb55-5"><a href="introduction-to-causal-diagrams.html#cb55-5" tabindex="-1"></a></span>
-<span id="cb55-6"><a href="introduction-to-causal-diagrams.html#cb55-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb55-7"><a href="introduction-to-causal-diagrams.html#cb55-7" tabindex="-1"></a></span>
-<span id="cb55-8"><a href="introduction-to-causal-diagrams.html#cb55-8" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb55-9"><a href="introduction-to-causal-diagrams.html#cb55-9" tabindex="-1"></a></span>
-<span id="cb55-10"><a href="introduction-to-causal-diagrams.html#cb55-10" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb55-11"><a href="introduction-to-causal-diagrams.html#cb55-11" tabindex="-1"></a></span>
-<span id="cb55-12"><a href="introduction-to-causal-diagrams.html#cb55-12" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> exercise <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb55-13"><a href="introduction-to-causal-diagrams.html#cb55-13" tabindex="-1"></a></span>
-<span id="cb55-14"><a href="introduction-to-causal-diagrams.html#cb55-14" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;dag {</span></span>
-<span id="cb55-15"><a href="introduction-to-causal-diagrams.html#cb55-15" tabindex="-1"></a><span class="st">  diet -&gt; exercise</span></span>
-<span id="cb55-16"><a href="introduction-to-causal-diagrams.html#cb55-16" tabindex="-1"></a><span class="st">  diet -&gt; heart_health</span></span>
-<span id="cb55-17"><a href="introduction-to-causal-diagrams.html#cb55-17" tabindex="-1"></a><span class="st">  exercise -&gt; heart_health</span></span>
-<span id="cb55-18"><a href="introduction-to-causal-diagrams.html#cb55-18" tabindex="-1"></a><span class="st">}&quot;</span>)</span>
-<span id="cb55-19"><a href="introduction-to-causal-diagrams.html#cb55-19" tabindex="-1"></a></span>
-<span id="cb55-20"><a href="introduction-to-causal-diagrams.html#cb55-20" tabindex="-1"></a><span class="fu">plot</span>(dag)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="introduction-to-causal-diagrams.html#cb35-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
+<span id="cb35-2"><a href="introduction-to-causal-diagrams.html#cb35-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
+<span id="cb35-3"><a href="introduction-to-causal-diagrams.html#cb35-3" tabindex="-1"></a><span class="co"># library(ggdag)</span></span>
+<span id="cb35-4"><a href="introduction-to-causal-diagrams.html#cb35-4" tabindex="-1"></a><span class="co"># library(dagitty)</span></span>
+<span id="cb35-5"><a href="introduction-to-causal-diagrams.html#cb35-5" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="introduction-to-causal-diagrams.html#cb35-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb35-7"><a href="introduction-to-causal-diagrams.html#cb35-7" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="introduction-to-causal-diagrams.html#cb35-8" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb35-9"><a href="introduction-to-causal-diagrams.html#cb35-9" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="introduction-to-causal-diagrams.html#cb35-10" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb35-11"><a href="introduction-to-causal-diagrams.html#cb35-11" tabindex="-1"></a></span>
+<span id="cb35-12"><a href="introduction-to-causal-diagrams.html#cb35-12" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> exercise <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb35-13"><a href="introduction-to-causal-diagrams.html#cb35-13" tabindex="-1"></a></span>
+<span id="cb35-14"><a href="introduction-to-causal-diagrams.html#cb35-14" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;dag {</span></span>
+<span id="cb35-15"><a href="introduction-to-causal-diagrams.html#cb35-15" tabindex="-1"></a><span class="st">  diet -&gt; exercise</span></span>
+<span id="cb35-16"><a href="introduction-to-causal-diagrams.html#cb35-16" tabindex="-1"></a><span class="st">  diet -&gt; heart_health</span></span>
+<span id="cb35-17"><a href="introduction-to-causal-diagrams.html#cb35-17" tabindex="-1"></a><span class="st">  exercise -&gt; heart_health</span></span>
+<span id="cb35-18"><a href="introduction-to-causal-diagrams.html#cb35-18" tabindex="-1"></a><span class="st">}&quot;</span>)</span>
+<span id="cb35-19"><a href="introduction-to-causal-diagrams.html#cb35-19" tabindex="-1"></a></span>
+<span id="cb35-20"><a href="introduction-to-causal-diagrams.html#cb35-20" tabindex="-1"></a><span class="fu">plot</span>(dag)</span></code></pre></div>
 <pre><code>## Plot coordinates for graph not supplied! Generating coordinates, see ?coordinates for how to set your own.</code></pre>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="introduction-to-causal-diagrams.html#cb57-1" tabindex="-1"></a><span class="fu">adjustmentSets</span>(dag, <span class="at">exposure =</span> <span class="st">&quot;exercise&quot;</span>, <span class="at">outcome =</span> <span class="st">&quot;heart_health&quot;</span>)</span></code></pre></div>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="introduction-to-causal-diagrams.html#cb37-1" tabindex="-1"></a><span class="fu">adjustmentSets</span>(dag, <span class="at">exposure =</span> <span class="st">&quot;exercise&quot;</span>, <span class="at">outcome =</span> <span class="st">&quot;heart_health&quot;</span>)</span></code></pre></div>
 <pre><code>## { diet }</code></pre>
 </div>
 <div id="common-causal-structures-in-public-health" class="section level2 hasAnchor" number="5.2">
@@ -293,30 +304,30 @@ Examples from public health studies involving confounding adjustment</p>
 <h2><span class="header-section-number">5.3</span> Using DAGs to introduce and understand selection bias<a href="introduction-to-causal-diagrams.html#using-dags-to-introduce-and-understand-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Selection bias</strong> occurs when the group of individuals included in a study is systematically different from the target population in a way that distorts the relationship between exposure and outcome. This can happen when inclusion into the study depends on variables that are related to either the exposure, the outcome, or both. Selection bias becomes especially problematic when researchers condition on a collider — a variable that is influenced by two or more variables in the causal model — because doing so can open non-causal paths and create spurious associations. In practical terms, this means that even if there is no causal relationship between an exposure and an outcome, conditioning on a collider can make it look like there is one, or it can distort the strength of a real effect.</p>
 <p>In our simulation, we introduced selection bias by only including individuals with moderate to high diet scores. Since diet is a confounder that affects both exercise and heart health, restricting our analysis to individuals with good diets creates a biased sample — one that no longer reflects the full population variation in diet. This conditioning on diet essentially blocks our ability to observe the full confounding relationship and can make the estimated effect of exercise on heart health appear stronger, weaker, or even reverse. By simulating this, we demonstrate how selection bias — even when introduced through something seemingly harmless like focusing on healthier individuals — can lead to incorrect causal conclusions if not properly accounted for.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="introduction-to-causal-diagrams.html#cb59-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(diet, exercise, heart_health)</span>
-<span id="cb59-2"><a href="introduction-to-causal-diagrams.html#cb59-2" tabindex="-1"></a></span>
-<span id="cb59-3"><a href="introduction-to-causal-diagrams.html#cb59-3" tabindex="-1"></a>df_selected <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(diet <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb59-4"><a href="introduction-to-causal-diagrams.html#cb59-4" tabindex="-1"></a></span>
-<span id="cb59-5"><a href="introduction-to-causal-diagrams.html#cb59-5" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise, <span class="at">data =</span> df_selected)</span>
-<span id="cb59-6"><a href="introduction-to-causal-diagrams.html#cb59-6" tabindex="-1"></a></span>
-<span id="cb59-7"><a href="introduction-to-causal-diagrams.html#cb59-7" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> diet, <span class="at">data =</span> df_selected)</span>
-<span id="cb59-8"><a href="introduction-to-causal-diagrams.html#cb59-8" tabindex="-1"></a></span>
-<span id="cb59-9"><a href="introduction-to-causal-diagrams.html#cb59-9" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="introduction-to-causal-diagrams.html#cb39-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(diet, exercise, heart_health)</span>
+<span id="cb39-2"><a href="introduction-to-causal-diagrams.html#cb39-2" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="introduction-to-causal-diagrams.html#cb39-3" tabindex="-1"></a>df_selected <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(diet <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb39-4"><a href="introduction-to-causal-diagrams.html#cb39-4" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="introduction-to-causal-diagrams.html#cb39-5" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise, <span class="at">data =</span> df_selected)</span>
+<span id="cb39-6"><a href="introduction-to-causal-diagrams.html#cb39-6" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="introduction-to-causal-diagrams.html#cb39-7" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> diet, <span class="at">data =</span> df_selected)</span>
+<span id="cb39-8"><a href="introduction-to-causal-diagrams.html#cb39-8" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="introduction-to-causal-diagrams.html#cb39-9" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##     Estimate   Std. Error      t value     Pr(&gt;|t|) 
-##   4.18217932   0.03735574 111.95548022   0.00000000</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="introduction-to-causal-diagrams.html#cb61-1" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
+##   4.15722332   0.03730355 111.44309898   0.00000000</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="introduction-to-causal-diagrams.html#cb41-1" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##    Estimate  Std. Error     t value    Pr(&gt;|t|) 
-##  2.95159462  0.03238224 91.14855171  0.00000000</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="introduction-to-causal-diagrams.html#cb63-1" tabindex="-1"></a>selection_bias_dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;dag {</span></span>
-<span id="cb63-2"><a href="introduction-to-causal-diagrams.html#cb63-2" tabindex="-1"></a><span class="st">  diet -&gt; exercise</span></span>
-<span id="cb63-3"><a href="introduction-to-causal-diagrams.html#cb63-3" tabindex="-1"></a><span class="st">  diet -&gt; heart_health</span></span>
-<span id="cb63-4"><a href="introduction-to-causal-diagrams.html#cb63-4" tabindex="-1"></a><span class="st">  exercise -&gt; heart_health</span></span>
-<span id="cb63-5"><a href="introduction-to-causal-diagrams.html#cb63-5" tabindex="-1"></a><span class="st">  diet -&gt; selection</span></span>
-<span id="cb63-6"><a href="introduction-to-causal-diagrams.html#cb63-6" tabindex="-1"></a><span class="st">}&quot;</span>)</span>
-<span id="cb63-7"><a href="introduction-to-causal-diagrams.html#cb63-7" tabindex="-1"></a></span>
-<span id="cb63-8"><a href="introduction-to-causal-diagrams.html#cb63-8" tabindex="-1"></a><span class="fu">plot</span>(selection_bias_dag)</span></code></pre></div>
+##  2.99712877  0.03051727 98.21091949  0.00000000</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="introduction-to-causal-diagrams.html#cb43-1" tabindex="-1"></a>selection_bias_dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;dag {</span></span>
+<span id="cb43-2"><a href="introduction-to-causal-diagrams.html#cb43-2" tabindex="-1"></a><span class="st">  diet -&gt; exercise</span></span>
+<span id="cb43-3"><a href="introduction-to-causal-diagrams.html#cb43-3" tabindex="-1"></a><span class="st">  diet -&gt; heart_health</span></span>
+<span id="cb43-4"><a href="introduction-to-causal-diagrams.html#cb43-4" tabindex="-1"></a><span class="st">  exercise -&gt; heart_health</span></span>
+<span id="cb43-5"><a href="introduction-to-causal-diagrams.html#cb43-5" tabindex="-1"></a><span class="st">  diet -&gt; selection</span></span>
+<span id="cb43-6"><a href="introduction-to-causal-diagrams.html#cb43-6" tabindex="-1"></a><span class="st">}&quot;</span>)</span>
+<span id="cb43-7"><a href="introduction-to-causal-diagrams.html#cb43-7" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="introduction-to-causal-diagrams.html#cb43-8" tabindex="-1"></a><span class="fu">plot</span>(selection_bias_dag)</span></code></pre></div>
 <pre><code>## Plot coordinates for graph not supplied! Generating coordinates, see ?coordinates for how to set your own.</code></pre>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 
 </div>
 </div>

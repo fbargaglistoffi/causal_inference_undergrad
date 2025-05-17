@@ -207,9 +207,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html"><i class="fa fa-check"></i><b>8</b> From Identification to Estimation</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#identification-and-estimation"><i class="fa fa-check"></i><b>8.1</b> Identification and Estimation</a></li>
+<li class="chapter" data-level="8.2" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#estimation-of-causal-effects"><i class="fa fa-check"></i><b>8.2</b> Estimation of causal effects</a></li>
+<li class="chapter" data-level="8.3" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#taxonomy-of-estimation-models"><i class="fa fa-check"></i><b>8.3</b> Taxonomy of estimation models</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="systems-thinking-and-policy-translation.html"><a href="systems-thinking-and-policy-translation.html"><i class="fa fa-check"></i><b>9</b> Systems Thinking and Policy Translation</a></li>
-<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a></li>
+<li class="chapter" data-level="9" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html"><i class="fa fa-check"></i><b>9</b> Applications of Causal Inference in Public Health and Medical Research</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#public-health-policy-evaluation"><i class="fa fa-check"></i><b>9.1</b> Public health policy evaluation</a></li>
+<li class="chapter" data-level="9.2" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#environmental-exposure-studies"><i class="fa fa-check"></i><b>9.2</b> Environmental exposure studies</a></li>
+<li class="chapter" data-level="9.3" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#health-disparities-research"><i class="fa fa-check"></i><b>9.3</b> Health disparities research</a></li>
+<li class="chapter" data-level="9.4" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#prevention-program-evaluation"><i class="fa fa-check"></i><b>9.4</b> Prevention program evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="final-project-presentations.html"><a href="final-project-presentations.html#final-project"><i class="fa fa-check"></i><b>10.1</b> Final Project</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://www.falcobargaglistoffi.com/" target="blank">Instructor: Falco J. Bargagli-Stoffi</a></li>
 </ul>
@@ -263,79 +274,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Adjustment methods typically aim to control for confounding, but they can also be used to detect effect modification when interaction terms are included. When effect modification is present, a single summary effect estimate (like an overall average) can be misleading. Instead, researchers often report subgroup-specific effects. Careful modeling and interpretation are necessary to distinguish between true effect modification and residual confounding.</p>
 <p>Simulation to Demonstrate Effect Modification</p>
 <p>We simulate a case where exercise improves heart health, but the effect of exercise is stronger for people with a good diet. That is, diet modifies the effect of exercise on heart health.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb49-2"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-2" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-3" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb49-4"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-4" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-5" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb49-6"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-6" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-7" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> diet) <span class="sc">*</span> exercise <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb49-8"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-8" tabindex="-1"></a></span>
-<span id="cb49-9"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(heart_health, exercise, diet)</span>
-<span id="cb49-10"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-10" tabindex="-1"></a></span>
-<span id="cb49-11"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-11" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> diet, <span class="at">data =</span> df)</span>
-<span id="cb49-12"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-12" tabindex="-1"></a></span>
-<span id="cb49-13"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-13" tabindex="-1"></a>interaction_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">*</span> diet, <span class="at">data =</span> df)</span>
-<span id="cb49-14"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-14" tabindex="-1"></a></span>
-<span id="cb49-15"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb49-15" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb29-2"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-2" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-3" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb29-4"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-4" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-5" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb29-6"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-6" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-7" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> diet) <span class="sc">*</span> exercise <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb29-8"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-8" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(heart_health, exercise, diet)</span>
+<span id="cb29-10"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-10" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-11" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> diet, <span class="at">data =</span> df)</span>
+<span id="cb29-12"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-12" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-13" tabindex="-1"></a>interaction_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">*</span> diet, <span class="at">data =</span> df)</span>
+<span id="cb29-14"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-14" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb29-15" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = heart_health ~ exercise + diet, data = df)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -10.6400  -1.1282  -0.0554   1.1150  12.9062 
+## -11.8244  -1.1650  -0.0015   1.1519  11.5030 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -0.05420    0.05136  -1.055    0.291    
-## exercise     0.95675    0.05176  18.483   &lt;2e-16 ***
-## diet         3.00926    0.05149  58.447   &lt;2e-16 ***
+## (Intercept) 0.009354   0.049750   0.188    0.851    
+## exercise    0.949876   0.049810  19.070   &lt;2e-16 ***
+## diet        3.101236   0.050330  61.618   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 2.297 on 1997 degrees of freedom
-## Multiple R-squared:  0.6505, Adjusted R-squared:  0.6501 
-## F-statistic:  1858 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb51-1" tabindex="-1"></a><span class="fu">summary</span>(interaction_model)</span></code></pre></div>
+## Residual standard error: 2.224 on 1997 degrees of freedom
+## Multiple R-squared:  0.6756, Adjusted R-squared:  0.6753 
+## F-statistic:  2079 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb31-1" tabindex="-1"></a><span class="fu">summary</span>(interaction_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = heart_health ~ exercise * diet, data = df)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -2.8464 -0.6797 -0.0190  0.6684  3.1513 
+## -2.9613 -0.6737 -0.0174  0.6415  3.5736 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -0.01440    0.02202  -0.654    0.513    
-## exercise       0.98423    0.02219  44.348   &lt;2e-16 ***
-## diet           2.97111    0.02208 134.586   &lt;2e-16 ***
-## exercise:diet  2.04730    0.02174  94.182   &lt;2e-16 ***
+## (Intercept)   0.008269   0.022119   0.374    0.709    
+## exercise      1.024655   0.022161  46.237   &lt;2e-16 ***
+## diet          3.022469   0.022394 134.970   &lt;2e-16 ***
+## exercise:diet 1.976031   0.021947  90.038   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.9846 on 1996 degrees of freedom
-## Multiple R-squared:  0.9358, Adjusted R-squared:  0.9357 
-## F-statistic:  9697 on 3 and 1996 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.9887 on 1996 degrees of freedom
+## Multiple R-squared:  0.9359, Adjusted R-squared:  0.9358 
+## F-statistic:  9715 on 3 and 1996 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Plot showing the differences between people with high genetics and low genetics</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb53-2"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
-<span id="cb53-3"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-3" tabindex="-1"></a></span>
-<span id="cb53-4"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-4" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb53-5"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diet_group =</span> <span class="fu">ifelse</span>(diet <span class="sc">&gt;</span> <span class="fu">median</span>(diet), <span class="st">&quot;Good Diet&quot;</span>, <span class="st">&quot;Bad Diet&quot;</span>))</span>
-<span id="cb53-6"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-6" tabindex="-1"></a></span>
-<span id="cb53-7"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-7" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> exercise, <span class="at">y =</span> heart_health, <span class="at">color =</span> diet_group)) <span class="sc">+</span></span>
-<span id="cb53-8"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb53-9"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-9" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb53-10"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect Modification: Exercise and Diet&quot;</span>,</span>
-<span id="cb53-11"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-11" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Separate Regression Lines for Good and Bad Diet&quot;</span>,</span>
-<span id="cb53-12"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-12" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Exercise Level&quot;</span>,</span>
-<span id="cb53-13"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Heart Health&quot;</span>,</span>
-<span id="cb53-14"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-14" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Diet Group&quot;</span>) <span class="sc">+</span></span>
-<span id="cb53-15"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb53-15" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
+<span id="cb33-2"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
+<span id="cb33-3"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-3" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-4" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diet_group =</span> <span class="fu">ifelse</span>(diet <span class="sc">&gt;</span> <span class="fu">median</span>(diet), <span class="st">&quot;Good Diet&quot;</span>, <span class="st">&quot;Bad Diet&quot;</span>))</span>
+<span id="cb33-6"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-6" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-7" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> exercise, <span class="at">y =</span> heart_health, <span class="at">color =</span> diet_group)) <span class="sc">+</span></span>
+<span id="cb33-8"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-9" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb33-10"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect Modification: Exercise and Diet&quot;</span>,</span>
+<span id="cb33-11"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-11" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Separate Regression Lines for Good and Bad Diet&quot;</span>,</span>
+<span id="cb33-12"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-12" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Exercise Level&quot;</span>,</span>
+<span id="cb33-13"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Heart Health&quot;</span>,</span>
+<span id="cb33-14"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-14" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Diet Group&quot;</span>) <span class="sc">+</span></span>
+<span id="cb33-15"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-15" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p>In this simulation, the benefit of exercise on heart health is stronger for individuals with better diet. When we run a naive model without an interaction term, we miss this important difference and incorrectly estimate a single average effect. When we include an interaction term between exercise and diet, we correctly capture that the effect of exercise varies across diet (healthy to unhealthy). The plot shows how heart health depends not just on exercise but also on how diet modifies the strength of that effect — illustrating why detecting and modeling effect modification is crucial in public health research.</p>
 </div>
 <div id="identifying-interaction" class="section level2 hasAnchor" number="4.2">
