@@ -61,6 +61,35 @@ adjustmentSets(dag, exposure = "exercise", outcome = "heart_health")
 
 ```
 
+```{r}
+
+# library(bnlearn)
+# library(igraph)
+
+n <- 2000
+
+diet <- rnorm(n)
+
+exercise <- 2 * diet + rnorm(n)
+
+heart_health <- 3 * exercise + 4 * diet + rnorm(n)
+
+df <- data.frame(diet, exercise, heart_health)
+
+dag_learned <- hc(df)
+
+dag_igraph <- as.igraph(dag_learned)
+
+plot(
+  dag_igraph,
+  vertex.label.color = "black",
+  vertex.size = 30,
+  edge.arrow.size = 0.5,
+  layout = layout_as_tree(dag_igraph)
+)
+
+```
+
 ## Common Causal Structures in Public Health
 
 In public health research, understanding the causal relationships between variables is essential for identifying risk factors, designing interventions, and making policy decisions. Common causal structures include **confounding, mediation, and collider bias,** each of which influences how we interpret observed associations. A confounder is a variable that affects both the exposure and the outcome, potentially biasing the estimated effect if not properly adjusted for. A mediator lies on the causal pathway between exposure and outcome, helping to explain how the exposure exerts its effect. A collider, on the other hand, is influenced by two variables, and conditioning on it can introduce spurious associations. Identifying these structures often requires drawing directed acyclic graphs (DAGs) to map out assumptions and determine which variables to adjust for when estimating causal effects.
