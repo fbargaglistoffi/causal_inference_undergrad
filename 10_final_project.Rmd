@@ -1,0 +1,18 @@
+# Final Project Presentations
+
+> ## Class materials
+>
+> Slides: [**Final Project Overview**](https://your-slide-link.com)
+>
+> Recording: [**Project Presentation Session**](https://your-recording-link.com)
+
+> ## Guidelines
+>
+> -   Presentation of Final Projects
+> -   Review of group projects
+
+## Final Project
+
+The final project is a group-based assignment designed to assess your ability to critically evaluate causal claims in real-world public health or epidemiological research. Working in teams of 3–4, you will select a published study and analyze it through the lens of causal inference. This includes clearly identifying the causal question the authors are attempting to answer, articulating the assumptions underlying their analysis, and evaluating whether the study’s design supports a valid causal interpretation. You’ll be expected to consider the use of tools like directed acyclic graphs (DAGs), potential confounders, selection bias, and whether the identification strategy is sound.
+
+In addition to identifying strengths and weaknesses in the study, your team will propose potential improvements or alternative approaches that could enhance causal validity. This might involve suggesting better adjustment strategies, different data collection designs, or more transparent modeling techniques. Ultimately, your goal is to interpret the study’s findings not just statistically, but causally — and explain their relevance for real-world public health policy or interventions. Your work will culminate in a 10-minute group presentation during Week 10 and a 3–4 page written report submitted during finals week, both of which demonstrate your ability to apply course concepts to actual scientific literature.

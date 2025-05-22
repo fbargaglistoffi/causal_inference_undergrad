@@ -5,19 +5,19 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Welcome | Causal-Inference-Graduate.knit</title>
-  <meta name="description" content="A graduate course on causal inference" />
-  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+  <meta name="description" content="An undergraduate course on causal inference" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Welcome | Causal-Inference-Graduate.knit" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="A graduate course on causal inference" />
+  <meta property="og:description" content="An undergraduate course on causal inference" />
   
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Welcome | Causal-Inference-Graduate.knit" />
   
-  <meta name="twitter:description" content="A graduate course on causal inference" />
+  <meta name="twitter:description" content="An undergraduate course on causal inference" />
   
 
 
@@ -29,7 +29,7 @@
   
   
 
-<link rel="next" href="foundations-potential-outcomes.html"/>
+<link rel="next" href="setup.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -52,6 +52,70 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -76,16 +140,87 @@
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#learning-objectives"><i class="fa fa-check"></i>Learning objectives</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#teaching-material"><i class="fa fa-check"></i>Teaching Material</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-description"><i class="fa fa-check"></i>Course Description</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructor"><i class="fa fa-check"></i>Instructor</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#teaching-assistants"><i class="fa fa-check"></i>Teaching Assistants</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-logistics"><i class="fa fa-check"></i>Course Logistics</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#required-materials"><i class="fa fa-check"></i>Required Materials</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#learning-objectives"><i class="fa fa-check"></i>Learning Objectives</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#upon-successful-completion-of-this-course-students-will-be-able-to"><i class="fa fa-check"></i>Upon successful completion of this course, students will be able to:</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#tools"><i class="fa fa-check"></i>Tools</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#useful-links"><i class="fa fa-check"></i>Useful Links</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="foundations-potential-outcomes.html"><a href="foundations-potential-outcomes.html"><i class="fa fa-check"></i><b>1</b> Foundations: Potential Outcomes</a></li>
-<li class="chapter" data-level="2" data-path="randomization-and-experiments.html"><a href="randomization-and-experiments.html"><i class="fa fa-check"></i><b>2</b> Randomization and Experiments</a></li>
-<li class="chapter" data-level="3" data-path="foundations-causal-graphs.html"><a href="foundations-causal-graphs.html"><i class="fa fa-check"></i><b>3</b> Foundations: Causal Graphs</a></li>
-<li class="chapter" data-level="4" data-path="observational-studies-under-unconfoundedness.html"><a href="observational-studies-under-unconfoundedness.html"><i class="fa fa-check"></i><b>4</b> Observational Studies Under Unconfoundedness</a></li>
-<li class="chapter" data-level="5" data-path="observational-studies-with-violations-of-unconfoundedness.html"><a href="observational-studies-with-violations-of-unconfoundedness.html"><i class="fa fa-check"></i><b>5</b> Observational Studies with Violations of Unconfoundedness</a></li>
-<li class="chapter" data-level="6" data-path="heterogeneous-treatment-effects-and-causal-machine-learning.html"><a href="heterogeneous-treatment-effects-and-causal-machine-learning.html"><i class="fa fa-check"></i><b>6</b> Heterogeneous Treatment Effects and Causal Machine Learning</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html"><i class="fa fa-check"></i>Setup</a>
+<ul>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html#installing-and-using-required-packages"><i class="fa fa-check"></i>Installing and Using Required Packages</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html#loading-packages"><i class="fa fa-check"></i>Loading Packages</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html#difference-between-install.packages-and-library"><i class="fa fa-check"></i>Difference Between install.packages() and library()</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html#session-information"><i class="fa fa-check"></i>Session Information</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html#why-include-this"><i class="fa fa-check"></i>Why include this?</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html#base-r-version-simple"><i class="fa fa-check"></i>Base R version (simple)</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html"><i class="fa fa-check"></i><b>1</b> Foundations of Causal Thinking in Public Health</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#association-vs.-causation"><i class="fa fa-check"></i><b>1.1</b> Association vs. Causation</a></li>
+<li class="chapter" data-level="1.2" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#introduction-to-counterfactuals-and-potential-outcomes"><i class="fa fa-check"></i><b>1.2</b> Introduction to Counterfactuals and Potential Outcomes</a></li>
+<li class="chapter" data-level="1.3" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#causal-estimands-and-identification"><i class="fa fa-check"></i><b>1.3</b> Causal Estimands and Identification</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html"><i class="fa fa-check"></i><b>2</b> Randomized Control Trials</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#randomized-controlled-trials-the-gold-standard"><i class="fa fa-check"></i><b>2.1</b> Randomized controlled trials: the gold standard</a></li>
+<li class="chapter" data-level="2.2" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#basic-experimental-design-principles"><i class="fa fa-check"></i><b>2.2</b> Basic Experimental Design Principles</a></li>
+<li class="chapter" data-level="2.3" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#limitations-of-rcts-in-public-health-contexts"><i class="fa fa-check"></i><b>2.3</b> Limitations of RCTs in Public Health Contexts</a></li>
+<li class="chapter" data-level="2.4" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#common-threats-to-internal-and-external-validity"><i class="fa fa-check"></i><b>2.4</b> Common Threats to Internal and External Validity</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="observational-studies.html"><a href="observational-studies.html"><i class="fa fa-check"></i><b>3</b> Observational Studies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="observational-studies.html"><a href="observational-studies.html#the-challenge-of-confounding-in-public-health-and-medical-research"><i class="fa fa-check"></i><b>3.1</b> The challenge of confounding in public health and medical research</a></li>
+<li class="chapter" data-level="3.2" data-path="observational-studies.html"><a href="observational-studies.html#exchangeability-positivity-and-consistency"><i class="fa fa-check"></i><b>3.2</b> Exchangeability, positivity, and consistency</a></li>
+<li class="chapter" data-level="3.3" data-path="observational-studies.html"><a href="observational-studies.html#effect-identification-in-observational-studies"><i class="fa fa-check"></i><b>3.3</b> Effect Identification in Observational Studies</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="randomized-controlled-trials-rcts-and-quasi-experiments.html"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html"><i class="fa fa-check"></i><b>4</b> Randomized Controlled Trials (RCTs) and Quasi-Experiments</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="randomized-controlled-trials-rcts-and-quasi-experiments.html"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#effect-modification-and-adjustment-methods"><i class="fa fa-check"></i><b>4.1</b> Effect Modification and Adjustment Methods</a></li>
+<li class="chapter" data-level="4.2" data-path="randomized-controlled-trials-rcts-and-quasi-experiments.html"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#identifying-interaction"><i class="fa fa-check"></i><b>4.2</b> Identifying Interaction</a></li>
+<li class="chapter" data-level="4.3" data-path="randomized-controlled-trials-rcts-and-quasi-experiments.html"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#effect-modification-vs-interaction"><i class="fa fa-check"></i><b>4.3</b> Effect Modification vs Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html"><i class="fa fa-check"></i><b>5</b> Introduction to Causal Diagrams</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#basic-principles-of-directed-acyclic-graphs-dags"><i class="fa fa-check"></i><b>5.1</b> Basic principles of directed acyclic graphs (DAGs)</a></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#common-causal-structures-in-public-health"><i class="fa fa-check"></i><b>5.2</b> Common Causal Structures in Public Health</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#using-dags-to-introduce-and-understand-selection-bias"><i class="fa fa-check"></i><b>5.3</b> Using DAGs to introduce and understand selection bias</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html"><i class="fa fa-check"></i><b>6</b> Effect Modification and Interaction</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#the-structure-of-confounding"><i class="fa fa-check"></i><b>6.1</b> The Structure of Confounding</a></li>
+<li class="chapter" data-level="6.2" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#how-to-adjust-for-confounding"><i class="fa fa-check"></i><b>6.2</b> How to Adjust for Confounding</a></li>
+<li class="chapter" data-level="6.3" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#the-form-of-selection-bias"><i class="fa fa-check"></i><b>6.3</b> The Form of Selection Bias</a></li>
+<li class="chapter" data-level="6.4" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#how-to-adjust-for-selection-bias"><i class="fa fa-check"></i><b>6.4</b> How to Adjust for Selection Bias</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="measurement-missing-data-and-selection-bias.html"><a href="measurement-missing-data-and-selection-bias.html"><i class="fa fa-check"></i><b>7</b> Measurement, Missing Data, and Selection Bias</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="measurement-missing-data-and-selection-bias.html"><a href="measurement-missing-data-and-selection-bias.html#measurement-bias"><i class="fa fa-check"></i><b>7.1</b> Measurement Bias</a></li>
+<li class="chapter" data-level="7.2" data-path="measurement-missing-data-and-selection-bias.html"><a href="measurement-missing-data-and-selection-bias.html#non-causal-diagrams"><i class="fa fa-check"></i><b>7.2</b> Non-Causal Diagrams</a></li>
+<li class="chapter" data-level="7.3" data-path="measurement-missing-data-and-selection-bias.html"><a href="measurement-missing-data-and-selection-bias.html#publication-bias-and-p-hacking"><i class="fa fa-check"></i><b>7.3</b> Publication Bias and P-Hacking</a></li>
+<li class="chapter" data-level="7.4" data-path="measurement-missing-data-and-selection-bias.html"><a href="measurement-missing-data-and-selection-bias.html#over--and-mis-interpretation-of-statistical-analyses"><i class="fa fa-check"></i><b>7.4</b> Over- and Mis-Interpretation of Statistical Analyses</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html"><i class="fa fa-check"></i><b>8</b> From Identification to Estimation</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#identification-and-estimation"><i class="fa fa-check"></i><b>8.1</b> Identification and Estimation</a></li>
+<li class="chapter" data-level="8.2" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#estimation-of-causal-effects"><i class="fa fa-check"></i><b>8.2</b> Estimation of causal effects</a></li>
+<li class="chapter" data-level="8.3" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html#taxonomy-of-estimation-models"><i class="fa fa-check"></i><b>8.3</b> Taxonomy of estimation models</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html"><i class="fa fa-check"></i><b>9</b> Applications of Causal Inference in Public Health and Medical Research</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#public-health-policy-evaluation"><i class="fa fa-check"></i><b>9.1</b> Public health policy evaluation</a></li>
+<li class="chapter" data-level="9.2" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#environmental-exposure-studies"><i class="fa fa-check"></i><b>9.2</b> Environmental exposure studies</a></li>
+<li class="chapter" data-level="9.3" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#health-disparities-research"><i class="fa fa-check"></i><b>9.3</b> Health disparities research</a></li>
+<li class="chapter" data-level="9.4" data-path="applications-of-causal-inference-in-public-health-and-medical-research.html"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#prevention-program-evaluation"><i class="fa fa-check"></i><b>9.4</b> Prevention program evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="final-project-presentations.html"><a href="final-project-presentations.html"><i class="fa fa-check"></i><b>10</b> Final Project Presentations</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="final-project-presentations.html"><a href="final-project-presentations.html#final-project"><i class="fa fa-check"></i><b>10.1</b> Final Project</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://www.falcobargaglistoffi.com/" target="blank">Instructor: Falco J. Bargagli-Stoffi</a></li>
 </ul>
@@ -109,29 +244,98 @@
 <!--bookdown:title:start-->
 <div id="welcome" class="section level1 unnumbered hasAnchor">
 <h1>Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is the website for the graduate course in Causal Inference (Biostat M235) at the University of California, Los Angeles (UCLA).</p>
-<p>Instructor: <a href="https://www.falcobargaglistoffi.com/">Falco J. Bargagli-Stoffi</a>.</p>
-<p>Teaching assistant: <a href="https://cch.ucla.edu/people/kelsey-ishimoto/">Kelsey Ishimoto</a>.</p>
-<p>Each course module in the left panel will span several lectures. We will build this website over the course of the quarter, uploading lecture slides as we go.</p>
+<p>Welcome to the course website for <strong>The Science of Why: Causal Inference for Public Health</strong>. This course introduces the foundations of causal inference in public health and medical sciences, with an emphasis on distinguishing between association and causation in real-world research.</p>
+<div id="course-description" class="section level2 unnumbered hasAnchor">
+<h2>Course Description<a href="index.html#course-description" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this course, students will:</p>
+<ul>
+<li>Explore foundational concepts such as counterfactuals, causal estimands, and identification strategies.<br />
+</li>
+<li>Learn how to critically evaluate causal claims in public health literature.<br />
+</li>
+<li>Understand and apply experimental and observational study designs, causal diagrams (DAGs), and bias adjustment methods.<br />
+</li>
+<li>Develop practical skills through R-based tutorials and case studies.</li>
+</ul>
+<p>This course is ideal for undergraduates interested in public health, epidemiology, biostatistics, or social science research.</p>
+</div>
+<div id="instructor" class="section level2 unnumbered hasAnchor">
+<h2>Instructor<a href="index.html#instructor" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Falco J. Bargagli-Stoffi</strong><br />
+Assistant Professor<br />
+Department of Biostatistics<br />
+UCLA Fielding School of Public Health<br />
+<a href="mailto:falco@ucla.edu">falco@ucla.edu</a></p>
+<p>Office hours: By appointment. (Book via the scheduling link on this website.)</p>
+</div>
+<div id="teaching-assistants" class="section level2 unnumbered hasAnchor">
+<h2>Teaching Assistants<a href="index.html#teaching-assistants" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>TBD — will be announced on the course website.</p>
+</div>
+<div id="course-logistics" class="section level2 unnumbered hasAnchor">
+<h2>Course Logistics<a href="index.html#course-logistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Offered</strong>: Fall Term<br />
+</li>
+<li><strong>Meetings</strong>: Lecture (3 hours), Discussion (1 hour) — in-person unless otherwise announced<br />
+</li>
+<li><strong>Assignments</strong>: Posted on the course website, due before 8 PM on specified dates<br />
+</li>
+<li><strong>Final Project</strong>: Group presentation + written report during finals week</li>
+</ul>
+</div>
+<div id="required-materials" class="section level2 unnumbered hasAnchor">
+<h2>Required Materials<a href="index.html#required-materials" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Primary Textbook</strong>:<br />
+Hernán MA, Robins JM. (2023) <em>Causal Inference: What If</em><br />
+<a href="https://www.miguelhernan.org/causal-inference-book/">Free PDF available here</a></p>
+<p><strong>Secondary (Recommended) Texts</strong>: - Rosenbaum PR. <em>Causal Inference</em>. MIT Press.<br />
+- Pearl J., Mackenzie D. <em>The Book of Why</em>. Basic Books.</p>
+<p><strong>Supplementary Readings</strong>:<br />
+Will be shared throughout the course.</p>
+</div>
 <div id="learning-objectives" class="section level2 unnumbered hasAnchor">
-<h2>Learning objectives<a href="index.html#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2>Learning Objectives<a href="index.html#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
-<p><a href="https://drive.google.com/file/d/1ca24sjKu307y0hSZwuzfxLcQSA_OjiWl/view?usp=sharing"><strong>Syllabus</strong></a></p>
+<p><a href="https://docs.google.com/document/d/17_kJcFCyRMHCMWIgOoCczqUh12HBkO7z/edit?tab=t.0"><strong>Syllabus</strong></a></p>
 </blockquote>
-<p>The course aims to introduce the key concepts and state-of-the-art methods for causal inference from randomized experiments and observational studies. We will first introduce the basic concepts of the potential outcome framework (with a particular focus on the essential role of the treatment assignment mechanism) and the causal graphical model approach. Then, we will cover different situations corresponding to different assumptions concerning the assignment mechanism. We will discuss the design and analysis of experiments and how to make inference under different modes, including design (randomization)-based, frequentist, and Bayesian. We will cover the design and analysis of observational studies with regular assignment mechanisms where the unconfoundedness assumption is assumed to hold. We will introduce methods and sensitivity analyses to account for possible violations of unconfoundedness. Finally, we will cover heterogeneous treatment effects, and causal machine learning approaches to causal heterogeneity.</p>
+<p>This course introduces students to the foundations of causal inference in public health and medical sciences, with a strong emphasis on the difference between <strong>association and causation</strong>. Students will learn to critically evaluate causal claims, understand causal diagrams (DAGs), and assess study design choices in both randomized and observational studies.</p>
+<p>We will explore how causal effects are identified and estimated, how to detect and adjust for biases (like confounding and selection bias), and how to use critical thinking tools when reviewing public health research. Students will also be introduced to concepts like effect modification, interaction, and systems thinking through real-world applications.</p>
 </div>
-<div id="teaching-material" class="section level2 unnumbered hasAnchor">
-<h2>Teaching Material<a href="index.html#teaching-material" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Selected chapters from the book list below. Articles in (bio)statistical and econometric journals.</p>
-<blockquote>
-<p>Imbens, G.W., and D.B. Rubin. 2015. <a href="https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB"><strong>Causal Inference for Statistics, Social, and Biomedical Sciences</strong></a> Cambridge: Cambridge University Press.</p>
-<p>Ding, P. 2023. <a href="https://www.routledge.com/A-First-Course-in-Causal-Inference/Ding/p/book/9781032758626"><strong>A First Course in Causal Inference</strong></a> New York: Routledge.</p>
-<p>Pearl, J. 2009. <a href="https://www.cambridge.org/core/books/causality/B0046844FAE10CBF274D4ACBDAEB5F5B"><strong>Causality</strong></a> Cambridge: Cambridge University Press.</p>
-</blockquote>
+<div id="upon-successful-completion-of-this-course-students-will-be-able-to" class="section level2 unnumbered hasAnchor">
+<h2>Upon successful completion of this course, students will be able to:<a href="index.html#upon-successful-completion-of-this-course-students-will-be-able-to" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Communicate public health findings and causal claims in written and oral forms<br />
+</li>
+<li>Evaluate causal claims in academic and public health literature<br />
+</li>
+<li>Design and assess both randomized trials and observational studies<br />
+</li>
+<li>Construct and analyze causal diagrams (DAGs) for identifying sources of bias<br />
+</li>
+<li>Apply concepts of effect modification, interaction, and confounding<br />
+</li>
+<li>Interpret findings within the context of public health policy and practice<br />
+</li>
+<li>Work independently and collaboratively to assess causal research</li>
+</ul>
 </div>
-<div id="acknowledgments" class="section level2 unnumbered hasAnchor">
-<h2>Acknowledgments<a href="index.html#acknowledgments" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Special thanks to Prof. <a href="https://sites.google.com/unifi.it/fabriziamealli">Fabrizia Mealli</a> and Prof. <a href="https://dviviano.github.io/">Davide Viviano</a> for their invaluable help in preparing this course.</p>
+<div id="tools" class="section level2 unnumbered hasAnchor">
+<h2>Tools<a href="index.html#tools" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This course will make use of:<br />
+- <strong>R</strong> and <strong>RStudio</strong><br />
+- Interactive R tutorials and guided analysis<br />
+- GitHub for accessing materials and submitting assignments</p>
+</div>
+<div id="useful-links" class="section level2 unnumbered hasAnchor">
+<h2>Useful Links<a href="index.html#useful-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><a href="http://www.cae.ucla.edu">UCLA Center for Accessible Education</a><br />
+</li>
+<li><a href="https://equity.ucla.edu">UCLA Equity, Diversity, and Inclusion</a><br />
+</li>
+<li><a href="https://ph.ucla.edu/about-fsph/fsph-equity-diversity-and-inclusion-taking-action-together">FSPH EDI Initiative</a></li>
+</ul>
 
 </div>
 </div>
@@ -141,7 +345,7 @@
         </div>
       </div>
 
-<a href="foundations-potential-outcomes.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="setup.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

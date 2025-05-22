@@ -1,0 +1,65 @@
+# Setup {.unnumbered}  
+
+## Installing and Using Required Packages {.unnumbered}  
+Throughout this tutorial, we’ll use a few essential R packages to manipulate data, run models, and create plots.   
+Below are the core packages, what they do, and how to install them.  
+
+Packages we’ll use:  
+
+**ggplot2** – For plotting (e.g., scatterplots, regression lines)    
+**dplyr** – For data wrangling (filtering, mutating, summarizing, etc.)     
+**gridExtra** – To combine multiple plots into one figure    
+**stats** – Comes with base R and used for regression (lm())    
+**pacman** – Simplifies package management in R
+**broom (optional)** – Makes model summaries easier to work with    
+
+```{r}
+
+# install.packages(c("ggplot2", "dplyr", "gridExtra", "pacman", "broom"))
+
+```
+
+## Loading Packages {.unnumbered}  
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
+
+# Optional if using tidy model outputs:
+# library(broom)
+
+```
+
+## Difference Between install.packages() and library() {.unnumbered}
+
+- install.packages("dplyr") downloads and installs the package — you only need to do this once per computer.  
+- library(dplyr) loads the package into your R session — you need to run this each time you use it.  
+
+## Session Information {.unnumbered}
+
+It's always good practice to include your session info at the end of your analysis. This gives a snapshot of:  
+
+- Your R version and system details  
+- All the packages that were loaded  
+- The versions of those packages  
+
+This is especially useful when:  
+- You're debugging errors  
+- You're submitting assignments  
+- You're collaborating with others  
+
+## Why include this? {.unnumbered}
+
+Sometimes code behaves differently depending on the version of a package or even the version of R itself. Including your session info makes your work **reproducible and easier to troubleshoot**.
+
+## Base R version (simple) {.unnumbered}
+
+This function comes with R and gives you basic session details.
+
+```{r}
+
+sessionInfo()
+
+```
