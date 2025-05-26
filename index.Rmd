@@ -53,7 +53,7 @@ TBD — will be announced on the course website.
 
 **Primary Textbook**:  
 Hernán MA, Robins JM. (2023) *Causal Inference: What If*  
-[Free PDF available here](https://www.miguelhernan.org/causal-inference-book/)  
+[Free PDF available here](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)  
 
 **Secondary (Recommended) Texts**: - Rosenbaum PR. *Causal Inference*. MIT Press.  
 - Pearl J., Mackenzie D. *The Book of Why*. Basic Books.  

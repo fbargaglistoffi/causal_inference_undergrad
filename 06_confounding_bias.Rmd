@@ -1,4 +1,4 @@
-# Effect Modification and Interaction
+# Confounding and Selection Bias
 
 > ## Class materials
 >

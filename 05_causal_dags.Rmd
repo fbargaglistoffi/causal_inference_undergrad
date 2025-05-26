@@ -61,6 +61,8 @@ adjustmentSets(dag, exposure = "exercise", outcome = "heart_health")
 
 ```
 
+New Simulation
+
 ```{r}
 
 # library(bnlearn)
