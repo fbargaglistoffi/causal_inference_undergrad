@@ -11,7 +11,7 @@ observational-studies
 the-challenge-of-confounding-in-public-health-and-medical-research
 exchangeability-positivity-and-consistency
 effect-identification-in-observational-studies
-randomized-controlled-trials-rcts-and-quasi-experiments
+effect-modification-and-interaction
 effect-modification-and-adjustment-methods
 identifying-interaction
 effect-modification-vs-interaction
@@ -19,12 +19,12 @@ introduction-to-causal-diagrams
 basic-principles-of-directed-acyclic-graphs-dags
 common-causal-structures-in-public-health
 using-dags-to-introduce-and-understand-selection-bias
-effect-modification-and-interaction
+confounding-and-selection-bias
 the-structure-of-confounding
 how-to-adjust-for-confounding
 the-form-of-selection-bias
 how-to-adjust-for-selection-bias
-measurement-missing-data-and-selection-bias
+other-common-pitfalls-of-causal-analyses
 measurement-bias
 non-causal-diagrams
 publication-bias-and-p-hacking
@@ -38,5 +38,5 @@ public-health-policy-evaluation
 environmental-exposure-studies
 health-disparities-research
 prevention-program-evaluation
-final-project-presentations
+presentation-of-final-projects
 final-project

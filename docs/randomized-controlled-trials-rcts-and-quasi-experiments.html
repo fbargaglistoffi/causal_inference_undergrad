@@ -346,7 +346,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb33-14"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-14" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Diet Group&quot;</span>) <span class="sc">+</span></span>
 <span id="cb33-15"><a href="randomized-controlled-trials-rcts-and-quasi-experiments.html#cb33-15" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p>In this simulation, the benefit of exercise on heart health is stronger for individuals with better diet. When we run a naive model without an interaction term, we miss this important difference and incorrectly estimate a single average effect. When we include an interaction term between exercise and diet, we correctly capture that the effect of exercise varies across diet (healthy to unhealthy). The plot shows how heart health depends not just on exercise but also on how diet modifies the strength of that effect — illustrating why detecting and modeling effect modification is crucial in public health research.</p>
 </div>
 <div id="identifying-interaction" class="section level2 hasAnchor" number="4.2">

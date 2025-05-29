@@ -1,4 +1,4 @@
-# Randomized Controlled Trials (RCTs) and Quasi-Experiments
+# Effect Modification and Interaction
 
 > ## Class materials
 >
@@ -31,31 +31,31 @@ Adjustment methods typically aim to control for confounding, but they can also b
 
 Simulation to Demonstrate Effect Modification
 
-We simulate a case where exercise improves heart health, but the effect of exercise is stronger for people with a good diet. That is, diet modifies the effect of exercise on heart health.
+We simulate a case where heart transplant improves survival, but the effect of transplant is stronger for individuals who receive vitamin supplements. That is, vitamin supplementation modifies the effect of transplant on survival. This reflects a scenario where a treatment (transplant) has a greater benefit under certain conditions (when the body is supported by vitamins), illustrating effect modification.
 
 ```{r}
 
 n <- 2000
 
-diet <- rnorm(n)
+A <- rbinom(n, 1, 0.5) # heart transplant
 
-exercise <- rnorm(n)
+E <- rbinom(n, 1, 0.5) # vitamin
 
-heart_health <- (1 + 2 * diet) * exercise + 3 * diet + rnorm(n)
+survival <- 1 * A + 2 * E + 3 * (A * E) + rnorm(n, mean = 0, sd = 1)
 
-df <- data.frame(heart_health, exercise, diet)
+df <- data.frame(survival, A, E)
 
-naive_model <- lm(heart_health ~ exercise + diet, data = df)
+naive_model <- lm(survival ~ A + E, data = df)
 
-interaction_model <- lm(heart_health ~ exercise * diet, data = df)
+adjusted_model <- lm(survival ~ A + E + A * E, data = df)
 
 summary(naive_model)
 
-summary(interaction_model)
+summary(adjusted_model)
 
 ```
 
-Plot showing the differences between people with high genetics and low genetics
+The plot shows that heart transplants improve survival more for individuals who received vitamins, illustrating effect modification by vitamin status.
 
 ```{r}
 
@@ -63,32 +63,31 @@ Plot showing the differences between people with high genetics and low genetics
 # library(dplyr)
 
 df_grouped <- df |>
-  mutate(diet_group = ifelse(diet > median(diet), "Good Diet", "Bad Diet"))
+  mutate(vitamin_group = ifelse(E == 1, "Vitamins", "No Vitamins"))
 
-ggplot(df_grouped, aes(x = exercise, y = heart_health, color = diet_group)) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = "Effect Modification: Exercise and Diet",
-       subtitle = "Separate Regression Lines for Good and Bad Diet",
-       x = "Exercise Level",
-       y = "Heart Health",
-       color = "Diet Group") +
+ggplot(df_grouped, aes(x = A, y = survival, color = vitamin_group)) +
+  geom_jitter(width = 0.1, alpha = 0.4) +
+  stat_summary(fun = mean, geom = "point", size = 3, shape = 18) +
+  stat_summary(fun = mean, geom = "line", aes(group = vitamin_group)) +
+  scale_x_continuous(breaks = c(0, 1)) + 
+  labs(title = "Effect Modification: Heart Transplant × Vitamin Supplement",
+       x = "Heart Transplant (A)",
+       y = "Survival",
+       color = "Vitamin Group") +
   theme_minimal()
 
 ```
 
-In this simulation, the benefit of exercise on heart health is stronger for individuals with better diet. When we run a naive model without an interaction term, we miss this important difference and incorrectly estimate a single average effect. When we include an interaction term between exercise and diet, we correctly capture that the effect of exercise varies across diet (healthy to unhealthy). The plot shows how heart health depends not just on exercise but also on how diet modifies the strength of that effect — illustrating why detecting and modeling effect modification is crucial in public health research.
+In this simulation, the benefit of heart transplant on survival is stronger for individuals who received vitamin supplements. A naive model without an interaction term fails to capture this difference and instead estimates an average effect across all individuals. By including an interaction term between transplant and vitamins, we reveal that the effect of transplant varies depending on vitamin use. The plot illustrates how survival is influenced not just by transplant alone, but by how vitamins modify its impact — highlighting the importance of detecting and modeling effect modification in public health research.
 
 ## Identifying Interaction
 
 Identifying interaction is crucial when studying causal relationships because it tells us whether the effect of an exposure on an outcome varies across levels of another variable. An interaction exists when the impact of one variable depends on the value of another, meaning the combined effect is not simply additive. Rather than being a source of bias like confounding, interaction reveals real differences in how subgroups respond to exposures or treatments. Detecting interaction helps researchers understand for whom and under what conditions an intervention works best, allowing for more tailored public health strategies and clinical recommendations.
 
-In our previous simulation with exercise and diet, interaction was present because the benefit of exercise on heart health was greater for individuals with a better diet. By fitting a model with an interaction term between exercise and diet, we were able to identify and quantify this effect modification. Without testing for interaction, we would have incorrectly assumed that exercise has the same benefit for everyone, masking important subgroup differences. Identifying interaction thus helps uncover nuanced causal relationships that average treatment effects alone may miss.
+In our simulation with heart transplant and vitamin supplements, interaction was present because the benefit of transplant on survival was greater for individuals who received vitamins. By fitting a model with an interaction term between transplant and vitamin use, we were able to identify and quantify this effect modification. Without testing for interaction, we would have incorrectly assumed that transplant provides the same benefit to everyone, masking important subgroup differences. Identifying interaction allows us to uncover nuanced causal relationships that average treatment effects alone may overlook.
 
 ## Effect Modification vs Interaction
 
 Effect modification and interaction are closely related concepts, but they serve slightly different purposes in causal analysis. Effect modification refers to a real difference in the causal effect of an exposure on an outcome across levels of another variable. It describes a biological or contextual phenomenon where an exposure has varying impacts depending on a modifier, such as a treatment working better for younger patients than older ones. In contrast, interaction is a modeling term: it refers to the inclusion of a product term (like exposure × modifier) in a statistical model to detect and estimate effect modification. In essence, effect modification is a feature of reality, while interaction is how we model and identify it in data.
 
-In our previous simulation with exercise and diet, the true underlying process involved **effect modification: the benefit of exercise on heart health was greater for individuals with better diet.** To uncover this, we included an **interaction term between exercise and diet (exercise \* diet)** in our regression model. Without including the interaction, the model would have incorrectly assumed a constant effect of exercise across all diets (healthy to unhealthy). This distinction highlights why researchers must carefully model interactions when they suspect effect modification is present — otherwise, important subgroup differences in treatment effects can be hidden by overly simple models.
-
-
+In our simulation with heart transplant and vitamin supplements, the true underlying process involved effect modification: the benefit of transplant on survival was greater for individuals who received vitamins. To uncover this, we included an interaction term between transplant and vitamin use (A * E) in our regression model. Without this interaction, the model would have incorrectly assumed a constant effect of transplant across all patients, regardless of vitamin status. This distinction underscores the importance of modeling interactions when effect modification is suspected — otherwise, meaningful subgroup differences in treatment effects can be obscured by oversimplified models.

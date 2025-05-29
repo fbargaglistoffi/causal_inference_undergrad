@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>9 Applications of Causal Inference in Public Health and Medical Research | Causal-Inference-Graduate.knit</title>
+  <title>6 Confounding and Selection Bias | Causal-Inference-Graduate.knit</title>
   <meta name="description" content="An undergraduate course on causal inference" />
   <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="9 Applications of Causal Inference in Public Health and Medical Research | Causal-Inference-Graduate.knit" />
+  <meta property="og:title" content="6 Confounding and Selection Bias | Causal-Inference-Graduate.knit" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="An undergraduate course on causal inference" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Applications of Causal Inference in Public Health and Medical Research | Causal-Inference-Graduate.knit" />
+  <meta name="twitter:title" content="6 Confounding and Selection Bias | Causal-Inference-Graduate.knit" />
   
   <meta name="twitter:description" content="An undergraduate course on causal inference" />
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="from-identification-to-estimation.html"/>
-<link rel="next" href="presentation-of-final-projects.html"/>
+<link rel="prev" href="introduction-to-causal-diagrams.html"/>
+<link rel="next" href="other-common-pitfalls-of-causal-analyses.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -240,81 +240,95 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="applications-of-causal-inference-in-public-health-and-medical-research" class="section level1 hasAnchor" number="9">
-<h1><span class="header-section-number">9</span> Applications of Causal Inference in Public Health and Medical Research<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#applications-of-causal-inference-in-public-health-and-medical-research" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="confounding-and-selection-bias" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> Confounding and Selection Bias<a href="confounding-and-selection-bias.html#confounding-and-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <blockquote>
-<h2 id="class-materials-8" class="hasAnchor">Class materials<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#class-materials-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Slides: <a href="https://your-slide-link.com"><strong>Module 9</strong></a></p>
-<p>Recording: <a href="https://your-recording-link.com"><strong>Module 9, Part 1</strong></a></p>
-<p>Recording: <a href="https://your-recording-link.com"><strong>Module 9, Part 2</strong></a></p>
+<h2 id="class-materials-5" class="hasAnchor">Class materials<a href="confounding-and-selection-bias.html#class-materials-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Slides: <a href="https://drive.google.com/drive/folders/14Iymvk2FlZqVsWrtbDLmwSzR5aNS-Mcg?usp=sharing"><strong>Module 6</strong></a></p>
+<p>Recording: <a href="https://your-recording-link.com"><strong>Module 6, Part 1</strong></a></p>
+<p>Recording: <a href="https://your-recording-link.com"><strong>Module 6, Part 2</strong></a></p>
 </blockquote>
 <blockquote>
-<h2 id="textbook-reading-8" class="hasAnchor">Textbook reading<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#textbook-reading-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapter 15</strong></a></p>
+<h2 id="textbook-reading-5" class="hasAnchor">Textbook reading<a href="confounding-and-selection-bias.html#textbook-reading-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapter 11</strong></a></p>
 </blockquote>
 <blockquote>
-<h2 id="supplementary-reading-8" class="hasAnchor">Supplementary reading<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#supplementary-reading-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1470480/"><strong>Sterman, J. D. (2006). Learning from evidence in a complex world. American Journal of Public Health, 96(3), 505–514.</strong></a><br />
-Examples of systems-level interventions in public health and policy</p>
+<h2 id="supplementary-reading-5" class="hasAnchor">Supplementary reading<a href="confounding-and-selection-bias.html#supplementary-reading-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://academic.oup.com/ije/article/41/2/514/709435"><strong>Knol, M. J., &amp; VanderWeele, T. J. (2012). Recommendations for presenting analyses of effect modification and interaction. International Journal of Epidemiology, 41(2), 514–520.</strong></a><br />
+Real-world public health examples of effect modification</p>
 </blockquote>
 <blockquote>
-<h2 id="topics-covered-8" class="hasAnchor">Topics covered<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#topics-covered-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2 id="topics-covered-5" class="hasAnchor">Topics Covered<a href="confounding-and-selection-bias.html#topics-covered-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>Public health policy evaluation</li>
-<li>Environmental exposure studies</li>
-<li>Health disparities research</li>
-<li>Prevention program evaluation</li>
+<li>The structure of confounding</li>
+<li>How to adjust for confounding</li>
+<li>The form of selection bias</li>
+<li>How to adjust for selection bias</li>
+<li>Critical reading exercise: sources of confounding and selection bias in public health</li>
 </ul>
 </blockquote>
-<div id="public-health-policy-evaluation" class="section level2 hasAnchor" number="9.1">
-<h2><span class="header-section-number">9.1</span> Public health policy evaluation<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#public-health-policy-evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb61-2"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-2" tabindex="-1"></a></span>
-<span id="cb61-3"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-3" tabindex="-1"></a>baseline_health <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
-<span id="cb61-4"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-4" tabindex="-1"></a></span>
-<span id="cb61-5"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-5" tabindex="-1"></a>policy <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(baseline_health <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">5</span>) <span class="sc">&lt;</span> <span class="dv">52</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb61-6"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-6" tabindex="-1"></a></span>
-<span id="cb61-7"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-7" tabindex="-1"></a>health_outcome <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> policy <span class="sc">+</span> <span class="fl">0.6</span> <span class="sc">*</span> baseline_health <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb61-8"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-8" tabindex="-1"></a></span>
-<span id="cb61-9"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb61-10"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-10" tabindex="-1"></a>  <span class="at">Policy =</span> <span class="fu">factor</span>(policy, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;No Policy&quot;</span>, <span class="st">&quot;Policy&quot;</span>)),</span>
-<span id="cb61-11"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-11" tabindex="-1"></a>  <span class="at">Baseline_Health =</span> baseline_health,</span>
-<span id="cb61-12"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-12" tabindex="-1"></a>  <span class="at">Health_Outcome =</span> health_outcome</span>
-<span id="cb61-13"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-13" tabindex="-1"></a>)</span>
-<span id="cb61-14"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-14" tabindex="-1"></a></span>
-<span id="cb61-15"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-15" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(Health_Outcome <span class="sc">~</span> Policy, <span class="at">data =</span> df)</span>
-<span id="cb61-16"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-16" tabindex="-1"></a></span>
-<span id="cb61-17"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-17" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(Health_Outcome <span class="sc">~</span> Policy <span class="sc">+</span> Baseline_Health, <span class="at">data =</span> df)</span>
-<span id="cb61-18"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-18" tabindex="-1"></a></span>
-<span id="cb61-19"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb61-19" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;PolicyPolicy&quot;</span>, ]</span></code></pre></div>
-<pre><code>##      Estimate    Std. Error       t value      Pr(&gt;|t|) 
-## -3.712213e+00  2.888163e-01 -1.285320e+01  2.187334e-36</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb63-1" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;PolicyPolicy&quot;</span>, ]</span></code></pre></div>
-<pre><code>##     Estimate   Std. Error      t value     Pr(&gt;|t|) 
-## 4.996592e+00 3.089999e-01 1.617021e+01 2.296516e-55</code></pre>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb65-2"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-2" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Policy, <span class="at">y =</span> Health_Outcome, <span class="at">fill =</span> Policy)) <span class="sc">+</span></span>
-<span id="cb65-3"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb65-4"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Simulated Impact of Public Health Policy&quot;</span>,</span>
-<span id="cb65-5"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Policy Implemented&quot;</span>,</span>
-<span id="cb65-6"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Health Outcome After 1 Year&quot;</span>) <span class="sc">+</span></span>
-<span id="cb65-7"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb65-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<div id="the-structure-of-confounding" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> The Structure of Confounding<a href="confounding-and-selection-bias.html#the-structure-of-confounding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Confounding occurs when an external variable influences both the exposure and the outcome, making it difficult to determine whether the observed association is truly causal. This third variable — the confounder — can create a misleading impression that the exposure causes the outcome, when in fact, the association may be driven entirely or partially by the confounder. The key structural feature of confounding is that the confounder must be related to both the exposure and the outcome. To obtain an accurate estimate of the exposure’s causal effect, researchers must adjust for confounding variables using methods like stratification, regression, or matching.</p>
+<p>In our simulation, age acts as a confounder because it affects both smoking behavior and lung cancer risk. Older individuals are more likely to smoke and also more likely to develop lung cancer, which can make smoking appear more harmful (or even less harmful) than it actually is if age isn’t taken into account. The naive model, which includes only smoking, produces a biased estimate because it doesn’t separate the effect of smoking from the effect of age. The adjusted model includes both smoking and age and provides a more accurate estimate of smoking’s effect by accounting for this confounding influence. This example highlights how confounding can distort findings and why controlling for related background variables is essential in observational research.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="confounding-and-selection-bias.html#cb45-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb45-2"><a href="confounding-and-selection-bias.html#cb45-2" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="confounding-and-selection-bias.html#cb45-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">2000</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb45-4"><a href="confounding-and-selection-bias.html#cb45-4" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="confounding-and-selection-bias.html#cb45-5" tabindex="-1"></a>smoking <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb45-6"><a href="confounding-and-selection-bias.html#cb45-6" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="confounding-and-selection-bias.html#cb45-7" tabindex="-1"></a>lung_cancer <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> smoking <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb45-8"><a href="confounding-and-selection-bias.html#cb45-8" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="confounding-and-selection-bias.html#cb45-9" tabindex="-1"></a>genetic_marker <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="at">prob =</span> <span class="fu">plogis</span>(<span class="fl">0.01</span> <span class="sc">*</span> smoking <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb45-10"><a href="confounding-and-selection-bias.html#cb45-10" tabindex="-1"></a></span>
+<span id="cb45-11"><a href="confounding-and-selection-bias.html#cb45-11" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb45-12"><a href="confounding-and-selection-bias.html#cb45-12" tabindex="-1"></a>  <span class="at">Age =</span> age,</span>
+<span id="cb45-13"><a href="confounding-and-selection-bias.html#cb45-13" tabindex="-1"></a>  <span class="at">Smoking =</span> smoking,</span>
+<span id="cb45-14"><a href="confounding-and-selection-bias.html#cb45-14" tabindex="-1"></a>  <span class="at">Lung_Cancer =</span> lung_cancer,</span>
+<span id="cb45-15"><a href="confounding-and-selection-bias.html#cb45-15" tabindex="-1"></a>  <span class="at">Genetic_Marker =</span> genetic_marker</span>
+<span id="cb45-16"><a href="confounding-and-selection-bias.html#cb45-16" tabindex="-1"></a>)</span>
+<span id="cb45-17"><a href="confounding-and-selection-bias.html#cb45-17" tabindex="-1"></a></span>
+<span id="cb45-18"><a href="confounding-and-selection-bias.html#cb45-18" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking, <span class="at">data =</span> df)</span>
+<span id="cb45-19"><a href="confounding-and-selection-bias.html#cb45-19" tabindex="-1"></a></span>
+<span id="cb45-20"><a href="confounding-and-selection-bias.html#cb45-20" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking <span class="sc">+</span> age, <span class="at">data =</span> df)</span>
+<span id="cb45-21"><a href="confounding-and-selection-bias.html#cb45-21" tabindex="-1"></a></span>
+<span id="cb45-22"><a href="confounding-and-selection-bias.html#cb45-22" tabindex="-1"></a>coef_naive <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb45-23"><a href="confounding-and-selection-bias.html#cb45-23" tabindex="-1"></a></span>
+<span id="cb45-24"><a href="confounding-and-selection-bias.html#cb45-24" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb45-25"><a href="confounding-and-selection-bias.html#cb45-25" tabindex="-1"></a></span>
+<span id="cb45-26"><a href="confounding-and-selection-bias.html#cb45-26" tabindex="-1"></a>coef_naive</span></code></pre></div>
+<pre><code>## [1] 4.998041</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="confounding-and-selection-bias.html#cb47-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
+<pre><code>## [1] 2.97812</code></pre>
 </div>
-<div id="environmental-exposure-studies" class="section level2 hasAnchor" number="9.2">
-<h2><span class="header-section-number">9.2</span> Environmental exposure studies<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#environmental-exposure-studies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Environmental exposure studies investigate how exposure to environmental factors—such as air pollution, contaminated water, radiation, or hazardous chemicals—affects human health. These studies aim to establish causal links between environmental conditions and outcomes like respiratory illness, cancer, or developmental disorders. Because randomizing exposure is often unethical or impractical, these studies typically rely on observational data, making careful adjustment for confounders and sources of bias essential. Tools like causal diagrams, regression models, and sensitivity analyses are often employed to assess whether the observed health effects are truly caused by the environmental exposure.</p>
-<p>In the policy simulation, the setup closely resembles an environmental exposure study where “policy” could be interpreted as an intervention to reduce environmental harm (e.g., enforcing clean air regulations). The simulation demonstrated how individuals exposed to the policy had lower average health outcomes, not because the policy failed, but because those individuals started with worse baseline health. This reflects a common challenge in environmental health research: exposure is often non-random and associated with other risk factors. Just like in environmental exposure studies, it is crucial to adjust for baseline differences—such as pre-existing health or socioeconomic status—to avoid incorrectly concluding that the exposure (or policy) caused harm.</p>
+<div id="how-to-adjust-for-confounding" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> How to Adjust for Confounding<a href="confounding-and-selection-bias.html#how-to-adjust-for-confounding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Adjusting for confounding is essential when estimating causal effects from observational data. Since confounders are variables that influence both the exposure and the outcome, failing to account for them can lead to biased and misleading conclusions. One of the most common ways to adjust for confounders is through multiple regression, where confounders are included as covariates in the model. Other methods include stratification, where analyses are performed within levels of the confounder, and matching, where exposed and unexposed individuals are paired based on similar values of the confounding variable. These approaches aim to isolate the effect of the exposure by holding confounders constant, thereby mimicking the balance achieved in randomized experiments.</p>
+<p>In our simulation, we demonstrated adjustment for confounding using regression. The variable age was a confounder because it influenced both smoking and lung cancer. When we fit a naive model that only included smoking, the effect estimate was biased because it reflected both smoking’s and age’s contributions to lung cancer. By including age in the model as an additional predictor, we were able to adjust for its influence. This adjustment allowed us to estimate the effect of smoking on lung cancer more accurately, as if age were held constant. This simple regression approach illustrates a key principle in observational research: if you can measure the confounder and include it in your analysis, you can often remove its biasing effect and get closer to the true causal relationship.</p>
 </div>
-<div id="health-disparities-research" class="section level2 hasAnchor" number="9.3">
-<h2><span class="header-section-number">9.3</span> Health disparities research<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#health-disparities-research" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Health disparities research focuses on understanding and addressing differences in health outcomes across population groups defined by factors such as race, ethnicity, socioeconomic status, geography, gender, or disability. These disparities often stem from unequal access to care, systemic discrimination, environmental exposures, and social determinants of health. The goal is not only to document these differences but also to identify causal pathways and implement interventions that promote health equity. Causal inference tools are especially valuable in this field because they help distinguish between mere correlations and actual structural inequalities that can be targeted through policy and intervention.</p>
-<p>The simulation of public health policy can be directly applied to health disparities research by modeling how an intervention affects different subgroups. For instance, if a health policy is implemented in lower-income neighborhoods, those individuals might begin with worse baseline health, as shown by lower health outcomes in the policy group. Without adjusting for these baseline differences, the simulation might misleadingly suggest that the policy worsens outcomes. In reality, this reflects the importance of stratifying or adjusting for social determinants when evaluating interventions aimed at reducing disparities. The simulation thus highlights how easily misleading conclusions can arise if disparities are not properly accounted for in causal analysis.</p>
+<div id="the-form-of-selection-bias" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> The Form of Selection Bias<a href="confounding-and-selection-bias.html#the-form-of-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Selection bias arises when the individuals included in a study are not representative of the target population due to a systematic filtering process. This filtering — whether intentional (like restricting analysis to a subgroup) or unintentional (like only including those who responded to a survey) — can distort the observed relationship between an exposure and an outcome. The core structure of selection bias involves inclusion in the study being related to variables that are also related to the exposure or the outcome. This means the analysis is performed on a biased subset of the population, which can create spurious associations or mask real ones, even when a true causal effect exists.</p>
+<p>In our simulation, we introduced selection bias by restricting the dataset to individuals with moderate to good diets. Because diet is related to both exercise and heart health, this restriction caused the analyzed sample to no longer reflect the full population. As a result, the apparent relationship between exercise and heart health in the filtered sample may differ from the true relationship in the full population. This demonstrates the form of selection bias: by conditioning on a variable that is related to both the exposure and the outcome (in this case, indirectly through diet), we introduced distortion into the analysis. This example shows how selection criteria — even seemingly benign ones — can alter causal interpretations if they create unbalanced or artificially restricted datasets.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="confounding-and-selection-bias.html#cb49-1" tabindex="-1"></a>df_biased <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(genetic_marker <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb49-2"><a href="confounding-and-selection-bias.html#cb49-2" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="confounding-and-selection-bias.html#cb49-3" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking, <span class="at">data =</span> df_biased)</span>
+<span id="cb49-4"><a href="confounding-and-selection-bias.html#cb49-4" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="confounding-and-selection-bias.html#cb49-5" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking <span class="sc">+</span> age, <span class="at">data =</span> df_biased)</span>
+<span id="cb49-6"><a href="confounding-and-selection-bias.html#cb49-6" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="confounding-and-selection-bias.html#cb49-7" tabindex="-1"></a>coef_naive <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb49-8"><a href="confounding-and-selection-bias.html#cb49-8" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="confounding-and-selection-bias.html#cb49-9" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb49-10"><a href="confounding-and-selection-bias.html#cb49-10" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="confounding-and-selection-bias.html#cb49-11" tabindex="-1"></a>coef_naive</span></code></pre></div>
+<pre><code>## [1] 4.998041</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="confounding-and-selection-bias.html#cb51-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
+<pre><code>## [1] 2.97812</code></pre>
 </div>
-<div id="prevention-program-evaluation" class="section level2 hasAnchor" number="9.4">
-<h2><span class="header-section-number">9.4</span> Prevention program evaluation<a href="applications-of-causal-inference-in-public-health-and-medical-research.html#prevention-program-evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Prevention program evaluation involves assessing the effectiveness of initiatives designed to reduce the risk of adverse health outcomes before they occur. These programs might target behaviors (e.g., smoking cessation), environmental risks (e.g., air quality improvement), or access to services (e.g., vaccination campaigns). Evaluators aim to determine whether the program caused measurable changes in outcomes such as disease incidence, risk factor reduction, or health equity. This requires careful consideration of confounding factors, selection bias, and whether the observed differences can be attributed to the intervention itself — making causal inference tools central to prevention research.</p>
-<p>In our simulation, the public health policy acts like a prevention program aimed at improving long-term health outcomes. By comparing the health trajectories of individuals in the policy versus no-policy groups, we can estimate the effect of the intervention. However, the simulation also reveals a key challenge: even if a program targets at-risk populations, initial disparities (like poorer baseline health) may mask its true benefits unless we adjust for those differences. This mirrors real-world prevention evaluations, where randomized trials or proper covariate adjustment are essential to distinguish actual program impact from background variability.</p>
+<div id="how-to-adjust-for-selection-bias" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> How to Adjust for Selection Bias<a href="confounding-and-selection-bias.html#how-to-adjust-for-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Adjusting for selection bias is more challenging than adjusting for confounding, because selection bias arises when the sample being analyzed is not representative of the target population due to a systematic inclusion process. This often happens when selection into the dataset depends on variables related to both the exposure and the outcome, introducing a spurious association that distorts causal estimates. Unlike confounding, which can often be handled by conditioning on measured variables, selection bias may require more complex strategies such as inverse probability weighting (IPW), sensitivity analysis, or explicitly modeling the selection mechanism. The key to adjusting for selection bias is understanding why and how certain individuals are excluded or included in the analysis — and then incorporating that information to correct the bias.</p>
+<p>In the simulation above, we introduced selection bias by filtering the dataset to include only individuals who smoked more than the average level. Because smoking is influenced by age and also affects lung cancer, conditioning on it distorts the relationship between age and lung cancer. While the naive model estimated the effect of smoking without accounting for age, the adjusted model included age as a covariate and produced a more accurate effect estimate. However, unlike confounding, adjusting for a covariate like age doesn’t always fully correct for selection bias — especially when selection is based on a collider or a downstream consequence of both exposure and outcome. This illustrates that although standard regression adjustment can help, it may not completely remove bias introduced through selective inclusion, reinforcing the need to carefully consider how and why individuals are included in an analysis.</p>
 
 </div>
 </div>
@@ -323,8 +337,8 @@ Examples of systems-level interventions in public health and policy</p>
           </div>
         </div>
       </div>
-<a href="from-identification-to-estimation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="presentation-of-final-projects.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="introduction-to-causal-diagrams.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="other-common-pitfalls-of-causal-analyses.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -355,7 +369,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/fbargaglistoffi/causal_inference_graduate/edit/main/09_public_health.Rmd",
+    "link": "https://github.com/fbargaglistoffi/causal_inference_graduate/edit/main/06_confounding_bias.Rmd",
     "text": "Edit"
   },
   "history": {
@@ -363,7 +377,7 @@ gitbook.start({
     "text": null
   },
   "view": {
-    "link": "https://github.com/fbargaglistoffi/causal_inference_graduate/blob/main/09_public_health.Rmd",
+    "link": "https://github.com/fbargaglistoffi/causal_inference_graduate/blob/main/06_confounding_bias.Rmd",
     "text": null
   },
   "download": null,
