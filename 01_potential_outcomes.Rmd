@@ -94,6 +94,8 @@ print(p1)
 
 ```
 
+If we only compare the death rates between groups that received treatment A against groups that received treatment B, treatment A seems to be more effective at treating patients.
+
 ```{r}
 
 group_means <- df %>%
@@ -125,6 +127,8 @@ p2 <- ggplot(group_means, aes(x = X_Pos, y = Death_rate, color = Treatment_Color
 print(p2)
 
 ```
+
+Only after stratifying by the severity of the case are we able to observe that treatment B is actually more effective than treatment A for both mild and severe pneumonia cases.
 
 ## Introduction to Counterfactuals and Potential Outcomes
 
