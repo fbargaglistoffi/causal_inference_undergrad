@@ -136,6 +136,14 @@ At the heart of causal inference lies a simple yet powerful idea: counterfactual
 
 Building on the concept of counterfactuals, the Average Treatment Effect (ATE) provides a formal way to quantify the impact of a treatment or intervention across a population. Since we cannot observe both potential outcomes (treated and untreated) for the same individual, ATE instead compares the average outcome we would see if everyone received the treatment versus if no one did. Mathematically, it is the difference between the expected value of the potential outcome under treatment and the expected value under control. While individual causal effects remain unobservable, the ATE offers a population-level summary of the treatment's impact — a cornerstone of policy evaluation, randomized experiments, and observational causal analysis.
 
+Counterfactuals can be represented using potential outcomes notation. Here is the basic notation:
+
+- $Y\;=\;$ the observed outcome
+- $Y(0)\;=\;$ the potential outcome under no treatment  
+- $Y(1)\;=\;$ the potential outcome under treatment  
+- $W\;=\;$ a binary variable that represents whether a unit was treated or not. If $W = 1$, then the unit was treated. If $W = 0$, then the unit was not treated.  
+Notice that the observed outcome can be expressed in terms of potential outcomes: $Y = (W)Y(1) + (1-W)Y(0)$. So $Y = Y(1)$ if the unit was treated and $Y = Y(0)$ if the unit was not treated. The previous equation is known as consistency.
+
 ```{r}
 
 n <- 2000
@@ -169,9 +177,30 @@ cat("Naive (unadjusted) ATE estimate:", round(naive_ate, 3), "\n")
 ## Causal Estimands and Identification
 
 Causal estimands are the quantities we aim to estimate to understand the effect of a treatment or intervention. The most common estimands include:\
+
 - Average Treatment Effect (ATE): Measures the average difference in outcomes if everyone received the treatment versus if no one did.\
+
+$$
+ATE = E[Y(1)-Y(0)]
+$$
+
 - Average Treatment Effect on the Treated (ATT): Measures the effect of treatment for those who actually received the treatment.\
+
+$$
+ATT = E[Y(1) - Y(0)\ | \ W = 1]
+$$
+
 - Average Treatment Effect on the Controls (ATC): Measures the effect for those who did not receive the treatment.\
-- Conditional Average Treatment Effect (CATE): Measures the treatment effect for subgroups defined by observed characteristics (e.g., older vs. younger patients).
+
+$$
+ATC = E[Y(1) - Y(0)\ | \ W = 0]
+$$
+
+- Conditional Average Treatment Effect (CATE): Measures the treatment effect for subgroups defined by observed characteristics (e.g., older vs. younger patients). 
+
+$$
+CATE = E[Y(1) - Y(0)\ | \ X = x] 
+$$
+Think of $X=x$ where $X$ is some form of age classification and $x$ could be a value of the age classifcation, such as younger or older.
 
 Identification is the process of linking a causal estimand (like ATE) to observable data. Without valid identification, any estimates we produce may be biased or incorrect. One major challenge in causal inference is that we can never observe both potential outcomes for the same person — only the outcome under the actual treatment they received. This is the Fundamental Problem of Causal Inference.

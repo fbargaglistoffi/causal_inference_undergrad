@@ -53,8 +53,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -64,7 +65,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -272,28 +273,28 @@ Examples of misclassification and selection bias in public health research</p>
 <p>Measurement bias occurs when the method used to collect data leads to systematic errors in the values recorded for a variable. This can happen when an exposure, outcome, or confounder is misclassified or inaccurately measured in a way that consistently overstates or understates the true value. Measurement bias is problematic because it can distort observed associations and lead to incorrect conclusions about the relationships between variables. Unlike random measurement error, which tends to cancel out over large samples, measurement bias introduces consistent errors that don’t disappear with more data. It can arise from faulty instruments, poorly worded survey questions, or inconsistent data collection procedures, and it often goes unnoticed unless explicitly tested for.</p>
 <p>In public health and medical research, measurement bias can affect both exposure and outcome variables. For example, if smoking behavior is self-reported and individuals tend to underreport how much they smoke, the study will underestimate the true relationship between smoking and lung cancer. Similarly, if age is recorded in broad categories rather than precise years, it can limit the ability to adjust accurately for confounding. Even adjusting for confounders may not correct measurement bias if those confounders are also measured with error. This makes it critical to use reliable, validated measurement tools and to account for potential misclassification during analysis, especially in observational studies where data quality may vary widely.</p>
 <p>This simulation demonstrates measurement bias by comparing the estimated effect of smoking on lung cancer using the true smoking values versus mismeasured (underreported) smoking. The model using mismeasured smoking underestimates the true effect, showing how systematic error in recording an exposure can bias causal estimates toward zero.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb53-2"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-2" tabindex="-1"></a></span>
-<span id="cb53-3"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
-<span id="cb53-4"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-4" tabindex="-1"></a></span>
-<span id="cb53-5"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-5" tabindex="-1"></a>true_smoking <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb53-6"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-6" tabindex="-1"></a></span>
-<span id="cb53-7"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-7" tabindex="-1"></a><span class="co"># no age to isolate measurement bias in smoking</span></span>
-<span id="cb53-8"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-8" tabindex="-1"></a>lung_cancer <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> true_smoking <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb53-9"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-9" tabindex="-1"></a></span>
-<span id="cb53-10"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-10" tabindex="-1"></a>measured_smoking <span class="ot">&lt;-</span> true_smoking <span class="sc">-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
-<span id="cb53-11"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-11" tabindex="-1"></a></span>
-<span id="cb53-12"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-12" tabindex="-1"></a>true_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> true_smoking <span class="sc">+</span> age)</span>
-<span id="cb53-13"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-13" tabindex="-1"></a></span>
-<span id="cb53-14"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-14" tabindex="-1"></a>biased_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> measured_smoking <span class="sc">+</span> age)</span>
-<span id="cb53-15"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-15" tabindex="-1"></a></span>
-<span id="cb53-16"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-16" tabindex="-1"></a>true_coef <span class="ot">&lt;-</span> <span class="fu">summary</span>(true_model)<span class="sc">$</span>coefficients[<span class="st">&quot;true_smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb53-17"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-17" tabindex="-1"></a></span>
-<span id="cb53-18"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-18" tabindex="-1"></a>biased_coef <span class="ot">&lt;-</span> <span class="fu">summary</span>(biased_model)<span class="sc">$</span>coefficients[<span class="st">&quot;measured_smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb53-19"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-19" tabindex="-1"></a></span>
-<span id="cb53-20"><a href="other-common-pitfalls-of-causal-analyses.html#cb53-20" tabindex="-1"></a>true_coef</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb73-2"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-2" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb73-4"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-4" tabindex="-1"></a></span>
+<span id="cb73-5"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-5" tabindex="-1"></a>true_smoking <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb73-6"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-6" tabindex="-1"></a></span>
+<span id="cb73-7"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-7" tabindex="-1"></a><span class="co"># no age to isolate measurement bias in smoking</span></span>
+<span id="cb73-8"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-8" tabindex="-1"></a>lung_cancer <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> true_smoking <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb73-9"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-9" tabindex="-1"></a></span>
+<span id="cb73-10"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-10" tabindex="-1"></a>measured_smoking <span class="ot">&lt;-</span> true_smoking <span class="sc">-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb73-11"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-11" tabindex="-1"></a></span>
+<span id="cb73-12"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-12" tabindex="-1"></a>true_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> true_smoking <span class="sc">+</span> age)</span>
+<span id="cb73-13"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-13" tabindex="-1"></a></span>
+<span id="cb73-14"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-14" tabindex="-1"></a>biased_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> measured_smoking <span class="sc">+</span> age)</span>
+<span id="cb73-15"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-15" tabindex="-1"></a></span>
+<span id="cb73-16"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-16" tabindex="-1"></a>true_coef <span class="ot">&lt;-</span> <span class="fu">summary</span>(true_model)<span class="sc">$</span>coefficients[<span class="st">&quot;true_smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb73-17"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-17" tabindex="-1"></a></span>
+<span id="cb73-18"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-18" tabindex="-1"></a>biased_coef <span class="ot">&lt;-</span> <span class="fu">summary</span>(biased_model)<span class="sc">$</span>coefficients[<span class="st">&quot;measured_smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb73-19"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-19" tabindex="-1"></a></span>
+<span id="cb73-20"><a href="other-common-pitfalls-of-causal-analyses.html#cb73-20" tabindex="-1"></a>true_coef</span></code></pre></div>
 <pre><code>## [1] 2.982501</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="other-common-pitfalls-of-causal-analyses.html#cb55-1" tabindex="-1"></a>biased_coef</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="other-common-pitfalls-of-causal-analyses.html#cb75-1" tabindex="-1"></a>biased_coef</span></code></pre></div>
 <pre><code>## [1] 2.356849</code></pre>
 </div>
 <div id="non-causal-diagrams" class="section level2 hasAnchor" number="7.2">
@@ -373,6 +374,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
