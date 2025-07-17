@@ -144,7 +144,6 @@ Counterfactuals can be represented using potential outcomes notation. Here is th
 - $W\;=\;$ a binary variable that represents whether a unit was treated or not. If $W = 1$, then the unit was treated. If $W = 0$, then the unit was not treated.  
 Notice that the observed outcome can be expressed in terms of potential outcomes: $Y = (W)Y(1) + (1-W)Y(0)$. So $Y = Y(1)$ if the unit was treated and $Y = Y(0)$ if the unit was not treated. The previous equation is known as consistency.
 
-
 ```{r}
 
 n <- 2000
@@ -202,6 +201,6 @@ $$
 $$
 CATE = E[Y(1) - Y(0)\ | \ X = x] 
 $$
-Think of $X=x$ as $X \;=\;$ age classification and $x$ could be older or younger.
+Think of $X=x$ where $X$ is some form of age classification and $x$ could be a value of the age classifcation, such as younger or older.
 
 Identification is the process of linking a causal estimand (like ATE) to observable data. Without valid identification, any estimates we produce may be biased or incorrect. One major challenge in causal inference is that we can never observe both potential outcomes for the same person — only the outcome under the actual treatment they received. This is the Fundamental Problem of Causal Inference.
