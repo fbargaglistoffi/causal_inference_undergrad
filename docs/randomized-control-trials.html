@@ -300,12 +300,12 @@ Selected DAG examples from public health studies (provided in class)</p>
 <span id="cb26-20"><a href="randomized-control-trials.html#cb26-20" tabindex="-1"></a></span>
 <span id="cb26-21"><a href="randomized-control-trials.html#cb26-21" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
 <pre><code>##        age treatment        y
-## 1 70.65289         0 70.64327
-## 2 60.26631         0 84.00313
-## 3 56.38332         1 62.38144
-## 4 57.79955         1 55.04975
-## 5 36.34660         0 84.09071
-## 6 40.80364         1 49.72174</code></pre>
+## 1 52.67790         0 75.09602
+## 2 46.00639         0 89.00471
+## 3 52.76884         0 73.81264
+## 4 37.66327         1 85.48502
+## 5 57.53575         1 73.73735
+## 6 52.89261         1 80.17162</code></pre>
 <p><strong>Estimated the Average Treatment Effect (ATE)</strong></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="randomized-control-trials.html#cb28-1" tabindex="-1"></a>ate_estimate <span class="ot">&lt;-</span> rct_data <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="randomized-control-trials.html#cb28-2" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
@@ -314,7 +314,7 @@ Selected DAG examples from public health studies (provided in class)</p>
 <span id="cb28-5"><a href="randomized-control-trials.html#cb28-5" tabindex="-1"></a>  <span class="fu">pull</span>(ATE)</span>
 <span id="cb28-6"><a href="randomized-control-trials.html#cb28-6" tabindex="-1"></a></span>
 <span id="cb28-7"><a href="randomized-control-trials.html#cb28-7" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Estimated ATE: &quot;</span>, <span class="fu">round</span>(ate_estimate, <span class="dv">2</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;Estimated ATE:  -10.17&quot;</code></pre>
+<pre><code>## [1] &quot;Estimated ATE:  -9.76&quot;</code></pre>
 <p><strong>Visualization of the Outcome Distributions</strong></p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="randomized-control-trials.html#cb30-1" tabindex="-1"></a><span class="fu">ggplot</span>(rct_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> y, <span class="at">fill =</span> <span class="fu">as.factor</span>(treatment))) <span class="sc">+</span> </span>
 <span id="cb30-2"><a href="randomized-control-trials.html#cb30-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>

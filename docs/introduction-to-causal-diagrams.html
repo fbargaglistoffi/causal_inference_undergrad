@@ -367,10 +367,10 @@ Examples from public health studies involving confounding adjustment</p>
 <span id="cb59-8"><a href="introduction-to-causal-diagrams.html#cb59-8" tabindex="-1"></a></span>
 <span id="cb59-9"><a href="introduction-to-causal-diagrams.html#cb59-9" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##     Estimate   Std. Error      t value     Pr(&gt;|t|) 
-##   4.14344585   0.03776859 109.70614088   0.00000000</code></pre>
+##   4.17476713   0.03633925 114.88315130   0.00000000</code></pre>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="introduction-to-causal-diagrams.html#cb61-1" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##    Estimate  Std. Error     t value    Pr(&gt;|t|) 
-##  3.01503260  0.03231176 93.31068101  0.00000000</code></pre>
+##  3.01722120  0.03185814 94.70800530  0.00000000</code></pre>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="introduction-to-causal-diagrams.html#cb63-1" tabindex="-1"></a>selection_bias_dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;dag {</span></span>
 <span id="cb63-2"><a href="introduction-to-causal-diagrams.html#cb63-2" tabindex="-1"></a><span class="st">  diet -&gt; exercise</span></span>
 <span id="cb63-3"><a href="introduction-to-causal-diagrams.html#cb63-3" tabindex="-1"></a><span class="st">  diet -&gt; heart_health</span></span>
