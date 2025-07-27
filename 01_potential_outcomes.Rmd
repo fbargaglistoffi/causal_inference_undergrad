@@ -144,32 +144,38 @@ Counterfactuals can be represented using potential outcomes notation. Here is th
 - $W\;=\;$ a binary variable that represents whether a unit was treated or not. If $W = 1$, then the unit was treated. If $W = 0$, then the unit was not treated.  
 Notice that the observed outcome can be expressed in terms of potential outcomes: $Y = (W)Y(1) + (1-W)Y(0)$. So $Y = Y(1)$ if the unit was treated and $Y = Y(0)$ if the unit was not treated. The previous equation is known as consistency.
 
+The simulation below is testing the effect of a treatment on 2000 patients. The treatment was assigned to older people with higher levels of cholesterol. If we simply take the difference of the average outcome of the treated group and average outcome of the control group, then our estimate of the average treatment effect will be biased because age and cholesterol levels are confounding the effect of the treatment. This is shown by how the true average treatment effect differs from naive average treatment effect estimate.
+
 ```{r}
+
+set.seed(123)
 
 n <- 2000
 
-age <- rnorm(n, mean = 50, sd = 10)           
+age <- rnorm(n, mean = 50, sd = 10)
+bmi <- rnorm(n, mean = 25, sd = 4)
+cholesterol <- rnorm(n, mean = 200, sd = 30)
 
-bmi <- rnorm(n, mean = 25, sd = 4)            
+# More extreme treatment assignment: strong bias toward older, high-cholesterol people
+treatment <- rbinom(n, 1, plogis(0.2 * age + 0.05 * cholesterol - 25))
 
-cholesterol <- rnorm(n, mean = 200, sd = 30)  
+# True untreated outcome
+y_0 <- 140 - 1.5 * age + 0.3 * bmi + 0.5 * cholesterol + rnorm(n, sd = 5)
 
-treatment <- rbinom(n, 1, plogis(0.05 * age + 0.01 * cholesterol - 2))
+# True treated outcome: better, but depends on age & cholesterol
+y_1 <- y_0 - (40 + 1.5 * age - 0.8 * cholesterol) + rnorm(n, sd = 2)
 
-y_0 <- 140 - 0.5 * age + 0.3 * bmi + 0.2 * cholesterol + rnorm(n, sd = 5)
-
-y_1 <- y_0 - (40 + 1.0 * age - 0.3 * cholesterol) + rnorm(n, sd = 1.5)
-
+# Observed outcome
 y <- ifelse(treatment == 1, y_1, y_0)
 
+# True ATE: average of individual-level effects
 true_ate <- mean(y_1 - y_0)
-
-cat("True ATE:", round(true_ate, 3), "\n")
 
 df <- data.frame(age, bmi, cholesterol, treatment, y)
 
+# Naive estimate: difference in means
 naive_ate <- mean(df$y[df$treatment == 1]) - mean(df$y[df$treatment == 0])
-
+cat("True ATE:", round(true_ate, 3), "\n")
 cat("Naive (unadjusted) ATE estimate:", round(naive_ate, 3), "\n")
 
 ```

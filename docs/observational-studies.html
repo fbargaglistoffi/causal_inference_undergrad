@@ -289,12 +289,12 @@ Additional DAG exercises provided in class</p>
 <span id="cb31-12"><a href="observational-studies.html#cb31-12" tabindex="-1"></a></span>
 <span id="cb31-13"><a href="observational-studies.html#cb31-13" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##    Estimate  Std. Error     t value    Pr(&gt;|t|) 
-##  0.99441785  0.02092428 47.52458309  0.00000000</code></pre>
+##  1.04124002  0.02073571 50.21483128  0.00000000</code></pre>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="observational-studies.html#cb33-1" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(heart_health <span class="sc">~</span> exercise <span class="sc">+</span> genetics, <span class="at">data =</span> df)</span>
 <span id="cb33-2"><a href="observational-studies.html#cb33-2" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="observational-studies.html#cb33-3" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, ]</span></code></pre></div>
 <pre><code>##      Estimate    Std. Error       t value      Pr(&gt;|t|) 
-##  7.850907e-01  2.257521e-02  3.477667e+01 1.347795e-207</code></pre>
+##  8.058919e-01  2.247952e-02  3.585004e+01 9.733499e-218</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="observational-studies.html#cb35-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
 <span id="cb35-2"><a href="observational-studies.html#cb35-2" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="observational-studies.html#cb35-3" tabindex="-1"></a>naive_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;exercise&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
