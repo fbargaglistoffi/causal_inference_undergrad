@@ -296,19 +296,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.6443 -0.9234  0.0055  0.9003  3.5857 
+## -3.5669 -0.8343 -0.0034  0.8674  3.6970 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -0.73506    0.04938  -14.89   &lt;2e-16 ***
-## A            2.50832    0.05729   43.78   &lt;2e-16 ***
-## E            3.47181    0.05728   60.61   &lt;2e-16 ***
+## (Intercept) -0.73522    0.04744  -15.50   &lt;2e-16 ***
+## A            2.43961    0.05552   43.94   &lt;2e-16 ***
+## E            3.51605    0.05553   63.32   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.281 on 1997 degrees of freedom
-## Multiple R-squared:  0.7361, Adjusted R-squared:  0.7358 
-## F-statistic:  2785 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 1.241 on 1997 degrees of freedom
+## Multiple R-squared:  0.7523, Adjusted R-squared:  0.7521 
+## F-statistic:  3033 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="effect-modification-and-interaction.html#cb38-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -316,20 +316,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.5538 -0.6745 -0.0114  0.7051  2.8409 
+## -3.0882 -0.6687 -0.0243  0.6506  3.2860 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.05652    0.04432   1.275    0.202    
-## A            0.90599    0.06305  14.369   &lt;2e-16 ***
-## E            1.89178    0.06261  30.215   &lt;2e-16 ***
-## A:E          3.21151    0.08926  35.978   &lt;2e-16 ***
+## (Intercept) -0.03704    0.04413  -0.839    0.401    
+## A            1.00947    0.06316  15.984   &lt;2e-16 ***
+## E            2.06465    0.06362  32.451   &lt;2e-16 ***
+## A:E          2.90657    0.09004  32.282   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.9979 on 1996 degrees of freedom
-## Multiple R-squared:  0.8399, Adjusted R-squared:  0.8396 
-## F-statistic:  3490 on 3 and 1996 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 1.006 on 1996 degrees of freedom
+## Multiple R-squared:  0.8373, Adjusted R-squared:  0.837 
+## F-statistic:  3423 on 3 and 1996 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The plot shows that heart transplants improve survival more for individuals who received vitamins, illustrating effect modification by vitamin status.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="effect-modification-and-interaction.html#cb40-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
 <span id="cb40-2"><a href="effect-modification-and-interaction.html#cb40-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>

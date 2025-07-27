@@ -296,9 +296,9 @@ Case studies on unmeasured confounding and robustness of findings</p>
 <span id="cb77-21"><a href="from-identification-to-estimation.html#cb77-21" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
 <span id="cb77-22"><a href="from-identification-to-estimation.html#cb77-22" tabindex="-1"></a></span>
 <span id="cb77-23"><a href="from-identification-to-estimation.html#cb77-23" tabindex="-1"></a>coef_naive</span></code></pre></div>
-<pre><code>## [1] 4.989247</code></pre>
+<pre><code>## [1] 4.997595</code></pre>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="from-identification-to-estimation.html#cb79-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
-<pre><code>## [1] 3.015073</code></pre>
+<pre><code>## [1] 2.945836</code></pre>
 <p>This simulation ties directly into the distinction between identification and estimation in causal inference. The true causal relationship between smoking and lung cancer is confounded by age, which affects both variables. Without adjusting for age, the naive model fails to identify the causal effect correctly, leading to a biased estimate. Identification is achieved by recognizing and adjusting for age as a confounder, based on assumptions encoded in the study design or a causal diagram. Once this adjustment is made, we can proceed to estimation—using regression to quantify the causal effect of smoking on lung cancer. This demonstrates that correct identification must precede estimation in order to yield valid and interpretable results.</p>
 </div>
 <div id="estimation-of-causal-effects" class="section level2 hasAnchor" number="8.2">
