@@ -289,10 +289,10 @@ Examples of systems-level interventions in public health and policy</p>
 <span id="cb81-18"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb81-18" tabindex="-1"></a></span>
 <span id="cb81-19"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb81-19" tabindex="-1"></a><span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;PolicyPolicy&quot;</span>, ]</span></code></pre></div>
 <pre><code>##      Estimate    Std. Error       t value      Pr(&gt;|t|) 
-## -3.478836e+00  2.902882e-01 -1.198407e+01  5.235952e-32</code></pre>
+## -3.490317e+00  2.968524e-01 -1.175775e+01  6.554473e-31</code></pre>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb83-1" tabindex="-1"></a><span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;PolicyPolicy&quot;</span>, ]</span></code></pre></div>
 <pre><code>##     Estimate   Std. Error      t value     Pr(&gt;|t|) 
-## 4.852042e+00 3.082862e-01 1.573876e+01 1.054019e-52</code></pre>
+## 5.070358e+00 3.247186e-01 1.561462e+01 6.003829e-52</code></pre>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb85-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb85-2"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb85-2" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Policy, <span class="at">y =</span> Health_Outcome, <span class="at">fill =</span> Policy)) <span class="sc">+</span></span>
 <span id="cb85-3"><a href="applications-of-causal-inference-in-public-health-and-medical-research.html#cb85-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>

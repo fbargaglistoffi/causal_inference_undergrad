@@ -275,37 +275,59 @@ Selected DAG examples from public health studies (provided in class)</p>
 <div id="randomized-controlled-trials-the-gold-standard" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Randomized controlled trials: the gold standard<a href="randomized-control-trials.html#randomized-controlled-trials-the-gold-standard" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Randomized Controlled Trials (RCTs) are widely considered the gold standard in causal inference because they offer the most rigorous way to establish whether a treatment or intervention truly causes an outcome. The key feature that sets RCTs apart is randomization: participants are randomly assigned to treatment or control groups, which ensures that—on average—all other characteristics (like age, health status, and behaviors) are equally distributed across groups. This process breaks any systematic link between confounders and treatment assignment, making the groups exchangeable and allowing us to interpret differences in outcomes as causal effects of the treatment.</p>
+<p><strong>Exchangeability</strong> is the key assumption for RCTs, and random assignment of the treatment in RCTs allows us to defend this assumption. Mathematically, exchangeability is written as:</p>
+<p><span class="math display">\[
+(Y(1), Y(0)) \perp W
+\]</span>
+To understand this consider an single person. Exchangeability says that if we have information about what treatment they received, then that doesn’t give us any information about what their potential outcome will be. So on average, the potential outcomes of the treated and control groups will be the same and they will be balanced on observable and unobservable factors. Using this assumption, we can identify the <strong>Population Average Treatment Effect</strong> with the following proof:</p>
+<p><span class="math display">\[
+\begin{align*}
+ATE &amp;= E[Y(1) - Y(0)] \\
+&amp;= E[Y(1)] - E[Y(0)] \quad \text{by linearity of expectation} \\
+&amp;= E[Y(1) \ | \ W=1] - E[Y(0) \ | \  W = 0] \quad \text{by exchangeability} \\
+&amp;= E[Y \ | \ W = 1] - E[Y \ | \ W = 0] \quad \text{by consistency}
+\end{align*}
+\]</span></p>
+<p>So we showed that the Population ATE can be expressed in the form of data we can observe. Specifically, it is the difference in means between the treated and control group. But we don’t have data on our entire population to get this causal effect. In practice, we estimate the causal effect using a sample. So the Sample ATE estimator is written as:</p>
+<p><span class="math display">\[
+\begin{align*}
+\hat{ATE} &amp;= \bar Y_1 - \bar Y_0 \quad
+\end{align*}
+\]</span></p>
+<p>In the equation above, <span class="math inline">\(\bar{Y_1}\)</span> is the average outcome of the treated group, and <span class="math inline">\(\bar{Y_0}\)</span> is the average outcome of the control group.</p>
 <p>Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.</p>
 <p>In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on patient outcomes. I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.</p>
 <p><strong>Simulated Baseline Data and Treatment Assignment</strong></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="randomized-control-trials.html#cb26-1" tabindex="-1"></a><span class="co"># pacman::p_load(&quot;dplyr&quot;, &quot;ggplot2&quot;)</span></span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="randomized-control-trials.html#cb26-1" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>)</span>
 <span id="cb26-2"><a href="randomized-control-trials.html#cb26-2" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="randomized-control-trials.html#cb26-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb26-3"><a href="randomized-control-trials.html#cb26-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb26-4"><a href="randomized-control-trials.html#cb26-4" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="randomized-control-trials.html#cb26-5" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)</span>
+<span id="cb26-5"><a href="randomized-control-trials.html#cb26-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb26-6"><a href="randomized-control-trials.html#cb26-6" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="randomized-control-trials.html#cb26-7" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb26-7"><a href="randomized-control-trials.html#cb26-7" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)</span>
 <span id="cb26-8"><a href="randomized-control-trials.html#cb26-8" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="randomized-control-trials.html#cb26-9" tabindex="-1"></a>y_0 <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">-</span> <span class="fl">0.3</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb26-9"><a href="randomized-control-trials.html#cb26-9" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
 <span id="cb26-10"><a href="randomized-control-trials.html#cb26-10" tabindex="-1"></a></span>
-<span id="cb26-11"><a href="randomized-control-trials.html#cb26-11" tabindex="-1"></a>y_1 <span class="ot">&lt;-</span> y_0 <span class="sc">-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb26-11"><a href="randomized-control-trials.html#cb26-11" tabindex="-1"></a>y_0 <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">-</span> <span class="fl">0.3</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">10</span>)</span>
 <span id="cb26-12"><a href="randomized-control-trials.html#cb26-12" tabindex="-1"></a></span>
-<span id="cb26-13"><a href="randomized-control-trials.html#cb26-13" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(treatment <span class="sc">==</span> <span class="dv">1</span>, y_1, y_0)</span>
+<span id="cb26-13"><a href="randomized-control-trials.html#cb26-13" tabindex="-1"></a>y_1 <span class="ot">&lt;-</span> y_0 <span class="sc">-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">5</span>)</span>
 <span id="cb26-14"><a href="randomized-control-trials.html#cb26-14" tabindex="-1"></a></span>
-<span id="cb26-15"><a href="randomized-control-trials.html#cb26-15" tabindex="-1"></a>rct_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb26-16"><a href="randomized-control-trials.html#cb26-16" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
-<span id="cb26-17"><a href="randomized-control-trials.html#cb26-17" tabindex="-1"></a>  <span class="at">treatment =</span> treatment,</span>
-<span id="cb26-18"><a href="randomized-control-trials.html#cb26-18" tabindex="-1"></a>  <span class="at">y =</span> y</span>
-<span id="cb26-19"><a href="randomized-control-trials.html#cb26-19" tabindex="-1"></a>)</span>
-<span id="cb26-20"><a href="randomized-control-trials.html#cb26-20" tabindex="-1"></a></span>
-<span id="cb26-21"><a href="randomized-control-trials.html#cb26-21" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
-<pre><code>##        age treatment        y
-## 1 52.67790         0 75.09602
-## 2 46.00639         0 89.00471
-## 3 52.76884         0 73.81264
-## 4 37.66327         1 85.48502
-## 5 57.53575         1 73.73735
-## 6 52.89261         1 80.17162</code></pre>
+<span id="cb26-15"><a href="randomized-control-trials.html#cb26-15" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(treatment <span class="sc">==</span> <span class="dv">1</span>, y_1, y_0)</span>
+<span id="cb26-16"><a href="randomized-control-trials.html#cb26-16" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="randomized-control-trials.html#cb26-17" tabindex="-1"></a>rct_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb26-18"><a href="randomized-control-trials.html#cb26-18" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
+<span id="cb26-19"><a href="randomized-control-trials.html#cb26-19" tabindex="-1"></a>  <span class="at">treatment =</span> treatment,</span>
+<span id="cb26-20"><a href="randomized-control-trials.html#cb26-20" tabindex="-1"></a>  <span class="at">y =</span> y</span>
+<span id="cb26-21"><a href="randomized-control-trials.html#cb26-21" tabindex="-1"></a>)</span>
+<span id="cb26-22"><a href="randomized-control-trials.html#cb26-22" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="randomized-control-trials.html#cb26-23" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
+<pre><code>##        age treatment         y
+## 1 44.39524         0  85.17835
+## 2 47.69823         1  78.05093
+## 3 65.58708         1  50.10747
+## 4 50.70508         1  75.22072
+## 5 51.29288         0 110.59704
+## 6 67.15065         0  79.48065</code></pre>
 <p><strong>Estimated the Average Treatment Effect (ATE)</strong></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="randomized-control-trials.html#cb28-1" tabindex="-1"></a>ate_estimate <span class="ot">&lt;-</span> rct_data <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="randomized-control-trials.html#cb28-2" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
@@ -314,7 +336,7 @@ Selected DAG examples from public health studies (provided in class)</p>
 <span id="cb28-5"><a href="randomized-control-trials.html#cb28-5" tabindex="-1"></a>  <span class="fu">pull</span>(ATE)</span>
 <span id="cb28-6"><a href="randomized-control-trials.html#cb28-6" tabindex="-1"></a></span>
 <span id="cb28-7"><a href="randomized-control-trials.html#cb28-7" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Estimated ATE: &quot;</span>, <span class="fu">round</span>(ate_estimate, <span class="dv">2</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;Estimated ATE:  -9.76&quot;</code></pre>
+<pre><code>## [1] &quot;Estimated ATE:  -10.01&quot;</code></pre>
 <p><strong>Visualization of the Outcome Distributions</strong></p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="randomized-control-trials.html#cb30-1" tabindex="-1"></a><span class="fu">ggplot</span>(rct_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> y, <span class="at">fill =</span> <span class="fu">as.factor</span>(treatment))) <span class="sc">+</span> </span>
 <span id="cb30-2"><a href="randomized-control-trials.html#cb30-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
