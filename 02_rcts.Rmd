@@ -31,7 +31,7 @@ Randomized Controlled Trials (RCTs) are widely considered the gold standard in c
 
 Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.  
 
-In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on patient outcomes. I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.  
+In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on patient outcomes. I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact. I also show random assignment allows for the exchangeability assumption to hold.
 
 **Simulated Baseline Data and Treatment Assignment**  
 
@@ -90,6 +90,25 @@ ggplot(rct_data, aes(x = as.factor(treatment), y = y, fill = as.factor(treatment
   theme_minimal()
 
 ```
+
+**Visualization of Observables**
+
+```{r}
+
+ggplot(rct_data, aes(x = age, color = as.factor(treatment), fill = as.factor(treatment))) + 
+  geom_density(alpha = 0.4) +
+  scale_fill_manual(values = c("0" = "red", "1" = "blue"),
+                    labels = c("Control", "Treated"),
+                    name = "Group") +
+  scale_color_manual(values = c("0" = "red", "1" = "blue"),
+                     labels = c("Control", "Treated"),
+                     name = "Group") +
+  labs(x = "Age", y = "Density", title = "Density Plot for Treated and Control Groups") + 
+  theme_minimal()
+
+```
+
+This plot shows that randomization balances on observable (and unobservable factors). We see that the distribution of age is balanced is pretty much identical between the treated and control groups. Since the treatment and control groups are practically the same, we say they are exchangeable.
 
 ## Basic Experimental Design Principles  
 
