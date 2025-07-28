@@ -57,7 +57,7 @@ In the equation above, $\bar{Y_1}$ is the average outcome of the treated group, 
 
 Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.  
 
-In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on patient outcomes. I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.  
+In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on a patient's blood pressure (mmHg). I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. In this example, the baseline characteristics that were measured were age, BMI, cholesterol (mg/dL), and daily sodium intake (mg/day). After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.  
 
 **Simulated Baseline Data and Treatment Assignment**  
 
@@ -71,9 +71,16 @@ n <- 2000
 
 age <- rnorm(n, 50, 10)
 
+bmi <- rnorm(n, 27, 4)
+
+cholesterol <- rnorm(n, 200, 30)
+
+sodium_intake <- rnorm(n, 3000, 500)
+
 treatment <- rbinom(n, 1, 0.5)
 
-y_0 <- 100 - 0.3 * age + rnorm(n, sd = 10)
+y_0 <- 90 + 0.4 * age + 0.05 * cholesterol + 0.004 * sodium_intake + 
+  rnorm(n, sd = 10)
 
 y_1 <- y_0 - 10 + rnorm(n, sd = 5)
 
@@ -81,6 +88,9 @@ y <- ifelse(treatment == 1, y_1, y_0)
 
 rct_data <- data.frame(
   age = age,
+  bmi = bmi,
+  cholesterol = cholesterol,
+  sodium_intake = sodium_intake,
   treatment = treatment,
   y = y
 )
@@ -103,6 +113,8 @@ paste("Estimated ATE: ", round(ate_estimate, 2))
 
 ```
 
+Based on our estimate, the treatment reduces blood pressure by 10 mmHg.
+
 **Visualization of the Outcome Distributions**  
 
 ```{r}
@@ -118,6 +130,23 @@ ggplot(rct_data, aes(x = as.factor(treatment), y = y, fill = as.factor(treatment
   theme_minimal()
 
 ```
+
+
+```{r}
+
+# library(cobalt)
+
+bal.out <- bal.tab(treatment~age+bmi+cholesterol+sodium_intake, data = rct_data, s.d.denom = "pooled")
+
+set.cobalt.options(binary = "std")
+
+love.plot(bal.out, limits = c(-0.1, 0.1))
+
+```
+
+This visualization is called a **love plot**. It shows how balanced each of the observed characteristics is between the treated and control group. For example, a value of 0.05 for age means that the treated group's mean age is 0.05 standard deviations above the control group's mean age, which is not much. Typically, an absolute standardized difference value of 0.10 or less typically means that the difference between the groups is negligible. 
+
+So in this plot, all the observed characteristics are balanced. This example shows that random assignment of the treatment balances observed and unobserved characteristics. Since the groups are so similar, we say that the treated and control groups are exchangeable.
 
 ## Basic Experimental Design Principles  
 
