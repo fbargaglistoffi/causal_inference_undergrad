@@ -275,79 +275,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Adjustment methods typically aim to control for confounding, but they can also be used to detect effect modification when interaction terms are included. When effect modification is present, a single summary effect estimate (like an overall average) can be misleading. Instead, researchers often report subgroup-specific effects. Careful modeling and interpretation are necessary to distinguish between true effect modification and residual confounding.</p>
 <p>Simulation to Demonstrate Effect Modification</p>
 <p>We simulate a case where heart transplant improves survival, but the effect of transplant is stronger for individuals who receive vitamin supplements. That is, vitamin supplementation modifies the effect of transplant on survival. This reflects a scenario where a treatment (transplant) has a greater benefit under certain conditions (when the body is supported by vitamins), illustrating effect modification.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="effect-modification-and-interaction.html#cb36-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb36-2"><a href="effect-modification-and-interaction.html#cb36-2" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="effect-modification-and-interaction.html#cb36-3" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># heart transplant</span></span>
-<span id="cb36-4"><a href="effect-modification-and-interaction.html#cb36-4" tabindex="-1"></a></span>
-<span id="cb36-5"><a href="effect-modification-and-interaction.html#cb36-5" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># vitamin</span></span>
-<span id="cb36-6"><a href="effect-modification-and-interaction.html#cb36-6" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="effect-modification-and-interaction.html#cb36-7" tabindex="-1"></a>survival <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">*</span> A <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> E <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> (A <span class="sc">*</span> E) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
-<span id="cb36-8"><a href="effect-modification-and-interaction.html#cb36-8" tabindex="-1"></a></span>
-<span id="cb36-9"><a href="effect-modification-and-interaction.html#cb36-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(survival, A, E)</span>
-<span id="cb36-10"><a href="effect-modification-and-interaction.html#cb36-10" tabindex="-1"></a></span>
-<span id="cb36-11"><a href="effect-modification-and-interaction.html#cb36-11" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(survival <span class="sc">~</span> A <span class="sc">+</span> E, <span class="at">data =</span> df)</span>
-<span id="cb36-12"><a href="effect-modification-and-interaction.html#cb36-12" tabindex="-1"></a></span>
-<span id="cb36-13"><a href="effect-modification-and-interaction.html#cb36-13" tabindex="-1"></a>adjusted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(survival <span class="sc">~</span> A <span class="sc">+</span> E <span class="sc">+</span> A <span class="sc">*</span> E, <span class="at">data =</span> df)</span>
-<span id="cb36-14"><a href="effect-modification-and-interaction.html#cb36-14" tabindex="-1"></a></span>
-<span id="cb36-15"><a href="effect-modification-and-interaction.html#cb36-15" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="effect-modification-and-interaction.html#cb30-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb30-2"><a href="effect-modification-and-interaction.html#cb30-2" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="effect-modification-and-interaction.html#cb30-3" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># heart transplant</span></span>
+<span id="cb30-4"><a href="effect-modification-and-interaction.html#cb30-4" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="effect-modification-and-interaction.html#cb30-5" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># vitamin</span></span>
+<span id="cb30-6"><a href="effect-modification-and-interaction.html#cb30-6" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="effect-modification-and-interaction.html#cb30-7" tabindex="-1"></a>survival <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">*</span> A <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> E <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> (A <span class="sc">*</span> E) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb30-8"><a href="effect-modification-and-interaction.html#cb30-8" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="effect-modification-and-interaction.html#cb30-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(survival, A, E)</span>
+<span id="cb30-10"><a href="effect-modification-and-interaction.html#cb30-10" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="effect-modification-and-interaction.html#cb30-11" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(survival <span class="sc">~</span> A <span class="sc">+</span> E, <span class="at">data =</span> df)</span>
+<span id="cb30-12"><a href="effect-modification-and-interaction.html#cb30-12" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="effect-modification-and-interaction.html#cb30-13" tabindex="-1"></a>adjusted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(survival <span class="sc">~</span> A <span class="sc">+</span> E <span class="sc">+</span> A <span class="sc">*</span> E, <span class="at">data =</span> df)</span>
+<span id="cb30-14"><a href="effect-modification-and-interaction.html#cb30-14" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="effect-modification-and-interaction.html#cb30-15" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = survival ~ A + E, data = df)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.5669 -0.8343 -0.0034  0.8674  3.6970 
+## -3.9644 -0.8594 -0.0175  0.8941  3.5872 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -0.73522    0.04744  -15.50   &lt;2e-16 ***
-## A            2.43961    0.05552   43.94   &lt;2e-16 ***
-## E            3.51605    0.05553   63.32   &lt;2e-16 ***
+## (Intercept) -0.74093    0.04832  -15.34   &lt;2e-16 ***
+## A            2.55081    0.05510   46.29   &lt;2e-16 ***
+## E            3.43272    0.05510   62.29   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.241 on 1997 degrees of freedom
-## Multiple R-squared:  0.7523, Adjusted R-squared:  0.7521 
-## F-statistic:  3033 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="effect-modification-and-interaction.html#cb38-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
+## Residual standard error: 1.231 on 1997 degrees of freedom
+## Multiple R-squared:  0.7455, Adjusted R-squared:  0.7453 
+## F-statistic:  2925 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="effect-modification-and-interaction.html#cb32-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = survival ~ A + E + A * E, data = df)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.0882 -0.6687 -0.0243  0.6506  3.2860 
+## -3.7688 -0.6833 -0.0006  0.6350  3.0543 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -0.03704    0.04413  -0.839    0.401    
-## A            1.00947    0.06316  15.984   &lt;2e-16 ***
-## E            2.06465    0.06362  32.451   &lt;2e-16 ***
-## A:E          2.90657    0.09004  32.282   &lt;2e-16 ***
+## (Intercept)  0.01795    0.04520   0.397    0.691    
+## A            1.07056    0.06313  16.959   &lt;2e-16 ***
+## E            1.97857    0.06257  31.623   &lt;2e-16 ***
+## A:E          2.92352    0.08872  32.954   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.006 on 1996 degrees of freedom
-## Multiple R-squared:  0.8373, Adjusted R-squared:  0.837 
-## F-statistic:  3423 on 3 and 1996 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.9913 on 1996 degrees of freedom
+## Multiple R-squared:  0.8352, Adjusted R-squared:  0.835 
+## F-statistic:  3372 on 3 and 1996 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The plot shows that heart transplants improve survival more for individuals who received vitamins, illustrating effect modification by vitamin status.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="effect-modification-and-interaction.html#cb40-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb40-2"><a href="effect-modification-and-interaction.html#cb40-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
-<span id="cb40-3"><a href="effect-modification-and-interaction.html#cb40-3" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="effect-modification-and-interaction.html#cb40-4" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb40-5"><a href="effect-modification-and-interaction.html#cb40-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vitamin_group =</span> <span class="fu">ifelse</span>(E <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Vitamins&quot;</span>, <span class="st">&quot;No Vitamins&quot;</span>))</span>
-<span id="cb40-6"><a href="effect-modification-and-interaction.html#cb40-6" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="effect-modification-and-interaction.html#cb40-7" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> A, <span class="at">y =</span> survival, <span class="at">color =</span> vitamin_group)) <span class="sc">+</span></span>
-<span id="cb40-8"><a href="effect-modification-and-interaction.html#cb40-8" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb40-9"><a href="effect-modification-and-interaction.html#cb40-9" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb40-10"><a href="effect-modification-and-interaction.html#cb40-10" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> vitamin_group)) <span class="sc">+</span></span>
-<span id="cb40-11"><a href="effect-modification-and-interaction.html#cb40-11" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> </span>
-<span id="cb40-12"><a href="effect-modification-and-interaction.html#cb40-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect Modification: Heart Transplant × Vitamin Supplement&quot;</span>,</span>
-<span id="cb40-13"><a href="effect-modification-and-interaction.html#cb40-13" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Heart Transplant (A)&quot;</span>,</span>
-<span id="cb40-14"><a href="effect-modification-and-interaction.html#cb40-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Survival&quot;</span>,</span>
-<span id="cb40-15"><a href="effect-modification-and-interaction.html#cb40-15" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Vitamin Group&quot;</span>) <span class="sc">+</span></span>
-<span id="cb40-16"><a href="effect-modification-and-interaction.html#cb40-16" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="effect-modification-and-interaction.html#cb34-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
+<span id="cb34-2"><a href="effect-modification-and-interaction.html#cb34-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
+<span id="cb34-3"><a href="effect-modification-and-interaction.html#cb34-3" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="effect-modification-and-interaction.html#cb34-4" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb34-5"><a href="effect-modification-and-interaction.html#cb34-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vitamin_group =</span> <span class="fu">ifelse</span>(E <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Vitamins&quot;</span>, <span class="st">&quot;No Vitamins&quot;</span>))</span>
+<span id="cb34-6"><a href="effect-modification-and-interaction.html#cb34-6" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="effect-modification-and-interaction.html#cb34-7" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> A, <span class="at">y =</span> survival, <span class="at">color =</span> vitamin_group)) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="effect-modification-and-interaction.html#cb34-8" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="effect-modification-and-interaction.html#cb34-9" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="effect-modification-and-interaction.html#cb34-10" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> vitamin_group)) <span class="sc">+</span></span>
+<span id="cb34-11"><a href="effect-modification-and-interaction.html#cb34-11" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb34-12"><a href="effect-modification-and-interaction.html#cb34-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect Modification: Heart Transplant × Vitamin Supplement&quot;</span>,</span>
+<span id="cb34-13"><a href="effect-modification-and-interaction.html#cb34-13" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Heart Transplant (A)&quot;</span>,</span>
+<span id="cb34-14"><a href="effect-modification-and-interaction.html#cb34-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Survival&quot;</span>,</span>
+<span id="cb34-15"><a href="effect-modification-and-interaction.html#cb34-15" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Vitamin Group&quot;</span>) <span class="sc">+</span></span>
+<span id="cb34-16"><a href="effect-modification-and-interaction.html#cb34-16" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>In this simulation, the benefit of heart transplant on survival is stronger for individuals who received vitamin supplements. A naive model without an interaction term fails to capture this difference and instead estimates an average effect across all individuals. By including an interaction term between transplant and vitamins, we reveal that the effect of transplant varies depending on vitamin use. The plot illustrates how survival is influenced not just by transplant alone, but by how vitamins modify its impact — highlighting the importance of detecting and modeling effect modification in public health research.</p>
 </div>
 <div id="identifying-interaction" class="section level2 hasAnchor" number="4.2">
