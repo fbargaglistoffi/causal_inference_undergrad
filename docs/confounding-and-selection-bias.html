@@ -182,8 +182,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html"><i class="fa fa-check"></i><b>4</b> Effect Modification and Interaction</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#effect-modification-and-adjustment-methods"><i class="fa fa-check"></i><b>4.1</b> Effect Modification and Adjustment Methods</a></li>
-<li class="chapter" data-level="4.2" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#identifying-interaction"><i class="fa fa-check"></i><b>4.2</b> Identifying Interaction</a></li>
-<li class="chapter" data-level="4.3" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#effect-modification-vs-interaction"><i class="fa fa-check"></i><b>4.3</b> Effect Modification vs Interaction</a></li>
+<li class="chapter" data-level="4.2" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#interaction"><i class="fa fa-check"></i><b>4.2</b> Interaction</a></li>
+<li class="chapter" data-level="4.3" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#identifying-interaction"><i class="fa fa-check"></i><b>4.3</b> Identifying Interaction</a></li>
+<li class="chapter" data-level="4.4" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html#effect-modification-vs-interaction"><i class="fa fa-check"></i><b>4.4</b> Effect Modification vs Interaction</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html"><i class="fa fa-check"></i><b>5</b> Introduction to Causal Diagrams</a>
 <ul>
@@ -272,35 +273,35 @@ Real-world public health examples of effect modification</p>
 <h2><span class="header-section-number">6.1</span> The Structure of Confounding<a href="confounding-and-selection-bias.html#the-structure-of-confounding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Confounding occurs when an external variable influences both the exposure and the outcome, making it difficult to determine whether the observed association is truly causal. This third variable — the confounder — can create a misleading impression that the exposure causes the outcome, when in fact, the association may be driven entirely or partially by the confounder. The key structural feature of confounding is that the confounder must be related to both the exposure and the outcome. To obtain an accurate estimate of the exposure’s causal effect, researchers must adjust for confounding variables using methods like stratification, regression, or matching.</p>
 <p>In our simulation, age acts as a confounder because it affects both smoking behavior and lung cancer risk. Older individuals are more likely to smoke and also more likely to develop lung cancer, which can make smoking appear more harmful (or even less harmful) than it actually is if age isn’t taken into account. The naive model, which includes only smoking, produces a biased estimate because it doesn’t separate the effect of smoking from the effect of age. The adjusted model includes both smoking and age and provides a more accurate estimate of smoking’s effect by accounting for this confounding influence. This example highlights how confounding can distort findings and why controlling for related background variables is essential in observational research.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="confounding-and-selection-bias.html#cb46-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb46-2"><a href="confounding-and-selection-bias.html#cb46-2" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="confounding-and-selection-bias.html#cb46-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">2000</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
-<span id="cb46-4"><a href="confounding-and-selection-bias.html#cb46-4" tabindex="-1"></a></span>
-<span id="cb46-5"><a href="confounding-and-selection-bias.html#cb46-5" tabindex="-1"></a>smoking <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb46-6"><a href="confounding-and-selection-bias.html#cb46-6" tabindex="-1"></a></span>
-<span id="cb46-7"><a href="confounding-and-selection-bias.html#cb46-7" tabindex="-1"></a>lung_cancer <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> smoking <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb46-8"><a href="confounding-and-selection-bias.html#cb46-8" tabindex="-1"></a></span>
-<span id="cb46-9"><a href="confounding-and-selection-bias.html#cb46-9" tabindex="-1"></a>genetic_marker <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="at">prob =</span> <span class="fu">plogis</span>(<span class="fl">0.01</span> <span class="sc">*</span> smoking <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb46-10"><a href="confounding-and-selection-bias.html#cb46-10" tabindex="-1"></a></span>
-<span id="cb46-11"><a href="confounding-and-selection-bias.html#cb46-11" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb46-12"><a href="confounding-and-selection-bias.html#cb46-12" tabindex="-1"></a>  <span class="at">Age =</span> age,</span>
-<span id="cb46-13"><a href="confounding-and-selection-bias.html#cb46-13" tabindex="-1"></a>  <span class="at">Smoking =</span> smoking,</span>
-<span id="cb46-14"><a href="confounding-and-selection-bias.html#cb46-14" tabindex="-1"></a>  <span class="at">Lung_Cancer =</span> lung_cancer,</span>
-<span id="cb46-15"><a href="confounding-and-selection-bias.html#cb46-15" tabindex="-1"></a>  <span class="at">Genetic_Marker =</span> genetic_marker</span>
-<span id="cb46-16"><a href="confounding-and-selection-bias.html#cb46-16" tabindex="-1"></a>)</span>
-<span id="cb46-17"><a href="confounding-and-selection-bias.html#cb46-17" tabindex="-1"></a></span>
-<span id="cb46-18"><a href="confounding-and-selection-bias.html#cb46-18" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking, <span class="at">data =</span> df)</span>
-<span id="cb46-19"><a href="confounding-and-selection-bias.html#cb46-19" tabindex="-1"></a></span>
-<span id="cb46-20"><a href="confounding-and-selection-bias.html#cb46-20" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking <span class="sc">+</span> age, <span class="at">data =</span> df)</span>
-<span id="cb46-21"><a href="confounding-and-selection-bias.html#cb46-21" tabindex="-1"></a></span>
-<span id="cb46-22"><a href="confounding-and-selection-bias.html#cb46-22" tabindex="-1"></a>coef_naive <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb46-23"><a href="confounding-and-selection-bias.html#cb46-23" tabindex="-1"></a></span>
-<span id="cb46-24"><a href="confounding-and-selection-bias.html#cb46-24" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb46-25"><a href="confounding-and-selection-bias.html#cb46-25" tabindex="-1"></a></span>
-<span id="cb46-26"><a href="confounding-and-selection-bias.html#cb46-26" tabindex="-1"></a>coef_naive</span></code></pre></div>
-<pre><code>## [1] 4.998262</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="confounding-and-selection-bias.html#cb48-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
-<pre><code>## [1] 3.019842</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="confounding-and-selection-bias.html#cb51-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb51-2"><a href="confounding-and-selection-bias.html#cb51-2" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="confounding-and-selection-bias.html#cb51-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">2000</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb51-4"><a href="confounding-and-selection-bias.html#cb51-4" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="confounding-and-selection-bias.html#cb51-5" tabindex="-1"></a>smoking <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb51-6"><a href="confounding-and-selection-bias.html#cb51-6" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="confounding-and-selection-bias.html#cb51-7" tabindex="-1"></a>lung_cancer <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> smoking <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb51-8"><a href="confounding-and-selection-bias.html#cb51-8" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="confounding-and-selection-bias.html#cb51-9" tabindex="-1"></a>genetic_marker <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="at">prob =</span> <span class="fu">plogis</span>(<span class="fl">0.01</span> <span class="sc">*</span> smoking <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb51-10"><a href="confounding-and-selection-bias.html#cb51-10" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="confounding-and-selection-bias.html#cb51-11" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb51-12"><a href="confounding-and-selection-bias.html#cb51-12" tabindex="-1"></a>  <span class="at">Age =</span> age,</span>
+<span id="cb51-13"><a href="confounding-and-selection-bias.html#cb51-13" tabindex="-1"></a>  <span class="at">Smoking =</span> smoking,</span>
+<span id="cb51-14"><a href="confounding-and-selection-bias.html#cb51-14" tabindex="-1"></a>  <span class="at">Lung_Cancer =</span> lung_cancer,</span>
+<span id="cb51-15"><a href="confounding-and-selection-bias.html#cb51-15" tabindex="-1"></a>  <span class="at">Genetic_Marker =</span> genetic_marker</span>
+<span id="cb51-16"><a href="confounding-and-selection-bias.html#cb51-16" tabindex="-1"></a>)</span>
+<span id="cb51-17"><a href="confounding-and-selection-bias.html#cb51-17" tabindex="-1"></a></span>
+<span id="cb51-18"><a href="confounding-and-selection-bias.html#cb51-18" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking, <span class="at">data =</span> df)</span>
+<span id="cb51-19"><a href="confounding-and-selection-bias.html#cb51-19" tabindex="-1"></a></span>
+<span id="cb51-20"><a href="confounding-and-selection-bias.html#cb51-20" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking <span class="sc">+</span> age, <span class="at">data =</span> df)</span>
+<span id="cb51-21"><a href="confounding-and-selection-bias.html#cb51-21" tabindex="-1"></a></span>
+<span id="cb51-22"><a href="confounding-and-selection-bias.html#cb51-22" tabindex="-1"></a>coef_naive <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb51-23"><a href="confounding-and-selection-bias.html#cb51-23" tabindex="-1"></a></span>
+<span id="cb51-24"><a href="confounding-and-selection-bias.html#cb51-24" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb51-25"><a href="confounding-and-selection-bias.html#cb51-25" tabindex="-1"></a></span>
+<span id="cb51-26"><a href="confounding-and-selection-bias.html#cb51-26" tabindex="-1"></a>coef_naive</span></code></pre></div>
+<pre><code>## [1] 4.995114</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="confounding-and-selection-bias.html#cb53-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
+<pre><code>## [1] 3.026331</code></pre>
 </div>
 <div id="how-to-adjust-for-confounding" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> How to Adjust for Confounding<a href="confounding-and-selection-bias.html#how-to-adjust-for-confounding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -311,20 +312,20 @@ Real-world public health examples of effect modification</p>
 <h2><span class="header-section-number">6.3</span> The Form of Selection Bias<a href="confounding-and-selection-bias.html#the-form-of-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Selection bias arises when the individuals included in a study are not representative of the target population due to a systematic filtering process. This filtering — whether intentional (like restricting analysis to a subgroup) or unintentional (like only including those who responded to a survey) — can distort the observed relationship between an exposure and an outcome. The core structure of selection bias involves inclusion in the study being related to variables that are also related to the exposure or the outcome. This means the analysis is performed on a biased subset of the population, which can create spurious associations or mask real ones, even when a true causal effect exists.</p>
 <p>In our simulation, we introduced selection bias by restricting the dataset to individuals with moderate to good diets. Because diet is related to both exercise and heart health, this restriction caused the analyzed sample to no longer reflect the full population. As a result, the apparent relationship between exercise and heart health in the filtered sample may differ from the true relationship in the full population. This demonstrates the form of selection bias: by conditioning on a variable that is related to both the exposure and the outcome (in this case, indirectly through diet), we introduced distortion into the analysis. This example shows how selection criteria — even seemingly benign ones — can alter causal interpretations if they create unbalanced or artificially restricted datasets.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="confounding-and-selection-bias.html#cb50-1" tabindex="-1"></a>df_biased <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(genetic_marker <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb50-2"><a href="confounding-and-selection-bias.html#cb50-2" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="confounding-and-selection-bias.html#cb50-3" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking, <span class="at">data =</span> df_biased)</span>
-<span id="cb50-4"><a href="confounding-and-selection-bias.html#cb50-4" tabindex="-1"></a></span>
-<span id="cb50-5"><a href="confounding-and-selection-bias.html#cb50-5" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking <span class="sc">+</span> age, <span class="at">data =</span> df_biased)</span>
-<span id="cb50-6"><a href="confounding-and-selection-bias.html#cb50-6" tabindex="-1"></a></span>
-<span id="cb50-7"><a href="confounding-and-selection-bias.html#cb50-7" tabindex="-1"></a>coef_naive <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb50-8"><a href="confounding-and-selection-bias.html#cb50-8" tabindex="-1"></a></span>
-<span id="cb50-9"><a href="confounding-and-selection-bias.html#cb50-9" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
-<span id="cb50-10"><a href="confounding-and-selection-bias.html#cb50-10" tabindex="-1"></a></span>
-<span id="cb50-11"><a href="confounding-and-selection-bias.html#cb50-11" tabindex="-1"></a>coef_naive</span></code></pre></div>
-<pre><code>## [1] 4.998262</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="confounding-and-selection-bias.html#cb52-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
-<pre><code>## [1] 3.019842</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="confounding-and-selection-bias.html#cb55-1" tabindex="-1"></a>df_biased <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(genetic_marker <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb55-2"><a href="confounding-and-selection-bias.html#cb55-2" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="confounding-and-selection-bias.html#cb55-3" tabindex="-1"></a>model_naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking, <span class="at">data =</span> df_biased)</span>
+<span id="cb55-4"><a href="confounding-and-selection-bias.html#cb55-4" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="confounding-and-selection-bias.html#cb55-5" tabindex="-1"></a>model_adjusted <span class="ot">&lt;-</span> <span class="fu">lm</span>(lung_cancer <span class="sc">~</span> smoking <span class="sc">+</span> age, <span class="at">data =</span> df_biased)</span>
+<span id="cb55-6"><a href="confounding-and-selection-bias.html#cb55-6" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="confounding-and-selection-bias.html#cb55-7" tabindex="-1"></a>coef_naive <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_naive)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb55-8"><a href="confounding-and-selection-bias.html#cb55-8" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="confounding-and-selection-bias.html#cb55-9" tabindex="-1"></a>coef_adjusted <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_adjusted)<span class="sc">$</span>coefficients[<span class="st">&quot;smoking&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb55-10"><a href="confounding-and-selection-bias.html#cb55-10" tabindex="-1"></a></span>
+<span id="cb55-11"><a href="confounding-and-selection-bias.html#cb55-11" tabindex="-1"></a>coef_naive</span></code></pre></div>
+<pre><code>## [1] 4.995114</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="confounding-and-selection-bias.html#cb57-1" tabindex="-1"></a>coef_adjusted</span></code></pre></div>
+<pre><code>## [1] 3.026331</code></pre>
 </div>
 <div id="how-to-adjust-for-selection-bias" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> How to Adjust for Selection Bias<a href="confounding-and-selection-bias.html#how-to-adjust-for-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
