@@ -10,7 +10,7 @@
 
 > ## Textbook reading
 >
-> [**Hernán & Robins, Causal Inference: What If – Chapters 7–8**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+> [**Hernán & Robins, Causal Inference: What If – Chapters 5–6**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
 
 > ## Supplementary reading
 >
@@ -19,35 +19,43 @@
 > ## Topics covered
 >
 > -   Effect modification and adjustment methods\
+> -   Interaction\
 > -   Identifying interaction\
 > -   Effect modification vs interaction\
 > -   Critical reading exercise: evaluating effect modification and interaction in studies
 
 ## Effect Modification and Adjustment Methods
 
-Effect modification occurs when the effect of an exposure on an outcome differs depending on the level of another variable. Unlike confounding, which biases the estimated effect, effect modification reflects a real variation in the causal effect across different subgroups. Recognizing effect modification is important because it can reveal that a treatment or exposure is beneficial for some groups but not for others. Adjustment methods like stratification or including interaction terms in regression models help detect and describe effect modification rather than "control" it away.
+Effect modification occurs when the effect of an exposure on an outcome differs depending on the level of another variable. Unlike confounding, which biases the estimated effect, effect modification reflects a real variation in the causal effect across different subgroups. Recognizing effect modification is important because it can reveal that a treatment or exposure is beneficial for some groups but not for others. Adjustment methods like stratification or including interaction terms in regression models help detect and describe effect modification rather than "control" it away. When we study effect modification, we are asking causal questions such as "What the effect of a treatment for group 1 vs the effect for group 2?"
 
 Adjustment methods typically aim to control for confounding, but they can also be used to detect effect modification when interaction terms are included. When effect modification is present, a single summary effect estimate (like an overall average) can be misleading. Instead, researchers often report subgroup-specific effects. Careful modeling and interpretation are necessary to distinguish between true effect modification and residual confounding.
 
 Simulation to Demonstrate Effect Modification
 
-We simulate a case where heart transplant improves survival, but the effect of transplant is stronger for individuals who receive vitamin supplements. That is, vitamin supplementation modifies the effect of transplant on survival. This reflects a scenario where a treatment (transplant) has a greater benefit under certain conditions (when the body is supported by vitamins), illustrating effect modification.
+Let's say we are interested in understanding the effect of new drug on a person's VO2 max for young vs old people. For example, this drug might be more effective for young people. VO2 max is the maximum amount of oxygen your body can utilize during exercise. VO2 max is measured in mL per kg of body weight per minute. In this simulation, the drug increases VO2 max by 4 mL/kg/min for old people, and 7.5 mL/kg/min for young people.
 
 ```{r}
+set.seed(123)
 
 n <- 2000
 
-A <- rbinom(n, 1, 0.5) # heart transplant
+treatment <- rbinom(n, 1, 0.5) # drug
 
-E <- rbinom(n, 1, 0.5) # vitamin
+age_group <- rbinom(n, 1, 0.5) # 1 = young, 0 = old
 
-survival <- 1 * A + 2 * E + 3 * (A * E) + rnorm(n, mean = 0, sd = 1)
+baseline <- 35 # baseline VO2 max is 35 mL/kg/min
 
-df <- data.frame(survival, A, E)
+vo2_max <- baseline + 
+            4 * treatment + 
+            0.5 * age_group + 
+            3.5 * (treatment * age_group) + 
+            rnorm(n, mean = 0, sd = 1)
 
-naive_model <- lm(survival ~ A + E, data = df)
+df <- data.frame(vo2_max, treatment, age_group)
 
-adjusted_model <- lm(survival ~ A + E + A * E, data = df)
+naive_model <- lm(vo2_max ~ treatment + age_group, data = df)
+
+adjusted_model <- lm(vo2_max ~ treatment + age_group + treatment * age_group, data = df)
 
 summary(naive_model)
 
@@ -55,7 +63,71 @@ summary(adjusted_model)
 
 ```
 
-The plot shows that heart transplants improve survival more for individuals who received vitamins, illustrating effect modification by vitamin status.
+If we look only at the naive model without considering effect modification, then we would have incorrectly concluded that the drug impacts young and old people in the same way, adding 5.76 mL/kg/min to a patient's VO2 max on average. 
+
+If we look at the adjusted model considering effect modification, then we see that we more accurately estimate the ground truths. We also have the correct interpretation that the drug's effect varies depending on whether the patient is young or old. For old people, the drug is estimated to increase the VO2 max by 4.05. For young people, the drug is estimated to increase the VO2 max by 4.05 + 3.43 = 7.48. So the drug is 3.43 units more effective in young people.
+
+The following plot shows how younger patients benefit more from the drug than older patients.
+
+```{r}
+df_grouped <- df |>
+  mutate(age_group = ifelse(age_group == 1, "Young", "Old"))
+
+ggplot(df_grouped, aes(x = treatment, y = vo2_max, color = age_group)) +
+  geom_jitter(width = 0.1, alpha = 0.4) +
+  stat_summary(fun = mean, geom = "point", size = 3, shape = 18) +
+  stat_summary(fun = mean, geom = "line", aes(group = age_group)) +
+  scale_x_continuous(breaks = c(0, 1)) + 
+  labs(title = "Effect Modification: Drug and Age Category",
+       x = "Treatment (0 = Control, 1 = Drug)",
+       y = "VO2 Max (mL/kg/min)",
+       color = "Age Category") +
+  theme_minimal()
+```
+
+
+## Interaction
+
+When we study interactions, we are trying to understand the joint effect of two or more treatments on a certain outcome. So we answer the causal question "What is the combined effect of treatment 1 and treatment 2 on an outcome?".
+
+Simulation to Demonstrate Interaction
+
+Let's say we are interested in understanding the effect of new drug and taking vitamin supplements on a person's VO2 max. Assume for this example that the patients who take vitamin supplements take the same supplements in the same dosage. In this simulation, the drug increases VO2 max by 4 mL/kg/min, vitamins increase VO2 max by 1.5 mL/kg/min, and taking both the drug and vitamins adds an addition 2.5 mL/kg/min to the VO2 max.
+
+```{r}
+set.seed(123)
+
+n <- 2000
+
+A_1 <- rbinom(n, 1, 0.5) # drug
+
+A_2 <- rbinom(n, 1, 0.5) # vitamin supplementation
+
+baseline <- 35 # baseline VO2 max is 35 mL/kg/min
+
+vo2_max <- baseline + 
+            4 * A_1 + 
+            1.5 * A_2 + 
+            2.5 * (A_1 * A_2) + 
+            rnorm(n, mean = 0, sd = 1)
+
+df <- data.frame(vo2_max, A_1, A_2)
+
+naive_model <- lm(vo2_max ~ A_1 + A_2, data = df)
+
+adjusted_model <- lm(vo2_max ~ A_1 + A_2 + A_1 * A_2, data = df)
+
+summary(naive_model)
+
+summary(adjusted_model)
+
+```
+
+If we look at the naive model, we would conclude that the drug increase VO2 max by 5.26 and the vitamins increase VO2 max by 2.69. But this isn't the truth. The naive model doesn't capture the combined effect of taking both the drug and vitamins, which is capture in the adjusted model using an interaction term. 
+
+Based on the adjusted model, we would conclude that the drug increases VO2 max by 4.05, the vitamins increase VO2 max by 1.49, and taking both adds 2.43 mL/kg/min to one's VO2 max on average. This is closer to the ground truth that we established when explaining the simulation.
+
+This plot shows that taking the drug increases VO2 max, but also taking vitamins with the drug has an combined effect that increases VO2 max.
 
 ```{r}
 
@@ -63,31 +135,34 @@ The plot shows that heart transplants improve survival more for individuals who 
 # library(dplyr)
 
 df_grouped <- df |>
-  mutate(vitamin_group = ifelse(E == 1, "Vitamins", "No Vitamins"))
+  mutate(vitamin_group = ifelse(A_2 == 1, "Vitamins", "No Vitamins"))
 
-ggplot(df_grouped, aes(x = A, y = survival, color = vitamin_group)) +
+ggplot(df_grouped, aes(x = A_1, y = vo2_max, color = vitamin_group)) +
   geom_jitter(width = 0.1, alpha = 0.4) +
   stat_summary(fun = mean, geom = "point", size = 3, shape = 18) +
   stat_summary(fun = mean, geom = "line", aes(group = vitamin_group)) +
   scale_x_continuous(breaks = c(0, 1)) + 
-  labs(title = "Effect Modification: Heart Transplant × Vitamin Supplement",
-       x = "Heart Transplant (A)",
-       y = "Survival",
+  labs(title = "Interaction: Drug × Vitamin Supplement",
+       x = "Treatment (0 = Control, 1 = Drug)",
+       y = "VO2 Max (mL/kg/min)",
        color = "Vitamin Group") +
   theme_minimal()
 
 ```
 
-In this simulation, the benefit of heart transplant on survival is stronger for individuals who received vitamin supplements. A naive model without an interaction term fails to capture this difference and instead estimates an average effect across all individuals. By including an interaction term between transplant and vitamins, we reveal that the effect of transplant varies depending on vitamin use. The plot illustrates how survival is influenced not just by transplant alone, but by how vitamins modify its impact — highlighting the importance of detecting and modeling effect modification in public health research.
+In this simulation, we learned that when we are interested in measuring the effect of multiple treatments on an outcome, it's important to consider the combined effect of these treatments. We achieve this by adding an interaction term in our regression model.
 
 ## Identifying Interaction
 
-Identifying interaction is crucial when studying causal relationships because it tells us whether the effect of an exposure on an outcome varies across levels of another variable. An interaction exists when the impact of one variable depends on the value of another, meaning the combined effect is not simply additive. Rather than being a source of bias like confounding, interaction reveals real differences in how subgroups respond to exposures or treatments. Detecting interaction helps researchers understand for whom and under what conditions an intervention works best, allowing for more tailored public health strategies and clinical recommendations.
+Identifying interaction is crucial when studying causal relationships because it tells us whether there is a combined effect of two or more treatments on an outcome. Rather than being a source of bias like confounding, interaction reveals real differences in how subgroups respond to exposures or treatments. Detecting interaction helps researchers understand for whom and under what conditions an intervention works best, allowing for more tailored public health strategies and clinical recommendations.
 
-In our simulation with heart transplant and vitamin supplements, interaction was present because the benefit of transplant on survival was greater for individuals who received vitamins. By fitting a model with an interaction term between transplant and vitamin use, we were able to identify and quantify this effect modification. Without testing for interaction, we would have incorrectly assumed that transplant provides the same benefit to everyone, masking important subgroup differences. Identifying interaction allows us to uncover nuanced causal relationships that average treatment effects alone may overlook.
+In our simulation with the drug and vitamin supplements, interaction was present because there was a combined effect of the drug and vitamin supplementation on VO2 max. In particular, patients that took both had the largest increases in VO2 max. By fitting a model with an interaction term between the drug and vitamin use, we were able to identify and quantify this combined interaction effect. Without testing for interaction, we would have incorrectly assumed that the drug and the vitamins independently improve VO2 max.
 
 ## Effect Modification vs Interaction
 
-Effect modification and interaction are closely related concepts, but they serve slightly different purposes in causal analysis. Effect modification refers to a real difference in the causal effect of an exposure on an outcome across levels of another variable. It describes a biological or contextual phenomenon where an exposure has varying impacts depending on a modifier, such as a treatment working better for younger patients than older ones. In contrast, interaction is a modeling term: it refers to the inclusion of a product term (like exposure × modifier) in a statistical model to detect and estimate effect modification. In essence, effect modification is a feature of reality, while interaction is how we model and identify it in data.
+Effect modification and interaction are closely related concepts, but they serve slightly different purposes in causal analysis. The confusing part is when we try to model both effect modification and interaction, we do it the same way with an interaction term in the regression. However, the difference between the two concepts is in the causal questions we are trying to answer.
 
-In our simulation with heart transplant and vitamin supplements, the true underlying process involved effect modification: the benefit of transplant on survival was greater for individuals who received vitamins. To uncover this, we included an interaction term between transplant and vitamin use (A * E) in our regression model. Without this interaction, the model would have incorrectly assumed a constant effect of transplant across all patients, regardless of vitamin status. This distinction underscores the importance of modeling interactions when effect modification is suspected — otherwise, meaningful subgroup differences in treatment effects can be obscured by oversimplified models.
+In effect modification, we are trying to understand how the effect of a single treatment varies based on levels of another factor like age or sex assigned at birth. 
+
+In interaction, we are trying to understand the combined effect of two or more treatments such as a drug and vitamin supplementation.
+

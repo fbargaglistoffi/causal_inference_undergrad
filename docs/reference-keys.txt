@@ -13,6 +13,7 @@ exchangeability-positivity-and-consistency
 effect-identification-in-observational-studies
 effect-modification-and-interaction
 effect-modification-and-adjustment-methods
+interaction
 identifying-interaction
 effect-modification-vs-interaction
 introduction-to-causal-diagrams
