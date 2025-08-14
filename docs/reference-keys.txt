@@ -2,6 +2,7 @@ foundations-of-causal-thinking-in-public-health
 association-vs.-causation
 introduction-to-counterfactuals-and-potential-outcomes
 causal-estimands-and-identification
+measuring-effects-for-binary-outcomes
 randomized-control-trials
 randomized-controlled-trials-the-gold-standard
 basic-experimental-design-principles

@@ -23,6 +23,7 @@
 > -   Association vs. Causation\
 > -   Introduction to Counterfactuals and Potential Outcomes\
 > -   Causal Estimands and Identification\
+> -   Measuring Effects for Binary Outcomes
 > -   Critical reading exercise: analyzing causal claims in public health news
 
 ## Association vs. Causation
@@ -210,3 +211,24 @@ $$
 Think of $X=x$ where $X$ is some form of age classification and $x$ could be a value of the age classifcation, such as younger or older.
 
 Identification is the process of linking a causal estimand (like ATE) to observable data. Without valid identification, any estimates we produce may be biased or incorrect. One major challenge in causal inference is that we can never observe both potential outcomes for the same person — only the outcome under the actual treatment they received. This is the Fundamental Problem of Causal Inference.
+
+##  Measuring Effects for Binary Outcomes
+
+Often times in public health settings, we have to estimate the causal effect on a binary outcome such as survival. For example, if we are trying to measure the effect of a heart surgery on a patient's survival status, we can say that the outcome $Y = 1$ means that the patient died and $Y = 0$ means that the patient survived. There are only two possible outcomes. In this case, we try to quantify or measure the causal effect using two main **effect measures**.
+
+$$
+Pr[Y(1) = 1] - Pr[Y(0) = 1] \quad \text{(Risk Difference)} \\
+$$
+
+The risk difference measures average individual causal effects. For example, if we estimated the heart surgery to have a risk difference of -0.5, then on average, the surgery reduced the probability of death by 0.5.
+
+$$
+\frac{Pr[Y(1) = 1]}{Pr[Y(0) = 1]} \quad \text{(Risk Ratio)} \\
+$$
+
+The risk ratio measures causal effects differently. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.
+
+Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let's consider the example about measuring the effect of heart surgery. To estimate the risk difference, using a logistic regression, we follow these steps.
+
+1. Fit the logistic regression model to your data\\
+2. Estimate $Pr[Y(1) = 1]$
