@@ -336,24 +336,24 @@ Additional DAG exercises provided in class</p>
 <p><span class="math display">\[
 0 &lt; Pr(W_i = 1 \ | \ X_i = x) &lt; 1  \quad \text{for any } x \in \mathcal{X}
 \]</span>
-Positivity is not always an assumption that is satisfied. For example, let’s say you are trying to estimate the effect of a new drug. You want to control for the patient’s sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.</p>
-<p><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong> is our last important assumption. There are two parts to SUTVA:</p>
+- Positivity is not always an assumption that is satisfied. For example, let’s say you are trying to estimate the effect of a new drug. You want to control for the patient’s sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.</p>
 <ul>
-<li><strong>Consistency</strong> means that the observed outcome under the observed treatment status of unit <span class="math inline">\(i\)</span> is the same as the potential outcome under the potential treatment status of unit <span class="math inline">\(i\)</span>. This usually occurs when there is a single well-defined treatment, such as a drug with a specific dosage.</li>
-</ul>
+<li><p><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong> is our last important assumption. There are two parts to SUTVA:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Consistency</strong> means that the observed outcome under the observed treatment status of unit <span class="math inline">\(i\)</span> is the same as the potential outcome under the potential treatment status of unit <span class="math inline">\(i\)</span>. This usually occurs when there is a single well-defined treatment, such as a drug with a specific dosage.</p>
 <p>Consistency can be violated if there are multiple versions of the treatment, usually because it is not well defined. For example, there could be a treatment that gives 50 mg of the drug and another version that gives 100 mg of the drug. Here, consistency will be violated.</p>
 <p>In potential outcomes notation, this is:</p>
 <p><span class="math display">\[
 Y = (W)Y(1) + (1-W)Y(0)
-\]</span></p>
-<ul>
-<li><strong>No-interference</strong> means that the potential outcomes of unit <span class="math inline">\(i\)</span> are independent of the treatments other units receive.</li>
-</ul>
+\]</span></p></li>
+<li><p><strong>No-interference</strong> means that the potential outcomes of unit <span class="math inline">\(i\)</span> are independent of the treatments other units receive.</p>
 <p>An example of when there is interference is when we are trying to test a vaccine’s effectiveness of preventing measles for an individual. Let’s say in our study, Falco receives the vaccine, and his friend Chad receives a control. Falco and Chad both interact regularly. Assume the vaccine truly reduces the risk of catching measles. Since Falco received the vaccine, he has a lower risk of catching measles, which lowers Chad’s risk of catching measles, even though Chad never received the vaccine. So Chad’s potential risk of contracting measles is a function of whether he receives the vaccine or not and whether Falco receives the vaccine or not. Thus, the no-interference assumption is violated in this case.</p>
-<p>In potential outcomes notation, we say the potential outcome for unit <span class="math inline">\(i\)</span> is not a function of the treatment status of another unit <span class="math inline">\(j\)</span>.</p>
+<p>In potential outcomes notation, we say the potential outcome for unit <span class="math inline">\(i\)</span> is not a function of the treatment status of another unit <span class="math inline">\(j\)</span>:</p>
 <p><span class="math display">\[
 Y_i(W_i) = Y_i(W_i,W_j) \quad \text{for all } j \neq i
-\]</span></p>
+\]</span></p></li>
+</ol></li>
+</ul>
 <p>In our previous simulation studying exercise and heart health, adjusting for genetics aimed to restore exchangeability by balancing genetic differences between individuals with different exercise levels. Positivity was satisfied because individuals at all levels of genetics still varied in how much they exercised. Consistency was assumed because the way we measured exercise and heart health accurately reflected the underlying causal relationship. Together, these assumptions allowed us to interpret the adjusted effect of exercise on heart health as a causal effect.</p>
 </div>
 <div id="effect-identification-in-observational-studies" class="section level2 hasAnchor" number="3.3">
