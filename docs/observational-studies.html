@@ -165,6 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#association-vs.-causation"><i class="fa fa-check"></i><b>1.1</b> Association vs. Causation</a></li>
 <li class="chapter" data-level="1.2" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#introduction-to-counterfactuals-and-potential-outcomes"><i class="fa fa-check"></i><b>1.2</b> Introduction to Counterfactuals and Potential Outcomes</a></li>
 <li class="chapter" data-level="1.3" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#causal-estimands-and-identification"><i class="fa fa-check"></i><b>1.3</b> Causal Estimands and Identification</a></li>
+<li class="chapter" data-level="1.4" data-path="foundations-of-causal-thinking-in-public-health.html"><a href="foundations-of-causal-thinking-in-public-health.html#measuring-effects-for-binary-outcomes"><i class="fa fa-check"></i><b>1.4</b> Measuring Effects for Binary Outcomes</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html"><i class="fa fa-check"></i><b>2</b> Randomized Control Trials</a>
 <ul>
@@ -176,7 +177,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="observational-studies.html"><a href="observational-studies.html"><i class="fa fa-check"></i><b>3</b> Observational Studies</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="observational-studies.html"><a href="observational-studies.html#the-challenge-of-confounding-in-public-health-and-medical-research"><i class="fa fa-check"></i><b>3.1</b> The challenge of confounding in public health and medical research</a></li>
-<li class="chapter" data-level="3.2" data-path="observational-studies.html"><a href="observational-studies.html#exchangeability-positivity-and-consistency"><i class="fa fa-check"></i><b>3.2</b> Exchangeability, positivity, and consistency</a></li>
+<li class="chapter" data-level="3.2" data-path="observational-studies.html"><a href="observational-studies.html#exchangeability-positivity-and-sutva"><i class="fa fa-check"></i><b>3.2</b> Exchangeability, positivity, and SUTVA</a></li>
 <li class="chapter" data-level="3.3" data-path="observational-studies.html"><a href="observational-studies.html#effect-identification-in-observational-studies"><i class="fa fa-check"></i><b>3.3</b> Effect Identification in Observational Studies</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html"><i class="fa fa-check"></i><b>4</b> Effect Modification and Interaction</a>
@@ -252,7 +253,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <blockquote>
 <h2 id="textbook-reading-2" class="hasAnchor">Textbook reading<a href="observational-studies.html#textbook-reading-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapters 5–6</strong></a></p>
+<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapter 3</strong></a></p>
 </blockquote>
 <blockquote>
 <h2 id="supplementary-reading-2" class="hasAnchor">Supplementary reading<a href="observational-studies.html#supplementary-reading-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -276,6 +277,7 @@ Additional DAG exercises provided in class</p>
 <p>Confounding is a major challenge in public health and medical research because it can create misleading associations between exposures and outcomes. A confounder is a third variable that is associated with both the exposure and the outcome, potentially distorting the true causal relationship. For example, if we observe that people who carry lighters tend to have higher rates of lung cancer, we might wrongly conclude that carrying a lighter causes cancer. In reality, smoking is the confounding variable: smokers are more likely to carry lighters and also more likely to develop lung cancer. Without properly adjusting for confounders, studies risk producing biased estimates, leading to incorrect conclusions about risk factors, treatments, or interventions.</p>
 <p>Addressing confounding is crucial but not always straightforward. Methods such as stratification, multivariable regression, propensity score matching, and randomized controlled trials (RCTs) are commonly used to try to adjust for or eliminate confounding effects. However, identifying all relevant confounders can be difficult, especially when dealing with observational data where randomization is not possible. Unmeasured or unknown confounders remain a constant threat to validity. Therefore, careful study design, domain knowledge, and sensitivity analyses are essential to minimize the impact of confounding and ensure more reliable and actionable public health research findings.</p>
 <p><strong>Example Setup</strong> Let’s say we want to study the effect of Exercise (X) on Heart Health (Y), but there’s a Genetic Factor (Z) that causes both Exercise and Heart Health. In this case, Z is a confounder, and we should adjust for it.</p>
+<p>In this simulation we will have two models: a naive model and an adjusted model. The naive model will only regression heart health on exercise. The adjusted model will regress heart health on exercise and genetic factors, which controls for genetic factor being a confounder. Since this is simulated example, we know that the true effect of exercise on heart health is 0.8. We will see in this example that the estimated causal effect coming from the adjusted model is better than the naive model.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="observational-studies.html#cb25-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb25-2"><a href="observational-studies.html#cb25-2" tabindex="-1"></a></span>
 <span id="cb25-3"><a href="observational-studies.html#cb25-3" tabindex="-1"></a>genetics <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
@@ -312,20 +314,41 @@ Additional DAG exercises provided in class</p>
 <span id="cb29-14"><a href="observational-studies.html#cb29-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Comparison of Naive vs Adjusted Estimates&quot;</span>,</span>
 <span id="cb29-15"><a href="observational-studies.html#cb29-15" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Effect of Exercise&quot;</span>,</span>
 <span id="cb29-16"><a href="observational-studies.html#cb29-16" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb29-17"><a href="observational-studies.html#cb29-17" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb29-18"><a href="observational-studies.html#cb29-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<span id="cb29-17"><a href="observational-studies.html#cb29-17" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-18"><a href="observational-studies.html#cb29-18" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">2.45</span>, <span class="at">y =</span> <span class="fl">0.85</span>, <span class="at">label =</span> <span class="st">&quot;True effect&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-19"><a href="observational-studies.html#cb29-19" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb29-20"><a href="observational-studies.html#cb29-20" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<p>In this simulation, we model a situation where Genetics (Z) is a confounder that influences both Exercise (X) and Heart Health (Y). The naive model, which regresses Heart Health on Exercise without adjusting for Genetics, gives a biased estimate of the effect of Exercise. This happens because part of the observed association is actually due to Genetics, not Exercise itself. When we adjust for Genetics in the second model, the estimate of Exercise’s effect becomes more accurate, isolating its true relationship with Heart Health. This example highlights how failing to account for confounding can lead researchers to overstate or misinterpret causal effects in public health and medical studies.</p>
+<p>In this simulation, we model a situation where Genetics (Z) is a confounder that influences both Exercise (X) and Heart Health (Y). The naive model, which regresses Heart Health on Exercise without adjusting for Genetics, gives a biased estimate of the effect of Exercise (1.05). This happens because part of the observed association is actually due to Genetics, not Exercise itself. When we adjust for Genetics in the second model, the estimate of Exercise’s effect (0.84) becomes more accurate, isolating its true relationship with Heart Health. This is shown in how the bar for the adjusted graph is closer to the dotted black line, which represents the true causal effect of exercise (0.8). This example highlights how failing to account for confounding can lead researchers to overstate or misinterpret causal effects in public health and medical studies.</p>
 </div>
-<div id="exchangeability-positivity-and-consistency" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Exchangeability, positivity, and consistency<a href="observational-studies.html#exchangeability-positivity-and-consistency" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: <strong>exchangeability, positivity, and consistency.</strong> These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.</p>
+<div id="exchangeability-positivity-and-sutva" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Exchangeability, positivity, and SUTVA<a href="observational-studies.html#exchangeability-positivity-and-sutva" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: <strong>exchangeability, positivity, and SUTVA</strong>. These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.</p>
 <ul>
-<li>Exchangeability means that after adjusting for confounders, the treatment and comparison groups are similar in all relevant ways except for the exposure itself.<br />
-</li>
-<li>Positivity means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values.<br />
-</li>
-<li>Consistency means that the observed outcome under the actual exposure is the same as the potential outcome we are trying to measure for that exposure level.</li>
+<li><p><strong>Exchangeability</strong> means that after adjusting for confounders, the treatment and comparison groups are similar in all relevant ways except for the exposure itself. In potential outcomes notation, this is written as:</p>
+<p><span class="math display">\[
+  (Y(0), Y(1)) \perp W|X
+  \]</span></p></li>
+<li><p><strong>Positivity</strong> means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values. In the notation, the “for any <span class="math inline">\(x \in \mathcal{X}\)</span>” is saying that within in each group <span class="math inline">\(x\)</span> that the random variable <span class="math inline">\(X\)</span> can take, the unit has a nonzero chance to receive treatment (and control).</p>
+<p><span class="math display">\[
+  0 &lt; Pr(W = 1 \ | \ X = x) &lt; 1  \quad \text{for any } x \in \mathcal{X}
+  \]</span></p>
+<p>Positivity is not always an assumption that is satisfied. For example, let’s say you are trying to estimate the effect of a new drug. You want to control for the patient’s sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.</p></li>
+<li><p><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong> is our last important assumption. There are two parts to SUTVA:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Consistency</strong> means that the observed outcome under the observed treatment status of unit <span class="math inline">\(i\)</span> is the same as the potential outcome under the potential treatment status of unit <span class="math inline">\(i\)</span>. This usually occurs when there is a single well-defined treatment, such as a drug with a specific dosage.</p>
+<p>Consistency can be violated if there are multiple versions of the treatment, usually because it is not well defined. For example, there could be a treatment that gives 50 mg of the drug and another version that gives 100 mg of the drug. Here, consistency will be violated.</p>
+<p>In potential outcomes notation, this is:</p>
+<p><span class="math display">\[
+Y = (W)Y(1) + (1-W)Y(0)
+\]</span></p></li>
+<li><p><strong>No-interference</strong> means that the potential outcomes of unit <span class="math inline">\(i\)</span> are independent of the treatments other units receive.</p>
+<p>An example of when there is interference is when we are trying to test a vaccine’s effectiveness of preventing measles for an individual. Let’s say in our study, Falco receives the vaccine, and his friend Chad receives a control. Falco and Chad both interact regularly. Assume the vaccine truly reduces the risk of catching measles. Since Falco received the vaccine, he has a lower risk of catching measles, which lowers Chad’s risk of catching measles, even though Chad never received the vaccine. So Chad’s potential risk of contracting measles is a function of whether he receives the vaccine or not and whether Falco receives the vaccine or not. Thus, the no-interference assumption is violated in this case.</p>
+<p>In potential outcomes notation, we say the potential outcome for unit <span class="math inline">\(i\)</span> is not a function of the treatment status of another unit <span class="math inline">\(j\)</span>:</p>
+<p><span class="math display">\[
+Y_i(W_i) = Y_i(W_i,W_j) \quad \text{for all } j \neq i
+\]</span></p></li>
+</ol></li>
 </ul>
 <p>In our previous simulation studying exercise and heart health, adjusting for genetics aimed to restore exchangeability by balancing genetic differences between individuals with different exercise levels. Positivity was satisfied because individuals at all levels of genetics still varied in how much they exercised. Consistency was assumed because the way we measured exercise and heart health accurately reflected the underlying causal relationship. Together, these assumptions allowed us to interpret the adjusted effect of exercise on heart health as a causal effect.</p>
 </div>
