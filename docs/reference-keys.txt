@@ -10,7 +10,7 @@ limitations-of-rcts-in-public-health-contexts
 common-threats-to-internal-and-external-validity
 observational-studies
 the-challenge-of-confounding-in-public-health-and-medical-research
-exchangeability-positivity-and-consistency
+exchangeability-positivity-and-sutva
 effect-identification-in-observational-studies
 effect-modification-and-interaction
 effect-modification-and-adjustment-methods

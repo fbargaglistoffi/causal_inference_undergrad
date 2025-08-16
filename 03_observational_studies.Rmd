@@ -83,45 +83,45 @@ ggplot(estimates, aes(x = Model, y = Estimate, fill = Model)) +
 
 In this simulation, we model a situation where Genetics (Z) is a confounder that influences both Exercise (X) and Heart Health (Y). The naive model, which regresses Heart Health on Exercise without adjusting for Genetics, gives a biased estimate of the effect of Exercise (1.05). This happens because part of the observed association is actually due to Genetics, not Exercise itself. When we adjust for Genetics in the second model, the estimate of Exercise’s effect (0.84) becomes more accurate, isolating its true relationship with Heart Health. This is shown in how the bar for the adjusted graph is closer to the dotted black line, which represents the true causal effect of exercise (0.8). This example highlights how failing to account for confounding can lead researchers to overstate or misinterpret causal effects in public health and medical studies.  
 
-## Exchangeability, positivity, and consistency  
+## Exchangeability, positivity, and SUTVA
 
-In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: **exchangeability, positivity, and consistency.** These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.  
+In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: **exchangeability, positivity, and SUTVA**. These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.  
 
 - **Exchangeability** means that after adjusting for confounders, the treatment and comparison groups are similar in all relevant ways except for the exposure itself. In potential outcomes notation, this is written as:
 
-$$
-(Y(0), Y(1)) \perp W|X
-$$
+    $$
+    (Y(0), Y(1)) \perp W|X
+    $$
 
-- **Positivity** means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values. In the notation below, the $i$ represents that we are talking about unit $i$. For example $D_i$ is the treatment that unit $i$ received. The "for any $x \in \mathcal{X}$" is saying that in every possible value that $X_i$ can take, unit $i$ could have received the treatment (or control).
+- **Positivity** means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values. In the notation, the "for any $x \in \mathcal{X}$" is saying that within in each group $x$ that the random variable $X$ can take, the unit has a nonzero chance to receive treatment (and control).
 
-$$
-0 < Pr(W_i = 1 \ | \ X_i = x) < 1  \quad \text{for any } x \in \mathcal{X}
-$$
-  - Positivity is not always an assumption that is satisfied. For example, let's say you are trying to estimate the effect of a new drug. You want to control for the patient's sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.
+    $$
+    0 < Pr(W = 1 \ | \ X = x) < 1  \quad \text{for any } x \in \mathcal{X}
+    $$
+
+    Positivity is not always an assumption that is satisfied. For example, let's say you are trying to estimate the effect of a new drug. You want to control for the patient's sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.
 
 - **Stable Unit Treatment Value Assumption (SUTVA)** is our last important assumption. There are two parts to SUTVA:
 
     1. **Consistency** means that the observed outcome under the observed treatment status of unit $i$ is the same as the potential outcome under the potential treatment status of unit $i$. This usually occurs when there is a single well-defined treatment, such as a drug with a specific dosage.
 
-       Consistency can be violated if there are multiple versions of the treatment, usually because it is not well defined. For example, there could be a treatment that gives 50 mg of the drug and another version that gives 100 mg of the drug. Here, consistency will be violated.
+        Consistency can be violated if there are multiple versions of the treatment, usually because it is not well defined. For example, there could be a treatment that gives 50 mg of the drug and another version that gives 100 mg of the drug. Here, consistency will be violated.
 
-       In potential outcomes notation, this is:
+        In potential outcomes notation, this is:
 
-       $$
-       Y = (W)Y(1) + (1-W)Y(0)
-       $$
+        $$
+        Y = (W)Y(1) + (1-W)Y(0)
+        $$
 
     2. **No-interference** means that the potential outcomes of unit $i$ are independent of the treatments other units receive. 
 
-       An example of when there is interference is when we are trying to test a vaccine's effectiveness of preventing measles for an individual. Let's say in our study, Falco receives the vaccine, and his friend Chad receives a control. Falco and Chad both interact regularly. Assume the vaccine truly reduces the risk of catching measles. Since Falco received the vaccine, he has a lower risk of catching measles, which lowers Chad's risk of catching measles, even though Chad never received the vaccine. So Chad's potential risk of contracting measles is a function of whether he receives the vaccine or not and whether Falco receives the vaccine or not. Thus, the no-interference assumption is violated in this case.
+        An example of when there is interference is when we are trying to test a vaccine's effectiveness of preventing measles for an individual. Let's say in our study, Falco receives the vaccine, and his friend Chad receives a control. Falco and Chad both interact regularly. Assume the vaccine truly reduces the risk of catching measles. Since Falco received the vaccine, he has a lower risk of catching measles, which lowers Chad's risk of catching measles, even though Chad never received the vaccine. So Chad's potential risk of contracting measles is a function of whether he receives the vaccine or not and whether Falco receives the vaccine or not. Thus, the no-interference assumption is violated in this case.
 
-       In potential outcomes notation, we say the potential outcome for unit $i$ is not a function of the treatment status of another unit $j$: 
+        In potential outcomes notation, we say the potential outcome for unit $i$ is not a function of the treatment status of another unit $j$: 
 
-       $$
-       Y_i(W_i) = Y_i(W_i,W_j) \quad \text{for all } j \neq i
-       $$
-
+        $$
+        Y_i(W_i) = Y_i(W_i,W_j) \quad \text{for all } j \neq i
+        $$
 
 In our previous simulation studying exercise and heart health, adjusting for genetics aimed to restore exchangeability by balancing genetic differences between individuals with different exercise levels. Positivity was satisfied because individuals at all levels of genetics still varied in how much they exercised. Consistency was assumed because the way we measured exercise and heart health accurately reflected the underlying causal relationship. Together, these assumptions allowed us to interpret the adjusted effect of exercise on heart health as a causal effect.  
 

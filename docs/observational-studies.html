@@ -177,7 +177,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="observational-studies.html"><a href="observational-studies.html"><i class="fa fa-check"></i><b>3</b> Observational Studies</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="observational-studies.html"><a href="observational-studies.html#the-challenge-of-confounding-in-public-health-and-medical-research"><i class="fa fa-check"></i><b>3.1</b> The challenge of confounding in public health and medical research</a></li>
-<li class="chapter" data-level="3.2" data-path="observational-studies.html"><a href="observational-studies.html#exchangeability-positivity-and-consistency"><i class="fa fa-check"></i><b>3.2</b> Exchangeability, positivity, and consistency</a></li>
+<li class="chapter" data-level="3.2" data-path="observational-studies.html"><a href="observational-studies.html#exchangeability-positivity-and-sutva"><i class="fa fa-check"></i><b>3.2</b> Exchangeability, positivity, and SUTVA</a></li>
 <li class="chapter" data-level="3.3" data-path="observational-studies.html"><a href="observational-studies.html#effect-identification-in-observational-studies"><i class="fa fa-check"></i><b>3.3</b> Effect Identification in Observational Studies</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="effect-modification-and-interaction.html"><a href="effect-modification-and-interaction.html"><i class="fa fa-check"></i><b>4</b> Effect Modification and Interaction</a>
@@ -321,23 +321,19 @@ Additional DAG exercises provided in class</p>
 <p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>In this simulation, we model a situation where Genetics (Z) is a confounder that influences both Exercise (X) and Heart Health (Y). The naive model, which regresses Heart Health on Exercise without adjusting for Genetics, gives a biased estimate of the effect of Exercise (1.05). This happens because part of the observed association is actually due to Genetics, not Exercise itself. When we adjust for Genetics in the second model, the estimate of Exercise’s effect (0.84) becomes more accurate, isolating its true relationship with Heart Health. This is shown in how the bar for the adjusted graph is closer to the dotted black line, which represents the true causal effect of exercise (0.8). This example highlights how failing to account for confounding can lead researchers to overstate or misinterpret causal effects in public health and medical studies.</p>
 </div>
-<div id="exchangeability-positivity-and-consistency" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Exchangeability, positivity, and consistency<a href="observational-studies.html#exchangeability-positivity-and-consistency" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: <strong>exchangeability, positivity, and consistency.</strong> These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.</p>
+<div id="exchangeability-positivity-and-sutva" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Exchangeability, positivity, and SUTVA<a href="observational-studies.html#exchangeability-positivity-and-sutva" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: <strong>exchangeability, positivity, and SUTVA</strong>. These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.</p>
 <ul>
-<li><strong>Exchangeability</strong> means that after adjusting for confounders, the treatment and comparison groups are similar in all relevant ways except for the exposure itself. In potential outcomes notation, this is written as:</li>
-</ul>
+<li><p><strong>Exchangeability</strong> means that after adjusting for confounders, the treatment and comparison groups are similar in all relevant ways except for the exposure itself. In potential outcomes notation, this is written as:</p>
 <p><span class="math display">\[
-(Y(0), Y(1)) \perp W|X
-\]</span></p>
-<ul>
-<li><strong>Positivity</strong> means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values. In the notation below, the <span class="math inline">\(i\)</span> represents that we are talking about unit <span class="math inline">\(i\)</span>. For example <span class="math inline">\(D_i\)</span> is the treatment that unit <span class="math inline">\(i\)</span> received. The “for any <span class="math inline">\(x \in \mathcal{X}\)</span>” is saying that in every possible value that <span class="math inline">\(X_i\)</span> can take, unit <span class="math inline">\(i\)</span> could have received the treatment (or control).</li>
-</ul>
+  (Y(0), Y(1)) \perp W|X
+  \]</span></p></li>
+<li><p><strong>Positivity</strong> means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values. In the notation, the “for any <span class="math inline">\(x \in \mathcal{X}\)</span>” is saying that within in each group <span class="math inline">\(x\)</span> that the random variable <span class="math inline">\(X\)</span> can take, the unit has a nonzero chance to receive treatment (and control).</p>
 <p><span class="math display">\[
-0 &lt; Pr(W_i = 1 \ | \ X_i = x) &lt; 1  \quad \text{for any } x \in \mathcal{X}
-\]</span>
-- Positivity is not always an assumption that is satisfied. For example, let’s say you are trying to estimate the effect of a new drug. You want to control for the patient’s sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.</p>
-<ul>
+  0 &lt; Pr(W = 1 \ | \ X = x) &lt; 1  \quad \text{for any } x \in \mathcal{X}
+  \]</span></p>
+<p>Positivity is not always an assumption that is satisfied. For example, let’s say you are trying to estimate the effect of a new drug. You want to control for the patient’s sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.</p></li>
 <li><p><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong> is our last important assumption. There are two parts to SUTVA:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Consistency</strong> means that the observed outcome under the observed treatment status of unit <span class="math inline">\(i\)</span> is the same as the potential outcome under the potential treatment status of unit <span class="math inline">\(i\)</span>. This usually occurs when there is a single well-defined treatment, such as a drug with a specific dosage.</p>
