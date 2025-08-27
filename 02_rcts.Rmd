@@ -10,7 +10,7 @@
 
 > ## Textbook reading  
 >
-> [**Hernán & Robins, Causal Inference: What If – Chapters 3–4**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)  
+> [**Hernán & Robins, Causal Inference: What If – Chapters 2*](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)  
 
 > ## Supplementary reading  
 >
@@ -23,6 +23,7 @@
 > -   Basic experimental design principles  
 > -   Limitations of RCTs in public health contexts  
 > -   Common threats to internal and external validity  
+> -   Causal Quantities: SATE vs PATE
 > -   Critical reading exercise: evaluating a published RCT  
 
 ## Randomized controlled trials: the gold standard  
@@ -34,7 +35,7 @@ Randomized Controlled Trials (RCTs) are widely considered the gold standard in c
 $$
 (Y(1), Y(0)) \perp W
 $$
-To understand this consider an single person. Exchangeability says that if we have information about what treatment they received, then that doesn't give us any information about what their potential outcome will be. So on average, the potential outcomes of the treated and control groups will be the same and they will be balanced on observable and unobservable factors. Using this assumption, we can identify the **Population Average Treatment Effect** with the following proof:
+To understand this consider an single person. Exchangeability says that if we have information about what treatment they received, then that doesn't give us any information about what their potential outcome will be. We use exchangeability to identify the average treatment effect (ATE). Identifying the ATE means we are using some assumptions to express the ATE which is expressed in counterfactual outcomes as something that can be expressed using observed data. In this case, the ATE can be written as a difference in means between the treated and control groups.
 
 $$
 \begin{align*}
@@ -45,15 +46,6 @@ ATE &= E[Y(1) - Y(0)] \\
 \end{align*}
 $$
 
-So we showed that the Population ATE can be expressed in the form of data we can observe. Specifically, it is the difference in means between the treated and control group. But we don't have data on our entire population to get this causal effect. In practice, we estimate the causal effect using a sample. So the Sample ATE estimator is written as:
-
-$$
-\begin{align*}
-\hat{ATE} &= \bar Y_1 - \bar Y_0 \quad 
-\end{align*}
-$$
-
-In the equation above, $\bar{Y_1}$ is the average outcome of the treated group, and $\bar{Y_0}$ is the average outcome of the control group.
 
 Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.  
 
@@ -183,3 +175,36 @@ External validity, on the other hand, concerns whether results from the study ca
 - Contextual factors, such as cultural, economic, or healthcare system differences that make the same intervention work differently elsewhere.  
 
 In the earlier RCT simulation, we achieved excellent internal validity because treatment was randomized perfectly and outcomes were cleanly measured. However, that simulation assumes an idealized setting; in real public health research, threats to validity often creep in, and careful design and critical thinking are needed to recognize and minimize them.  
+
+## Causal Quantities: SATE vs PATE
+
+When we do an RCT, we must be careful about the causal quantity of interest we are trying to estimate.
+
+If we are interested in understanding the effect of a treatment for just the individuals in our sample, then we are estimating the **Sample Average Treatment Effect (SATE)**.
+
+$$
+\begin{align*}
+  SATE = \frac{1}{n}\sum_{i=1}^n (Y_i(1) - Y_i(0))
+\end{align*}
+$$
+
+Intuitively, the SATE is the average causal effect of individuals in your sample. These results cannot be generalized to a greater population without some assumptions about how sampling was conducted.
+
+If we are trying to understand a causal effect on an entire population beyond just our sample, then we are trying to estimate the **Population Average Treatment Effect (PATE)**. The PATE requires an extra component to the study's design. To estimate the PATE, random sampling must occur to ensure that the sample is representative of the population. This allows us to make conclusions about the population from our sample.
+
+$$
+\begin{align*}
+PATE &= E[Y(1) - Y(0)]
+\end{align*}
+$$
+
+The main difference between the SATE and PATE is that the PATE has an extra assumption about randomly sampling from the population. This assumption let's us make conclusions about the causal effect for the entire population, rather than only the sample.
+
+Both estimands can be estimated using the difference in means estimator $\hat{\tau}$:
+
+$$
+\begin{align*}
+\hat{\tau} &= \frac{1}{n_1} \sum_{i=1}^{n} W_iY_i - \frac{1}{n_0} \sum_{i = 1}^{n}(1-W_i)Y_i
+\end{align*}
+$$
+Since the difference in means estimator is used to estimate both estimands, we have to be extremely careful in specifying whether we are trying to estimate the SATE or PATE.
