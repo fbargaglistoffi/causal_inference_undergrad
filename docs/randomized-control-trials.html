@@ -173,6 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#basic-experimental-design-principles"><i class="fa fa-check"></i><b>2.2</b> Basic Experimental Design Principles</a></li>
 <li class="chapter" data-level="2.3" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#limitations-of-rcts-in-public-health-contexts"><i class="fa fa-check"></i><b>2.3</b> Limitations of RCTs in Public Health Contexts</a></li>
 <li class="chapter" data-level="2.4" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#common-threats-to-internal-and-external-validity"><i class="fa fa-check"></i><b>2.4</b> Common Threats to Internal and External Validity</a></li>
+<li class="chapter" data-level="2.5" data-path="randomized-control-trials.html"><a href="randomized-control-trials.html#causal-quantities-sate-vs-pate"><i class="fa fa-check"></i><b>2.5</b> Causal Quantities: SATE vs PATE</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="observational-studies.html"><a href="observational-studies.html"><i class="fa fa-check"></i><b>3</b> Observational Studies</a>
 <ul>
@@ -253,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <blockquote>
 <h2 id="textbook-reading-1" class="hasAnchor">Textbook reading<a href="randomized-control-trials.html#textbook-reading-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapters 3–4</strong></a></p>
+<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf">**Hernán &amp; Robins, Causal Inference: What If – Chapters 2*</a></p>
 </blockquote>
 <blockquote>
 <h2 id="supplementary-reading-1" class="hasAnchor">Supplementary reading<a href="randomized-control-trials.html#supplementary-reading-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -271,6 +272,7 @@ Selected DAG examples from public health studies (provided in class)</p>
 </li>
 <li>Common threats to internal and external validity<br />
 </li>
+<li>Causal Quantities: SATE vs PATE</li>
 <li>Critical reading exercise: evaluating a published RCT</li>
 </ul>
 </blockquote>
@@ -281,7 +283,7 @@ Selected DAG examples from public health studies (provided in class)</p>
 <p><span class="math display">\[
 (Y(1), Y(0)) \perp W
 \]</span>
-To understand this consider an single person. Exchangeability says that if we have information about what treatment they received, then that doesn’t give us any information about what their potential outcome will be. So on average, the potential outcomes of the treated and control groups will be the same and they will be balanced on observable and unobservable factors. Using this assumption, we can identify the <strong>Population Average Treatment Effect</strong> with the following proof:</p>
+To understand this consider an single person. Exchangeability says that if we have information about what treatment they received, then that doesn’t give us any information about what their potential outcome will be. We use exchangeability to identify the average treatment effect (ATE). Identifying the ATE means we are using some assumptions to express the ATE which is expressed in counterfactual outcomes as something that can be expressed using observed data. In this case, the ATE can be written as a difference in means between the treated and control groups.</p>
 <p><span class="math display">\[
 \begin{align*}
 ATE &amp;= E[Y(1) - Y(0)] \\
@@ -290,13 +292,6 @@ ATE &amp;= E[Y(1) - Y(0)] \\
 &amp;= E[Y \ | \ W = 1] - E[Y \ | \ W = 0] \quad \text{by consistency}
 \end{align*}
 \]</span></p>
-<p>So we showed that the Population ATE can be expressed in the form of data we can observe. Specifically, it is the difference in means between the treated and control group. But we don’t have data on our entire population to get this causal effect. In practice, we estimate the causal effect using a sample. So the Sample ATE estimator is written as:</p>
-<p><span class="math display">\[
-\begin{align*}
-\hat{ATE} &amp;= \bar Y_1 - \bar Y_0 \quad
-\end{align*}
-\]</span></p>
-<p>In the equation above, <span class="math inline">\(\bar{Y_1}\)</span> is the average outcome of the treated group, and <span class="math inline">\(\bar{Y_0}\)</span> is the average outcome of the control group.</p>
 <p>Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.</p>
 <p>In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on a patient’s blood pressure (mmHg). I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. In this example, the baseline characteristics that were measured were age, BMI, cholesterol (mg/dL), and daily sodium intake (mg/day). After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.</p>
 <p><strong>Simulated Baseline Data and Treatment Assignment</strong></p>
@@ -410,6 +405,31 @@ ATE &amp;= E[Y(1) - Y(0)] \\
 <li>Contextual factors, such as cultural, economic, or healthcare system differences that make the same intervention work differently elsewhere.</li>
 </ul>
 <p>In the earlier RCT simulation, we achieved excellent internal validity because treatment was randomized perfectly and outcomes were cleanly measured. However, that simulation assumes an idealized setting; in real public health research, threats to validity often creep in, and careful design and critical thinking are needed to recognize and minimize them.</p>
+</div>
+<div id="causal-quantities-sate-vs-pate" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Causal Quantities: SATE vs PATE<a href="randomized-control-trials.html#causal-quantities-sate-vs-pate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we do an RCT, we must be careful about the causal quantity of interest we are trying to estimate.</p>
+<p>If we are interested in understanding the effect of a treatment for just the individuals in our sample, then we are estimating the <strong>Sample Average Treatment Effect (SATE)</strong>.</p>
+<p><span class="math display">\[
+\begin{align*}
+  SATE = \frac{1}{n}\sum_{i=1}^n (Y_i(1) - Y_i(0))
+\end{align*}
+\]</span></p>
+<p>Intuitively, the SATE is the average causal effect of individuals in your sample. These results cannot be generalized to a greater population without some assumptions about how sampling was conducted.</p>
+<p>If we are trying to understand a causal effect on an entire population beyond just our sample, then we are trying to estimate the <strong>Population Average Treatment Effect (PATE)</strong>. The PATE requires an extra component to the study’s design. To estimate the PATE, random sampling must occur to ensure that the sample is representative of the population. This allows us to make conclusions about the population from our sample.</p>
+<p><span class="math display">\[
+\begin{align*}
+PATE &amp;= E[Y(1) - Y(0)]
+\end{align*}
+\]</span></p>
+<p>The main difference between the SATE and PATE is that the PATE has an extra assumption about randomly sampling from the population. This assumption let’s us make conclusions about the causal effect for the entire population, rather than only the sample.</p>
+<p>Both estimands can be estimated using the difference in means estimator <span class="math inline">\(\hat{\tau}\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+\hat{\tau} &amp;= \frac{1}{n_1} \sum_{i=1}^{n} W_iY_i - \frac{1}{n_0} \sum_{i = 1}^{n}(1-W_i)Y_i
+\end{align*}
+\]</span>
+Since the difference in means estimator is used to estimate both estimands, we have to be extremely careful in specifying whether we are trying to estimate the SATE or PATE.</p>
 
 </div>
 </div>
