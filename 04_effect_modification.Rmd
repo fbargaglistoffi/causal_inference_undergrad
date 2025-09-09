@@ -10,7 +10,7 @@
 
 > ## Textbook reading
 >
-> [**Hernán & Robins, Causal Inference: What If – Chapters 5–6**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+> [**Hernán & Robins, Causal Inference: What If – Chapters 4–5**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
 
 > ## Supplementary reading
 >

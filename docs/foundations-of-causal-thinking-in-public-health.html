@@ -454,16 +454,82 @@ Think of <span class="math inline">\(X=x\)</span> where <span class="math inline
 <p><span class="math display">\[
 Pr[Y(1) = 1] - Pr[Y(0) = 1] \quad \text{(Risk Difference)} \\
 \]</span></p>
-<p>The risk difference measures average individual causal effects. For example, if we estimated the heart surgery to have a risk difference of -0.5, then on average, the surgery reduced the probability of death by 0.5.</p>
+<p>The risk difference measures average individual causal effects additively. For example, if we estimated the heart surgery to have a risk difference of -0.5, then on average, the surgery reduced the probability of death by 0.5.</p>
 <p><span class="math display">\[
 \frac{Pr[Y(1) = 1]}{Pr[Y(0) = 1]} \quad \text{(Risk Ratio)} \\
 \]</span></p>
-<p>The risk ratio measures causal effects differently. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.</p>
-<p>Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let’s consider the example about measuring the effect of heart surgery. To estimate the risk difference, using a logistic regression, we follow these steps.</p>
+<p>The risk ratio measures causal effects manipulatively For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.</p>
+<p>Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let’s consider the example about measuring the effect of heart surgery. To estimate the risk difference using a logistic regression, we follow a set of steps called <strong>g-computation</strong>:</p>
 <ol style="list-style-type: decimal">
-<li>Fit the logistic regression model to your data\</li>
-<li>Estimate <span class="math inline">\(Pr[Y(1) = 1]\)</span></li>
+<li><p>Fit a logistic regression model to the observed data</p></li>
+<li><p>Set the treatment status of all units to 1 and predict <span class="math inline">\(Y(1)\)</span>. This gets the probability of <span class="math inline">\(Y = 1\)</span> had each unit been treated.</p></li>
+<li><p>Set the treatment status of all units to 0 and predict <span class="math inline">\(Y(0)\)</span>. This gets the probability of <span class="math inline">\(Y = 1\)</span> had each unit been untreated.</p></li>
+<li><p>Use (2) and (3) to estimate a risk difference or risk ratio</p></li>
 </ol>
+<p>In the example below, we are trying to measure the causal effect of a heart transplant on a patient’s survival status. Our study includes 200 total patients. We have data on the patient’s age, health score (ranging from 0 to 100, where a higher score means more healthy), whether they are diabetic, and whether they have had a prior heart attack. Patients that tend to be older, less healthy, have had diabetes, or have had a prior heart attack are more likely to receive the surgery. Out of 200 patients, 127 did not receive heart surgery, while 73 did.</p>
+<p>For simulation purposes, the true risk difference is -0.093 and the risk ratio is 0.76. This means that the heart surgery reduces chance of death by 9.3 percentage points on average according to the risk difference. The risk ratio of 0.76 means that the probability of death under surgery is 76% of the probability of death under no surgery, which is a 28% decrease relative to the probability of death under no surgery.</p>
+<p><a href="https://github.com/kathoffman/causal-inference-visual-guides/blob/master/visual-guides/G-Computation.pdf">Visual Steps for g-computation</a></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-1" tabindex="-1"></a><span class="co">#library(e1071)</span></span>
+<span id="cb19-2"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-2" tabindex="-1"></a><span class="co">#library(dplyr)</span></span>
+<span id="cb19-3"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-3" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-4" tabindex="-1"></a><span class="do">### Step 1: Data Generating Process</span></span>
+<span id="cb19-5"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-7"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-7" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-8" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># 200 subjects in study</span></span>
+<span id="cb19-9"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-9" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-10" tabindex="-1"></a><span class="co"># simulate covariates</span></span>
+<span id="cb19-11"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-11" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">60</span>, <span class="dv">12</span>)</span>
+<span id="cb19-12"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-12" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">25</span>, <span class="fu">pmin</span>(<span class="dv">90</span>, age)) <span class="co"># cap age to range from 25 to 90</span></span>
+<span id="cb19-13"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-13" tabindex="-1"></a>health_score <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n , <span class="dv">60</span>, <span class="dv">15</span>)</span>
+<span id="cb19-14"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-14" tabindex="-1"></a>health_score <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="fu">pmin</span>(<span class="dv">100</span>, health_score)) <span class="co"># cap health scores between 0 and 100</span></span>
+<span id="cb19-15"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-15" tabindex="-1"></a>diabetic <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.25</span>) <span class="co"># 25% chance of diabetes</span></span>
+<span id="cb19-16"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-16" tabindex="-1"></a>prior_heart_attack <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.3</span>) <span class="co"># 30% chance of heart attack</span></span>
+<span id="cb19-17"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-17" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-18" tabindex="-1"></a><span class="co"># generate potential linear predictions for all units (lp0 = untreated, lp1 = treated)</span></span>
+<span id="cb19-19"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-19" tabindex="-1"></a>lp0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.98</span> <span class="sc">+</span> <span class="fl">0.034</span><span class="sc">*</span>age <span class="sc">-</span> <span class="fl">0.036</span><span class="sc">*</span>health_score <span class="sc">+</span> <span class="fl">0.53</span><span class="sc">*</span>diabetic <span class="sc">+</span> <span class="fl">0.79</span><span class="sc">*</span>prior_heart_attack </span>
+<span id="cb19-20"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-20" tabindex="-1"></a>lp1 <span class="ot">&lt;-</span> lp0 <span class="sc">-</span> <span class="fl">0.51</span></span>
+<span id="cb19-21"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-21" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-22" tabindex="-1"></a><span class="co"># convert linear predictions to probabilites using sigmoid function</span></span>
+<span id="cb19-23"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-23" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fu">plogis</span>(lp0)</span>
+<span id="cb19-24"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-24" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">plogis</span>(lp1)</span>
+<span id="cb19-25"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-25" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-26" tabindex="-1"></a><span class="co"># generate probabilites of getting treated based on covariates to assign treatment status to each unit</span></span>
+<span id="cb19-27"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-27" tabindex="-1"></a>W_linear <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fl">0.03</span><span class="sc">*</span>age <span class="sc">-</span> <span class="fl">0.03</span><span class="sc">*</span>health_score <span class="sc">+</span> <span class="fl">0.7</span><span class="sc">*</span>diabetic <span class="sc">+</span> <span class="fl">0.6</span><span class="sc">*</span>prior_heart_attack</span>
+<span id="cb19-28"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-28" tabindex="-1"></a>W_prob <span class="ot">&lt;-</span> <span class="fu">plogis</span>(W_linear)</span>
+<span id="cb19-29"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-29" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, W_prob)</span>
+<span id="cb19-30"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-30" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-31" tabindex="-1"></a><span class="co"># generate observed outcomes</span></span>
+<span id="cb19-32"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-32" tabindex="-1"></a>Y0 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, p0)</span>
+<span id="cb19-33"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-33" tabindex="-1"></a>Y1 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, p1)</span>
+<span id="cb19-34"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-34" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(W <span class="sc">==</span> <span class="dv">1</span>, Y1, Y0)</span>
+<span id="cb19-35"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-35" tabindex="-1"></a></span>
+<span id="cb19-36"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-36" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(age, health_score, diabetic, prior_heart_attack, W, Y) <span class="co"># observed data</span></span>
+<span id="cb19-37"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-37" tabindex="-1"></a></span>
+<span id="cb19-38"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-38" tabindex="-1"></a><span class="do">### Step 2: Estimating causal effects using g-computation</span></span>
+<span id="cb19-39"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-39" tabindex="-1"></a></span>
+<span id="cb19-40"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-40" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y<span class="sc">~</span>W<span class="sc">+</span>age<span class="sc">+</span>health_score<span class="sc">+</span>diabetic<span class="sc">+</span>prior_heart_attack, </span>
+<span id="cb19-41"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-41" tabindex="-1"></a>             <span class="at">data =</span> df, </span>
+<span id="cb19-42"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-42" tabindex="-1"></a>             <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)) <span class="co"># fit logistic regression model</span></span>
+<span id="cb19-43"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-43" tabindex="-1"></a></span>
+<span id="cb19-44"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-44" tabindex="-1"></a>df_treat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">W =</span> <span class="dv">1</span>) <span class="co"># create a copy of observed data where all units are treated</span></span>
+<span id="cb19-45"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-45" tabindex="-1"></a></span>
+<span id="cb19-46"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-46" tabindex="-1"></a>df_untreat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">W =</span> <span class="dv">0</span>) <span class="co"># create a copy of observed data where all units are not treated</span></span>
+<span id="cb19-47"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-47" tabindex="-1"></a></span>
+<span id="cb19-48"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-48" tabindex="-1"></a><span class="co"># predict potential outcomes (in probabilities) using model</span></span>
+<span id="cb19-49"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-49" tabindex="-1"></a>p0_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> df_untreat, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>) </span>
+<span id="cb19-50"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-50" tabindex="-1"></a>p1_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> df_treat, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb19-51"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-51" tabindex="-1"></a></span>
+<span id="cb19-52"><a href="foundations-of-causal-thinking-in-public-health.html#cb19-52" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;True Risk Difference: &quot;</span>, <span class="fu">mean</span>(p1) <span class="sc">-</span> <span class="fu">mean</span>(p0), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## True Risk Difference:  -0.09344478</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="foundations-of-causal-thinking-in-public-health.html#cb21-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;True Risk Ratio: &quot;</span>, <span class="fu">mean</span>(p1) <span class="sc">/</span> <span class="fu">mean</span>(p0), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## True Risk Ratio:  0.7216753</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="foundations-of-causal-thinking-in-public-health.html#cb23-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="foundations-of-causal-thinking-in-public-health.html#cb24-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Estimated Risk Difference: &quot;</span>, <span class="fu">mean</span>(p1_hat) <span class="sc">-</span> <span class="fu">mean</span>(p0_hat), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Estimated Risk Difference:  -0.07962482</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="foundations-of-causal-thinking-in-public-health.html#cb26-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Estimated Risk Ratio: &quot;</span>, <span class="fu">mean</span>(p1_hat) <span class="sc">/</span> <span class="fu">mean</span>(p0_hat), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Estimated Risk Ratio:  0.7645678</code></pre>
+<p>Though they aren’t perfect estimates, we were able to estimate the risk differences and ratios using g-computation.</p>
 
 </div>
 </div>
