@@ -458,7 +458,7 @@ Pr[Y(1) = 1] - Pr[Y(0) = 1] \quad \text{(Risk Difference)} \\
 <p><span class="math display">\[
 \frac{Pr[Y(1) = 1]}{Pr[Y(0) = 1]} \quad \text{(Risk Ratio)} \\
 \]</span></p>
-<p>The risk ratio measures causal effects manipulatively For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.</p>
+<p>The risk ratio measures causal effects multiplicatively. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.</p>
 <p>Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let’s consider the example about measuring the effect of heart surgery. To estimate the risk difference using a logistic regression, we follow a set of steps called <strong>g-computation</strong>:</p>
 <ol style="list-style-type: decimal">
 <li><p>Fit a logistic regression model to the observed data</p></li>
@@ -529,7 +529,7 @@ Pr[Y(1) = 1] - Pr[Y(0) = 1] \quad \text{(Risk Difference)} \\
 <pre><code>## Estimated Risk Difference:  -0.07962482</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="foundations-of-causal-thinking-in-public-health.html#cb26-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Estimated Risk Ratio: &quot;</span>, <span class="fu">mean</span>(p1_hat) <span class="sc">/</span> <span class="fu">mean</span>(p0_hat), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## Estimated Risk Ratio:  0.7645678</code></pre>
-<p>Though they aren’t perfect estimates, we were able to estimate the risk differences and ratios using g-computation.</p>
+<p>Though they are not perfect estimates, we were able to estimate the risk differences and ratios using g-computation.</p>
 
 </div>
 </div>

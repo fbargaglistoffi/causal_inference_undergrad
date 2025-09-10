@@ -226,7 +226,7 @@ $$
 \frac{Pr[Y(1) = 1]}{Pr[Y(0) = 1]} \quad \text{(Risk Ratio)} \\
 $$
 
-The risk ratio measures causal effects manipulatively For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.
+The risk ratio measures causal effects multiplicatively. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.
 
 Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let's consider the example about measuring the effect of heart surgery. To estimate the risk difference using a logistic regression, we follow a set of steps called **g-computation**:
 
@@ -306,4 +306,4 @@ cat("Estimated Risk Ratio: ", mean(p1_hat) / mean(p0_hat), "\n")
 
 ```
 
-Though they aren't perfect estimates, we were able to estimate the risk differences and ratios using g-computation.
+Though they are not perfect estimates, we were able to estimate the risk differences and ratios using g-computation.
