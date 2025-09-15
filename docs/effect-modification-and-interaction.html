@@ -254,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <blockquote>
 <h2 id="textbook-reading-3" class="hasAnchor">Textbook reading<a href="effect-modification-and-interaction.html#textbook-reading-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapters 5–6</strong></a></p>
+<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapters 4–5</strong></a></p>
 </blockquote>
 <blockquote>
 <h2 id="supplementary-reading-3" class="hasAnchor">Supplementary reading<a href="effect-modification-and-interaction.html#supplementary-reading-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -280,29 +280,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Adjustment methods typically aim to control for confounding, but they can also be used to detect effect modification when interaction terms are included. When effect modification is present, a single summary effect estimate (like an overall average) can be misleading. Instead, researchers often report subgroup-specific effects. Careful modeling and interpretation are necessary to distinguish between true effect modification and residual confounding.</p>
 <p>Simulation to Demonstrate Effect Modification</p>
 <p>Let’s say we are interested in understanding the effect of new drug on a person’s VO2 max for young vs old people. For example, this drug might be more effective for young people. VO2 max is the maximum amount of oxygen your body can utilize during exercise. VO2 max is measured in mL per kg of body weight per minute. In this simulation, the drug increases VO2 max by 4 mL/kg/min for old people, and 7.5 mL/kg/min for young people.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="effect-modification-and-interaction.html#cb30-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb30-2"><a href="effect-modification-and-interaction.html#cb30-2" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="effect-modification-and-interaction.html#cb30-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb30-4"><a href="effect-modification-and-interaction.html#cb30-4" tabindex="-1"></a></span>
-<span id="cb30-5"><a href="effect-modification-and-interaction.html#cb30-5" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># drug</span></span>
-<span id="cb30-6"><a href="effect-modification-and-interaction.html#cb30-6" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="effect-modification-and-interaction.html#cb30-7" tabindex="-1"></a>age_group <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># 1 = young, 0 = old</span></span>
-<span id="cb30-8"><a href="effect-modification-and-interaction.html#cb30-8" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="effect-modification-and-interaction.html#cb30-9" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> <span class="dv">35</span> <span class="co"># baseline VO2 max is 35 mL/kg/min</span></span>
-<span id="cb30-10"><a href="effect-modification-and-interaction.html#cb30-10" tabindex="-1"></a></span>
-<span id="cb30-11"><a href="effect-modification-and-interaction.html#cb30-11" tabindex="-1"></a>vo2_max <span class="ot">&lt;-</span> baseline <span class="sc">+</span> </span>
-<span id="cb30-12"><a href="effect-modification-and-interaction.html#cb30-12" tabindex="-1"></a>            <span class="dv">4</span> <span class="sc">*</span> treatment <span class="sc">+</span> </span>
-<span id="cb30-13"><a href="effect-modification-and-interaction.html#cb30-13" tabindex="-1"></a>            <span class="fl">0.5</span> <span class="sc">*</span> age_group <span class="sc">+</span> </span>
-<span id="cb30-14"><a href="effect-modification-and-interaction.html#cb30-14" tabindex="-1"></a>            <span class="fl">3.5</span> <span class="sc">*</span> (treatment <span class="sc">*</span> age_group) <span class="sc">+</span> </span>
-<span id="cb30-15"><a href="effect-modification-and-interaction.html#cb30-15" tabindex="-1"></a>            <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
-<span id="cb30-16"><a href="effect-modification-and-interaction.html#cb30-16" tabindex="-1"></a></span>
-<span id="cb30-17"><a href="effect-modification-and-interaction.html#cb30-17" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vo2_max, treatment, age_group)</span>
-<span id="cb30-18"><a href="effect-modification-and-interaction.html#cb30-18" tabindex="-1"></a></span>
-<span id="cb30-19"><a href="effect-modification-and-interaction.html#cb30-19" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> treatment <span class="sc">+</span> age_group, <span class="at">data =</span> df)</span>
-<span id="cb30-20"><a href="effect-modification-and-interaction.html#cb30-20" tabindex="-1"></a></span>
-<span id="cb30-21"><a href="effect-modification-and-interaction.html#cb30-21" tabindex="-1"></a>adjusted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> treatment <span class="sc">+</span> age_group <span class="sc">+</span> treatment <span class="sc">*</span> age_group, <span class="at">data =</span> df)</span>
-<span id="cb30-22"><a href="effect-modification-and-interaction.html#cb30-22" tabindex="-1"></a></span>
-<span id="cb30-23"><a href="effect-modification-and-interaction.html#cb30-23" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="effect-modification-and-interaction.html#cb39-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb39-2"><a href="effect-modification-and-interaction.html#cb39-2" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="effect-modification-and-interaction.html#cb39-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb39-4"><a href="effect-modification-and-interaction.html#cb39-4" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="effect-modification-and-interaction.html#cb39-5" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># drug</span></span>
+<span id="cb39-6"><a href="effect-modification-and-interaction.html#cb39-6" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="effect-modification-and-interaction.html#cb39-7" tabindex="-1"></a>age_group <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># 1 = young, 0 = old</span></span>
+<span id="cb39-8"><a href="effect-modification-and-interaction.html#cb39-8" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="effect-modification-and-interaction.html#cb39-9" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> <span class="dv">35</span> <span class="co"># baseline VO2 max is 35 mL/kg/min</span></span>
+<span id="cb39-10"><a href="effect-modification-and-interaction.html#cb39-10" tabindex="-1"></a></span>
+<span id="cb39-11"><a href="effect-modification-and-interaction.html#cb39-11" tabindex="-1"></a>vo2_max <span class="ot">&lt;-</span> baseline <span class="sc">+</span> </span>
+<span id="cb39-12"><a href="effect-modification-and-interaction.html#cb39-12" tabindex="-1"></a>            <span class="dv">4</span> <span class="sc">*</span> treatment <span class="sc">+</span> </span>
+<span id="cb39-13"><a href="effect-modification-and-interaction.html#cb39-13" tabindex="-1"></a>            <span class="fl">0.5</span> <span class="sc">*</span> age_group <span class="sc">+</span> </span>
+<span id="cb39-14"><a href="effect-modification-and-interaction.html#cb39-14" tabindex="-1"></a>            <span class="fl">3.5</span> <span class="sc">*</span> (treatment <span class="sc">*</span> age_group) <span class="sc">+</span> </span>
+<span id="cb39-15"><a href="effect-modification-and-interaction.html#cb39-15" tabindex="-1"></a>            <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb39-16"><a href="effect-modification-and-interaction.html#cb39-16" tabindex="-1"></a></span>
+<span id="cb39-17"><a href="effect-modification-and-interaction.html#cb39-17" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vo2_max, treatment, age_group)</span>
+<span id="cb39-18"><a href="effect-modification-and-interaction.html#cb39-18" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="effect-modification-and-interaction.html#cb39-19" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> treatment <span class="sc">+</span> age_group, <span class="at">data =</span> df)</span>
+<span id="cb39-20"><a href="effect-modification-and-interaction.html#cb39-20" tabindex="-1"></a></span>
+<span id="cb39-21"><a href="effect-modification-and-interaction.html#cb39-21" tabindex="-1"></a>adjusted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> treatment <span class="sc">+</span> age_group <span class="sc">+</span> treatment <span class="sc">*</span> age_group, <span class="at">data =</span> df)</span>
+<span id="cb39-22"><a href="effect-modification-and-interaction.html#cb39-22" tabindex="-1"></a></span>
+<span id="cb39-23"><a href="effect-modification-and-interaction.html#cb39-23" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = vo2_max ~ treatment + age_group, data = df)
@@ -322,7 +322,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Residual standard error: 1.306 on 1997 degrees of freedom
 ## Multiple R-squared:  0.8527, Adjusted R-squared:  0.8526 
 ## F-statistic:  5780 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="effect-modification-and-interaction.html#cb32-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="effect-modification-and-interaction.html#cb41-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = vo2_max ~ treatment + age_group + treatment * age_group, 
@@ -347,49 +347,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>If we look only at the naive model without considering effect modification, then we would have incorrectly concluded that the drug impacts young and old people in the same way, adding 5.76 mL/kg/min to a patient’s VO2 max on average.</p>
 <p>If we look at the adjusted model considering effect modification, then we see that we more accurately estimate the ground truths. We also have the correct interpretation that the drug’s effect varies depending on whether the patient is young or old. For old people, the drug is estimated to increase the VO2 max by 4.05. For young people, the drug is estimated to increase the VO2 max by 4.05 + 3.43 = 7.48. So the drug is 3.43 units more effective in young people.</p>
 <p>The following plot shows how younger patients benefit more from the drug than older patients.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="effect-modification-and-interaction.html#cb34-1" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="effect-modification-and-interaction.html#cb34-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">ifelse</span>(age_group <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Young&quot;</span>, <span class="st">&quot;Old&quot;</span>))</span>
-<span id="cb34-3"><a href="effect-modification-and-interaction.html#cb34-3" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="effect-modification-and-interaction.html#cb34-4" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> vo2_max, <span class="at">color =</span> age_group)) <span class="sc">+</span></span>
-<span id="cb34-5"><a href="effect-modification-and-interaction.html#cb34-5" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb34-6"><a href="effect-modification-and-interaction.html#cb34-6" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb34-7"><a href="effect-modification-and-interaction.html#cb34-7" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> age_group)) <span class="sc">+</span></span>
-<span id="cb34-8"><a href="effect-modification-and-interaction.html#cb34-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> </span>
-<span id="cb34-9"><a href="effect-modification-and-interaction.html#cb34-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect Modification: Drug and Age Category&quot;</span>,</span>
-<span id="cb34-10"><a href="effect-modification-and-interaction.html#cb34-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Treatment (0 = Control, 1 = Drug)&quot;</span>,</span>
-<span id="cb34-11"><a href="effect-modification-and-interaction.html#cb34-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;VO2 Max (mL/kg/min)&quot;</span>,</span>
-<span id="cb34-12"><a href="effect-modification-and-interaction.html#cb34-12" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Age Category&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-13"><a href="effect-modification-and-interaction.html#cb34-13" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="effect-modification-and-interaction.html#cb43-1" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="effect-modification-and-interaction.html#cb43-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">ifelse</span>(age_group <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Young&quot;</span>, <span class="st">&quot;Old&quot;</span>))</span>
+<span id="cb43-3"><a href="effect-modification-and-interaction.html#cb43-3" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="effect-modification-and-interaction.html#cb43-4" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> vo2_max, <span class="at">color =</span> age_group)) <span class="sc">+</span></span>
+<span id="cb43-5"><a href="effect-modification-and-interaction.html#cb43-5" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb43-6"><a href="effect-modification-and-interaction.html#cb43-6" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
+<span id="cb43-7"><a href="effect-modification-and-interaction.html#cb43-7" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> age_group)) <span class="sc">+</span></span>
+<span id="cb43-8"><a href="effect-modification-and-interaction.html#cb43-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb43-9"><a href="effect-modification-and-interaction.html#cb43-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect Modification: Drug and Age Category&quot;</span>,</span>
+<span id="cb43-10"><a href="effect-modification-and-interaction.html#cb43-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Treatment (0 = Control, 1 = Drug)&quot;</span>,</span>
+<span id="cb43-11"><a href="effect-modification-and-interaction.html#cb43-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;VO2 Max (mL/kg/min)&quot;</span>,</span>
+<span id="cb43-12"><a href="effect-modification-and-interaction.html#cb43-12" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Age Category&quot;</span>) <span class="sc">+</span></span>
+<span id="cb43-13"><a href="effect-modification-and-interaction.html#cb43-13" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 <div id="interaction" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Interaction<a href="effect-modification-and-interaction.html#interaction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>When we study interactions, we are trying to understand the joint effect of two or more treatments on a certain outcome. So we answer the causal question “What is the combined effect of treatment 1 and treatment 2 on an outcome?”.</p>
 <p>Simulation to Demonstrate Interaction</p>
 <p>Let’s say we are interested in understanding the effect of new drug and taking vitamin supplements on a person’s VO2 max. Assume for this example that the patients who take vitamin supplements take the same supplements in the same dosage. In this simulation, the drug increases VO2 max by 4 mL/kg/min, vitamins increase VO2 max by 1.5 mL/kg/min, and taking both the drug and vitamins adds an addition 2.5 mL/kg/min to the VO2 max.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="effect-modification-and-interaction.html#cb35-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb35-2"><a href="effect-modification-and-interaction.html#cb35-2" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="effect-modification-and-interaction.html#cb35-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb35-4"><a href="effect-modification-and-interaction.html#cb35-4" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="effect-modification-and-interaction.html#cb35-5" tabindex="-1"></a>A_1 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># drug</span></span>
-<span id="cb35-6"><a href="effect-modification-and-interaction.html#cb35-6" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="effect-modification-and-interaction.html#cb35-7" tabindex="-1"></a>A_2 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># vitamin supplementation</span></span>
-<span id="cb35-8"><a href="effect-modification-and-interaction.html#cb35-8" tabindex="-1"></a></span>
-<span id="cb35-9"><a href="effect-modification-and-interaction.html#cb35-9" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> <span class="dv">35</span> <span class="co"># baseline VO2 max is 35 mL/kg/min</span></span>
-<span id="cb35-10"><a href="effect-modification-and-interaction.html#cb35-10" tabindex="-1"></a></span>
-<span id="cb35-11"><a href="effect-modification-and-interaction.html#cb35-11" tabindex="-1"></a>vo2_max <span class="ot">&lt;-</span> baseline <span class="sc">+</span> </span>
-<span id="cb35-12"><a href="effect-modification-and-interaction.html#cb35-12" tabindex="-1"></a>            <span class="dv">4</span> <span class="sc">*</span> A_1 <span class="sc">+</span> </span>
-<span id="cb35-13"><a href="effect-modification-and-interaction.html#cb35-13" tabindex="-1"></a>            <span class="fl">1.5</span> <span class="sc">*</span> A_2 <span class="sc">+</span> </span>
-<span id="cb35-14"><a href="effect-modification-and-interaction.html#cb35-14" tabindex="-1"></a>            <span class="fl">2.5</span> <span class="sc">*</span> (A_1 <span class="sc">*</span> A_2) <span class="sc">+</span> </span>
-<span id="cb35-15"><a href="effect-modification-and-interaction.html#cb35-15" tabindex="-1"></a>            <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
-<span id="cb35-16"><a href="effect-modification-and-interaction.html#cb35-16" tabindex="-1"></a></span>
-<span id="cb35-17"><a href="effect-modification-and-interaction.html#cb35-17" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vo2_max, A_1, A_2)</span>
-<span id="cb35-18"><a href="effect-modification-and-interaction.html#cb35-18" tabindex="-1"></a></span>
-<span id="cb35-19"><a href="effect-modification-and-interaction.html#cb35-19" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> A_1 <span class="sc">+</span> A_2, <span class="at">data =</span> df)</span>
-<span id="cb35-20"><a href="effect-modification-and-interaction.html#cb35-20" tabindex="-1"></a></span>
-<span id="cb35-21"><a href="effect-modification-and-interaction.html#cb35-21" tabindex="-1"></a>adjusted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> A_1 <span class="sc">+</span> A_2 <span class="sc">+</span> A_1 <span class="sc">*</span> A_2, <span class="at">data =</span> df)</span>
-<span id="cb35-22"><a href="effect-modification-and-interaction.html#cb35-22" tabindex="-1"></a></span>
-<span id="cb35-23"><a href="effect-modification-and-interaction.html#cb35-23" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="effect-modification-and-interaction.html#cb44-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb44-2"><a href="effect-modification-and-interaction.html#cb44-2" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="effect-modification-and-interaction.html#cb44-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb44-4"><a href="effect-modification-and-interaction.html#cb44-4" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="effect-modification-and-interaction.html#cb44-5" tabindex="-1"></a>A_1 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># drug</span></span>
+<span id="cb44-6"><a href="effect-modification-and-interaction.html#cb44-6" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="effect-modification-and-interaction.html#cb44-7" tabindex="-1"></a>A_2 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>) <span class="co"># vitamin supplementation</span></span>
+<span id="cb44-8"><a href="effect-modification-and-interaction.html#cb44-8" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="effect-modification-and-interaction.html#cb44-9" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> <span class="dv">35</span> <span class="co"># baseline VO2 max is 35 mL/kg/min</span></span>
+<span id="cb44-10"><a href="effect-modification-and-interaction.html#cb44-10" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="effect-modification-and-interaction.html#cb44-11" tabindex="-1"></a>vo2_max <span class="ot">&lt;-</span> baseline <span class="sc">+</span> </span>
+<span id="cb44-12"><a href="effect-modification-and-interaction.html#cb44-12" tabindex="-1"></a>            <span class="dv">4</span> <span class="sc">*</span> A_1 <span class="sc">+</span> </span>
+<span id="cb44-13"><a href="effect-modification-and-interaction.html#cb44-13" tabindex="-1"></a>            <span class="fl">1.5</span> <span class="sc">*</span> A_2 <span class="sc">+</span> </span>
+<span id="cb44-14"><a href="effect-modification-and-interaction.html#cb44-14" tabindex="-1"></a>            <span class="fl">2.5</span> <span class="sc">*</span> (A_1 <span class="sc">*</span> A_2) <span class="sc">+</span> </span>
+<span id="cb44-15"><a href="effect-modification-and-interaction.html#cb44-15" tabindex="-1"></a>            <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb44-16"><a href="effect-modification-and-interaction.html#cb44-16" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="effect-modification-and-interaction.html#cb44-17" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vo2_max, A_1, A_2)</span>
+<span id="cb44-18"><a href="effect-modification-and-interaction.html#cb44-18" tabindex="-1"></a></span>
+<span id="cb44-19"><a href="effect-modification-and-interaction.html#cb44-19" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> A_1 <span class="sc">+</span> A_2, <span class="at">data =</span> df)</span>
+<span id="cb44-20"><a href="effect-modification-and-interaction.html#cb44-20" tabindex="-1"></a></span>
+<span id="cb44-21"><a href="effect-modification-and-interaction.html#cb44-21" tabindex="-1"></a>adjusted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vo2_max <span class="sc">~</span> A_1 <span class="sc">+</span> A_2 <span class="sc">+</span> A_1 <span class="sc">*</span> A_2, <span class="at">data =</span> df)</span>
+<span id="cb44-22"><a href="effect-modification-and-interaction.html#cb44-22" tabindex="-1"></a></span>
+<span id="cb44-23"><a href="effect-modification-and-interaction.html#cb44-23" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = vo2_max ~ A_1 + A_2, data = df)
@@ -409,7 +409,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Residual standard error: 1.158 on 1997 degrees of freedom
 ## Multiple R-squared:  0.8723, Adjusted R-squared:  0.8722 
 ## F-statistic:  6820 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="effect-modification-and-interaction.html#cb37-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="effect-modification-and-interaction.html#cb46-1" tabindex="-1"></a><span class="fu">summary</span>(adjusted_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = vo2_max ~ A_1 + A_2 + A_1 * A_2, data = df)
@@ -433,23 +433,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>If we look at the naive model, we would conclude that the drug increase VO2 max by 5.26 and the vitamins increase VO2 max by 2.69. But this isn’t the truth. The naive model doesn’t capture the combined effect of taking both the drug and vitamins, which is capture in the adjusted model using an interaction term.</p>
 <p>Based on the adjusted model, we would conclude that the drug increases VO2 max by 4.05, the vitamins increase VO2 max by 1.49, and taking both adds 2.43 mL/kg/min to one’s VO2 max on average. This is closer to the ground truth that we established when explaining the simulation.</p>
 <p>This plot shows that taking the drug increases VO2 max, but also taking vitamins with the drug has an combined effect that increases VO2 max.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="effect-modification-and-interaction.html#cb39-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb39-2"><a href="effect-modification-and-interaction.html#cb39-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
-<span id="cb39-3"><a href="effect-modification-and-interaction.html#cb39-3" tabindex="-1"></a></span>
-<span id="cb39-4"><a href="effect-modification-and-interaction.html#cb39-4" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb39-5"><a href="effect-modification-and-interaction.html#cb39-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vitamin_group =</span> <span class="fu">ifelse</span>(A_2 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Vitamins&quot;</span>, <span class="st">&quot;No Vitamins&quot;</span>))</span>
-<span id="cb39-6"><a href="effect-modification-and-interaction.html#cb39-6" tabindex="-1"></a></span>
-<span id="cb39-7"><a href="effect-modification-and-interaction.html#cb39-7" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> A_1, <span class="at">y =</span> vo2_max, <span class="at">color =</span> vitamin_group)) <span class="sc">+</span></span>
-<span id="cb39-8"><a href="effect-modification-and-interaction.html#cb39-8" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb39-9"><a href="effect-modification-and-interaction.html#cb39-9" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb39-10"><a href="effect-modification-and-interaction.html#cb39-10" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> vitamin_group)) <span class="sc">+</span></span>
-<span id="cb39-11"><a href="effect-modification-and-interaction.html#cb39-11" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> </span>
-<span id="cb39-12"><a href="effect-modification-and-interaction.html#cb39-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Interaction: Drug × Vitamin Supplement&quot;</span>,</span>
-<span id="cb39-13"><a href="effect-modification-and-interaction.html#cb39-13" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Treatment (0 = Control, 1 = Drug)&quot;</span>,</span>
-<span id="cb39-14"><a href="effect-modification-and-interaction.html#cb39-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;VO2 Max (mL/kg/min)&quot;</span>,</span>
-<span id="cb39-15"><a href="effect-modification-and-interaction.html#cb39-15" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Vitamin Group&quot;</span>) <span class="sc">+</span></span>
-<span id="cb39-16"><a href="effect-modification-and-interaction.html#cb39-16" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="effect-modification-and-interaction.html#cb48-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
+<span id="cb48-2"><a href="effect-modification-and-interaction.html#cb48-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
+<span id="cb48-3"><a href="effect-modification-and-interaction.html#cb48-3" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="effect-modification-and-interaction.html#cb48-4" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href="effect-modification-and-interaction.html#cb48-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vitamin_group =</span> <span class="fu">ifelse</span>(A_2 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Vitamins&quot;</span>, <span class="st">&quot;No Vitamins&quot;</span>))</span>
+<span id="cb48-6"><a href="effect-modification-and-interaction.html#cb48-6" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="effect-modification-and-interaction.html#cb48-7" tabindex="-1"></a><span class="fu">ggplot</span>(df_grouped, <span class="fu">aes</span>(<span class="at">x =</span> A_1, <span class="at">y =</span> vo2_max, <span class="at">color =</span> vitamin_group)) <span class="sc">+</span></span>
+<span id="cb48-8"><a href="effect-modification-and-interaction.html#cb48-8" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb48-9"><a href="effect-modification-and-interaction.html#cb48-9" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
+<span id="cb48-10"><a href="effect-modification-and-interaction.html#cb48-10" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> vitamin_group)) <span class="sc">+</span></span>
+<span id="cb48-11"><a href="effect-modification-and-interaction.html#cb48-11" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb48-12"><a href="effect-modification-and-interaction.html#cb48-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Interaction: Drug × Vitamin Supplement&quot;</span>,</span>
+<span id="cb48-13"><a href="effect-modification-and-interaction.html#cb48-13" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Treatment (0 = Control, 1 = Drug)&quot;</span>,</span>
+<span id="cb48-14"><a href="effect-modification-and-interaction.html#cb48-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;VO2 Max (mL/kg/min)&quot;</span>,</span>
+<span id="cb48-15"><a href="effect-modification-and-interaction.html#cb48-15" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Vitamin Group&quot;</span>) <span class="sc">+</span></span>
+<span id="cb48-16"><a href="effect-modification-and-interaction.html#cb48-16" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>In this simulation, we learned that when we are interested in measuring the effect of multiple treatments on an outcome, it’s important to consider the combined effect of these treatments. We achieve this by adding an interaction term in our regression model.</p>
 </div>
 <div id="identifying-interaction" class="section level2 hasAnchor" number="4.3">

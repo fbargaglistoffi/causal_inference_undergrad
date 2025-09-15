@@ -220,15 +220,90 @@ $$
 Pr[Y(1) = 1] - Pr[Y(0) = 1] \quad \text{(Risk Difference)} \\
 $$
 
-The risk difference measures average individual causal effects. For example, if we estimated the heart surgery to have a risk difference of -0.5, then on average, the surgery reduced the probability of death by 0.5.
+The risk difference measures average individual causal effects additively. For example, if we estimated the heart surgery to have a risk difference of -0.5, then on average, the surgery reduced the probability of death by 0.5.
 
 $$
 \frac{Pr[Y(1) = 1]}{Pr[Y(0) = 1]} \quad \text{(Risk Ratio)} \\
 $$
 
-The risk ratio measures causal effects differently. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.
+The risk ratio measures causal effects multiplicatively. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.
 
-Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let's consider the example about measuring the effect of heart surgery. To estimate the risk difference, using a logistic regression, we follow these steps.
+Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let's consider the example about measuring the effect of heart surgery. To estimate the risk difference using a logistic regression, we follow a set of steps called **g-computation**:
 
-1. Fit the logistic regression model to your data\\
-2. Estimate $Pr[Y(1) = 1]$
+1. Fit a logistic regression model to the observed data
+
+2. Set the treatment status of all units to 1 and predict $Y(1)$. This gets the probability of $Y = 1$ had each unit been treated.
+
+3. Set the treatment status of all units to 0 and predict $Y(0)$. This gets the probability of $Y = 1$ had each unit been untreated.
+
+4. Use (2) and (3) to estimate a risk difference or risk ratio
+
+In the example below, we are trying to measure the causal effect of a heart transplant on a patient's survival status. Our study includes 200 total patients. We have data on the patient's age, health score (ranging from 0 to 100, where a higher score means more healthy), whether they are diabetic, and whether they have had a prior heart attack. Patients that tend to be older, less healthy, have had diabetes, or have had a prior heart attack are more likely to receive the surgery. Out of 200 patients, 127 did not receive heart surgery, while 73 did.
+
+For simulation purposes, the true risk difference is -0.093 and the risk ratio is 0.76. This means that the heart surgery reduces chance of death by 9.3 percentage points on average according to the risk difference. The risk ratio of 0.76 means that the probability of death under surgery is 76% of the probability of death under no surgery, which is a 28% decrease relative to the probability of death under no surgery.
+
+[Visual Steps for g-computation](https://github.com/kathoffman/causal-inference-visual-guides/blob/master/visual-guides/G-Computation.pdf)
+
+
+```{r}
+
+#library(e1071)
+#library(dplyr)
+
+### Step 1: Data Generating Process
+
+set.seed(123)
+
+n <- 200 # 200 subjects in study
+
+# simulate covariates
+age <- rnorm(n, 60, 12)
+age <- pmax(25, pmin(90, age)) # cap age to range from 25 to 90
+health_score <- rnorm(n , 60, 15)
+health_score <- pmax(0, pmin(100, health_score)) # cap health scores between 0 and 100
+diabetic <- rbinom(n, 1, 0.25) # 25% chance of diabetes
+prior_heart_attack <- rbinom(n, 1, 0.3) # 30% chance of heart attack
+
+# generate potential linear predictions for all units (lp0 = untreated, lp1 = treated)
+lp0 <- -0.98 + 0.034*age - 0.036*health_score + 0.53*diabetic + 0.79*prior_heart_attack 
+lp1 <- lp0 - 0.51
+
+# convert linear predictions to probabilites using sigmoid function
+p0 <- plogis(lp0)
+p1 <- plogis(lp1)
+
+# generate probabilites of getting treated based on covariates to assign treatment status to each unit
+W_linear <- -1 + 0.03*age - 0.03*health_score + 0.7*diabetic + 0.6*prior_heart_attack
+W_prob <- plogis(W_linear)
+W <- rbinom(n, 1, W_prob)
+
+# generate observed outcomes
+Y0 <- rbinom(n, 1, p0)
+Y1 <- rbinom(n, 1, p1)
+Y <- ifelse(W == 1, Y1, Y0)
+
+df <- data.frame(age, health_score, diabetic, prior_heart_attack, W, Y) # observed data
+
+### Step 2: Estimating causal effects using g-computation
+
+model <- glm(Y~W+age+health_score+diabetic+prior_heart_attack, 
+             data = df, 
+             family = binomial(link = "logit")) # fit logistic regression model
+
+df_treat <- df |> mutate(W = 1) # create a copy of observed data where all units are treated
+
+df_untreat <- df |> mutate(W = 0) # create a copy of observed data where all units are not treated
+
+# predict potential outcomes (in probabilities) using model
+p0_hat <- predict(model, newdata = df_untreat, type = "response") 
+p1_hat <- predict(model, newdata = df_treat, type = "response")
+
+cat("True Risk Difference: ", mean(p1) - mean(p0), "\n")
+cat("True Risk Ratio: ", mean(p1) / mean(p0), "\n")
+cat("\n")
+cat("Estimated Risk Difference: ", mean(p1_hat) - mean(p0_hat), "\n")
+cat("Estimated Risk Ratio: ", mean(p1_hat) / mean(p0_hat), "\n")
+
+```
+
+Though they are not perfect estimates, we were able to estimate the risk differences and ratios using g-computation.
