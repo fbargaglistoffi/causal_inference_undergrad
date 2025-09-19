@@ -7,6 +7,7 @@ view: https://github.com/fbargaglistoffi/causal_inference_graduate/blob/main/%s
 rmd_files:
   - index.Rmd
   - setup.Rmd
+  - causal_dictionary.Rmd
   - 01_potential_outcomes.Rmd
   - 02_rcts.Rmd
   - 03_observational_studies.Rmd
