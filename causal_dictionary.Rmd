@@ -1,0 +1,15 @@
+# Causal Dictionary {.unnumbered} 
+
+We compiled a list of important terms or common questions you might have! This page is useful to refer to throughout the course.
+
+**Conditioning** - A statistical operation to analyze relationships of variables while holding values of other variables constant. For example, if we are analyzing the relationship between $X$ and $Y$ while conditioning on $Z$, we are asking "What is the relationship of $X$ and $Y$ when holding $Z$ constant?"
+
+**Controlling/Adjusting** - Controlling or adjusting for a variable is one way to implement conditioning, particularly in regression contexts. We control for a variable by adding it as a covariate to our regression model. The regression coefficient for $X$ then represents the association between $X$ and $Y$ when $Z$ is held constant.
+
+**Stratifying/Selecting** - Stratifying or selecting is a different way to implement conditioning by subsetting the data to observations that meets certain criteria. We then only analyze that subset of the data. For example, if we are interested in the effect of an energy drink on a person's awareness levels and we only include college students in the study, then we are stratifying.
+
+
+**What is the difference between controlling and stratifying for Z?** - For example let $Z$ = sex assigned at birth. Both controlling and stratifying are forms of conditioning. When we control, we add $Z$ as a covariate to our regression model, but our data still contains both males and females. When we stratify for males, then only males are included in our analysis. Though they are both forms of conditioning, controlling or stratifying have different implications for what causal quantity we are actually estimating.
+
+
+**Selection bias** - Selection bias occurs when the probability of being included in the analysis depends on a factor that affects the association between the treatment and outcome.
