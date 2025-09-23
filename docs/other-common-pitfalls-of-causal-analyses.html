@@ -204,9 +204,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html"><i class="fa fa-check"></i><b>7</b> Other Common Pitfalls of Causal Analyses</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#measurement-bias"><i class="fa fa-check"></i><b>7.1</b> Measurement Bias</a></li>
-<li class="chapter" data-level="7.2" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#non-causal-diagrams"><i class="fa fa-check"></i><b>7.2</b> Non-Causal Diagrams</a></li>
-<li class="chapter" data-level="7.3" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#publication-bias-and-p-hacking"><i class="fa fa-check"></i><b>7.3</b> Publication Bias and P-Hacking</a></li>
-<li class="chapter" data-level="7.4" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#over--and-mis-interpretation-of-statistical-analyses"><i class="fa fa-check"></i><b>7.4</b> Over- and Mis-Interpretation of Statistical Analyses</a></li>
+<li class="chapter" data-level="7.2" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#non-compliance"><i class="fa fa-check"></i><b>7.2</b> Non-compliance</a></li>
+<li class="chapter" data-level="7.3" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#non-causal-diagrams"><i class="fa fa-check"></i><b>7.3</b> Non-Causal Diagrams</a></li>
+<li class="chapter" data-level="7.4" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#publication-bias-and-p-hacking"><i class="fa fa-check"></i><b>7.4</b> Publication Bias and P-Hacking</a></li>
+<li class="chapter" data-level="7.5" data-path="other-common-pitfalls-of-causal-analyses.html"><a href="other-common-pitfalls-of-causal-analyses.html#over--and-mis-interpretation-of-statistical-analyses"><i class="fa fa-check"></i><b>7.5</b> Over- and Mis-Interpretation of Statistical Analyses</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="from-identification-to-estimation.html"><a href="from-identification-to-estimation.html"><i class="fa fa-check"></i><b>8</b> From Identification to Estimation</a>
 <ul>
@@ -254,17 +255,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <blockquote>
 <h2 id="textbook-reading-6" class="hasAnchor">Textbook reading<a href="other-common-pitfalls-of-causal-analyses.html#textbook-reading-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapters 12–13</strong></a></p>
+<p><a href="https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf"><strong>Hernán &amp; Robins, Causal Inference: What If – Chapter 9</strong></a></p>
 </blockquote>
 <blockquote>
 <h2 id="supplementary-reading-6" class="hasAnchor">Supplementary reading<a href="other-common-pitfalls-of-causal-analyses.html#supplementary-reading-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://academic.oup.com/aje/article/175/3/210/155666"><strong>Groenwold, R. H., et al. (2012). Dealing with missing outcome data in randomized trials and observational studies. American Journal of Epidemiology, 175(3), 210–217.</strong></a><br />
+<p><strong>ADD RELEVANT READING</strong><br />
 Examples of misclassification and selection bias in public health research</p>
 </blockquote>
 <blockquote>
 <h2 id="topics-covered-6" class="hasAnchor">Topics covered<a href="other-common-pitfalls-of-causal-analyses.html#topics-covered-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li>Measurement bias</li>
+<li>Non-compliance</li>
 <li>Non-causal diagrams</li>
 <li>Publication bias and p-hacking</li>
 <li>Over- and mis-interpretation of statistical analyses</li>
@@ -299,19 +301,27 @@ Examples of misclassification and selection bias in public health research</p>
 <pre><code>## [1] 3.008776</code></pre>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="other-common-pitfalls-of-causal-analyses.html#cb61-1" tabindex="-1"></a>biased_coef</span></code></pre></div>
 <pre><code>## [1] 2.445573</code></pre>
+<p>We can capture measurement bias in DAGs as well by denoting the measured exposure variable as <span class="math inline">\(W^*\)</span>. In the example below, the measured treatment <span class="math inline">\(W^*\)</span> is affected both by confounders and the exposure variable <span class="math inline">\(W\)</span>.</p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
-<div id="non-causal-diagrams" class="section level2 hasAnchor" number="7.2">
-<h2><span class="header-section-number">7.2</span> Non-Causal Diagrams<a href="other-common-pitfalls-of-causal-analyses.html#non-causal-diagrams" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="non-compliance" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Non-compliance<a href="other-common-pitfalls-of-causal-analyses.html#non-compliance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far we have assumed that the examples with randomized experiments that we have covered went as intended. In real experiments, sometimes participants might not comply with the treatment they are assigned to. For example, if our example is about the effect of a heart transplant on 5-year mortality, some patients might not undergo surgery even if they were assigned the surgery.</p>
+<p>To account for the potential mismatch between the treatment assigned and the treatment received for a patient in DAG notation, we use two variables. <span class="math inline">\(Z\)</span> represents the assigned treatment, and <span class="math inline">\(W\)</span> represents the received treatment. This is different from how we denote measurement error because <span class="math inline">\(Z\)</span> can have a causal effect on <span class="math inline">\(Y\)</span>.</p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
+<div id="non-causal-diagrams" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Non-Causal Diagrams<a href="other-common-pitfalls-of-causal-analyses.html#non-causal-diagrams" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Non-causal diagrams represent associations between variables that do not imply direct cause-and-effect relationships. These diagrams are useful for illustrating statistical relationships that arise from shared causes, correlations due to bias, or measurement artifacts. In non-causal diagrams, arrows may still indicate directional influence, but they are used to reflect associations or data-generating processes, not claims about interventions. Unlike causal diagrams, which are designed to identify and estimate the effects of manipulating one variable on another, non-causal diagrams help clarify patterns in the data without asserting that changing one variable will necessarily change another.</p>
 <p>In the context of our simulation, we can use a non-causal diagram to represent the observed association between age and lung cancer without assuming a direct causal relationship. While age and lung cancer may be strongly correlated — older individuals tend to have higher cancer risk — this relationship does not imply that age causes lung cancer in an interventional sense. Instead, age may be acting as a proxy for other underlying factors like cumulative exposure to smoking or environmental risks. A non-causal diagram helps us visualize this statistical association without attributing it to a direct, manipulable pathway, highlighting that not all observed relationships in data should be interpreted as causal.</p>
 </div>
-<div id="publication-bias-and-p-hacking" class="section level2 hasAnchor" number="7.3">
-<h2><span class="header-section-number">7.3</span> Publication Bias and P-Hacking<a href="other-common-pitfalls-of-causal-analyses.html#publication-bias-and-p-hacking" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="publication-bias-and-p-hacking" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> Publication Bias and P-Hacking<a href="other-common-pitfalls-of-causal-analyses.html#publication-bias-and-p-hacking" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Publication bias occurs when the likelihood of a study being published depends on the nature or direction of its results — typically favoring studies with statistically significant or “positive” findings. This creates a distorted picture of the evidence in a field, because null or contradictory results are less likely to be seen. P-hacking refers to the practice of manipulating statistical analyses or data collection until a desired (usually statistically significant) result is achieved. This can include selectively reporting outcomes, running many analyses and only publishing those with low p-values, or stopping data collection once a significant result appears. Both practices inflate false-positive rates and undermine the credibility of scientific findings.</p>
 <p>In the context of the simulation we ran — whether it involves confounding, selection bias, or measurement error — it’s easy to see how p-hacking or publication bias could skew interpretations. For example, imagine rerunning the simulation many times and only reporting the version where the naive model shows a significant effect of smoking on lung cancer (even if the underlying data or causal structure doesn’t support it). Or selectively reporting only the adjusted model that produces a “clean” result while hiding others. These practices can make even a carefully designed simulation appear misleading. The simulation reinforces the idea that statistical significance is not the same as truth, and that transparency in modeling choices and full reporting of results are critical for avoiding biased conclusions.</p>
 </div>
-<div id="over--and-mis-interpretation-of-statistical-analyses" class="section level2 hasAnchor" number="7.4">
-<h2><span class="header-section-number">7.4</span> Over- and Mis-Interpretation of Statistical Analyses<a href="other-common-pitfalls-of-causal-analyses.html#over--and-mis-interpretation-of-statistical-analyses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="over--and-mis-interpretation-of-statistical-analyses" class="section level2 hasAnchor" number="7.5">
+<h2><span class="header-section-number">7.5</span> Over- and Mis-Interpretation of Statistical Analyses<a href="other-common-pitfalls-of-causal-analyses.html#over--and-mis-interpretation-of-statistical-analyses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Over-interpretation occurs when researchers draw stronger conclusions from statistical results than the data can justify, while mis-interpretation involves misunderstanding what the results actually mean. A common example is interpreting a statistically significant association as proof of causation, even when the study design or model does not support that claim. Another frequent error is overstating the practical importance of a small effect size or assuming that a non-significant result means “no effect.” These issues are often driven by pressure to produce definitive conclusions, even when the data are limited, noisy, or confounded. Careful interpretation requires understanding the limits of the methods used and being transparent about uncertainty, assumptions, and alternative explanations.</p>
 <p>In the simulations we’ve conducted — such as estimating the effect of smoking on lung cancer under different types of bias — it’s easy to see how results can be over- or mis-interpreted. For instance, in a model affected by measurement bias or confounding, one might find a statistically significant association between smoking and lung cancer, but incorrectly conclude that the estimated effect size reflects the true causal effect. Alternatively, if the biased model appears significant and the true model does not, someone might misinterpret that as evidence that adjustment “eliminated” the effect, when in fact it corrected for bias. These examples highlight how even simple models can be misunderstood or overstated, and underscore the importance of grounding interpretation in study design, data limitations, and causal reasoning — not just statistical output.</p>
 

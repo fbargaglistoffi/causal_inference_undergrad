@@ -10,16 +10,17 @@
 
 > ## Textbook reading
 >
-> [**Hernán & Robins, Causal Inference: What If – Chapters 12–13**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+> [**Hernán & Robins, Causal Inference: What If – Chapter 9**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
 
 > ## Supplementary reading
 >
-> [**Groenwold, R. H., et al. (2012). Dealing with missing outcome data in randomized trials and observational studies. American Journal of Epidemiology, 175(3), 210–217.**](https://academic.oup.com/aje/article/175/3/210/155666)\
+> **ADD RELEVANT READING**  
 > Examples of misclassification and selection bias in public health research
 
 > ## Topics covered
 >
 > -   Measurement bias
+> -   Non-compliance
 > -   Non-causal diagrams
 > -   Publication bias and p-hacking
 > -   Over- and mis-interpretation of statistical analyses
@@ -60,6 +61,64 @@ biased_coef
 
 ```
 
+We can capture measurement bias in DAGs as well by denoting the measured exposure variable as $W^*$. In the example below, the measured treatment $W^*$ is affected both by confounders and the exposure variable $W$. 
+
+```{r, echo = FALSE}
+
+dag <- model2network("[W][Y|W][W*|W:U][U]")
+
+g <- as.igraph(dag)
+
+plot(
+  g,
+  layout = layout_as_tree(g, root = "W*"),
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1
+)
+
+```
+
+## Non-compliance
+
+So far we have assumed that the examples with randomized experiments that we have covered went as intended. In real experiments, sometimes participants might not comply with the treatment they are assigned to. For example, if our example is about the effect of a heart transplant on 5-year mortality, some patients might not undergo surgery even if they were assigned the surgery.
+
+To account for the potential mismatch between the treatment assigned and the treatment received for a patient in DAG notation, we use two variables. $Z$ represents the assigned treatment, and $W$ represents the received treatment. This is different from how we denote measurement error because $Z$ can have a causal effect on $Y$.
+
+```{r, echo = FALSE}
+
+dag <- model2network("[Z][U][W|Z:U][Y|W:Z:U]")
+
+g <- as.igraph(dag)
+
+lay <- rbind(
+  Z = c(-1.1,  0.6),
+  W = c( 0.0,  0.6),
+  Y = c( 1.2,  0.6),
+  U = c(-1.2, -0.6)
+)[V(g)$name, , drop = FALSE]
+
+lay <- lay * 0.7
+
+edge_names <- apply(ends(g, E(g), names = TRUE), 1, paste, collapse = "->")
+curv <- rep(0, ecount(g))
+curv[edge_names == "Z->Y"] <- 0.65
+curv[edge_names == "U->Y"] <- -0.15
+
+plot(
+  g,
+  layout = lay,
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1,
+  edge.curved = curv,
+  asp = 0,
+  xlim = c(-1.5, 1.5),   
+  ylim = c(-1.5, 1.5)
+)
+
+```
+
 ## Non-Causal Diagrams
 
 Non-causal diagrams represent associations between variables that do not imply direct cause-and-effect relationships. These diagrams are useful for illustrating statistical relationships that arise from shared causes, correlations due to bias, or measurement artifacts. In non-causal diagrams, arrows may still indicate directional influence, but they are used to reflect associations or data-generating processes, not claims about interventions. Unlike causal diagrams, which are designed to identify and estimate the effects of manipulating one variable on another, non-causal diagrams help clarify patterns in the data without asserting that changing one variable will necessarily change another.
@@ -77,6 +136,3 @@ In the context of the simulation we ran — whether it involves confounding, sel
 Over-interpretation occurs when researchers draw stronger conclusions from statistical results than the data can justify, while mis-interpretation involves misunderstanding what the results actually mean. A common example is interpreting a statistically significant association as proof of causation, even when the study design or model does not support that claim. Another frequent error is overstating the practical importance of a small effect size or assuming that a non-significant result means "no effect." These issues are often driven by pressure to produce definitive conclusions, even when the data are limited, noisy, or confounded. Careful interpretation requires understanding the limits of the methods used and being transparent about uncertainty, assumptions, and alternative explanations.
 
 In the simulations we've conducted — such as estimating the effect of smoking on lung cancer under different types of bias — it's easy to see how results can be over- or mis-interpreted. For instance, in a model affected by measurement bias or confounding, one might find a statistically significant association between smoking and lung cancer, but incorrectly conclude that the estimated effect size reflects the true causal effect. Alternatively, if the biased model appears significant and the true model does not, someone might misinterpret that as evidence that adjustment "eliminated" the effect, when in fact it corrected for bias. These examples highlight how even simple models can be misunderstood or overstated, and underscore the importance of grounding interpretation in study design, data limitations, and causal reasoning — not just statistical output.
-
-
-

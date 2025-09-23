@@ -10,11 +10,11 @@
 
 > ## Textbook reading  
 >
-> [**Hernán & Robins, Causal Inference: What If – Chapter 14**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+> [**Hernán & Robins, Causal Inference: What If – Chapter 10**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
 
 > ## Supplementary reading  
 >
-> [**VanderWeele, T. J., & Ding, P. (2017). Sensitivity analysis in observational research: introducing the E-value. Annals of Internal Medicine, 167(4), 268–274.**](https://www.acpjournals.org/doi/10.7326/M16-2607)\  
+> **ADD RELEVANT READING**  
 > Case studies on unmeasured confounding and robustness of findings  
   
 > ## Topics covered   
@@ -30,48 +30,13 @@ In causal inference, identification refers to the theoretical question of whethe
 
 Once identification is established, the next step is estimation, which involves applying statistical methods to calculate the size of the effect using real data. Estimation uses techniques like regression, inverse probability weighting, or matching to quantify the identified causal relationship. In our simulations, for example, once we specify that the causal effect of smoking on lung cancer is identifiable by adjusting for age, we use regression to estimate that effect. If we skip the identification step and go straight to estimation without accounting for confounding or bias, our estimates may be precise — but wrong. Together, identification and estimation form the backbone of credible causal analysis: one ensures that we're asking the right question, and the other that we're answering it correctly.  
 
-This simulation illustrates the concepts of identification and estimation by showing that, without adjusting for the confounder (age), the causal effect of smoking on lung cancer cannot be correctly identified. Once the effect is identified through proper adjustment, it can then be accurately estimated using regression.  
-
-```{r}
-
-n <- 2000
-
-age <- rnorm(2000, mean = 50, sd = 10)
-
-smoking <- 2 * age + rnorm(n)
-
-lung_cancer <- 3 * smoking + 4 * age + rnorm(n)
-
-df <- data.frame(
-  Age = age,
-  Smoking = smoking,
-  Lung_Cancer = lung_cancer
-)
-
-model_naive <- lm(lung_cancer ~ smoking, data = df)
-
-model_adjusted <- lm(lung_cancer ~ smoking + age, data = df)
-
-coef_naive <- summary(model_naive)$coefficients["smoking", "Estimate"]
-
-coef_adjusted <- summary(model_adjusted)$coefficients["smoking", "Estimate"]
-
-coef_naive
-
-coef_adjusted
-
-```
-
-This simulation ties directly into the distinction between identification and estimation in causal inference. The true causal relationship between smoking and lung cancer is confounded by age, which affects both variables. Without adjusting for age, the naive model fails to identify the causal effect correctly, leading to a biased estimate. Identification is achieved by recognizing and adjusting for age as a confounder, based on assumptions encoded in the study design or a causal diagram. Once this adjustment is made, we can proceed to estimation—using regression to quantify the causal effect of smoking on lung cancer. This demonstrates that correct identification must precede estimation in order to yield valid and interpretable results.  
+**ADD AN EXAMPLE OF GOING END-TO-END FROM CAUSAL QUESTION -> IDENTIFICATION STRATEGY -> DEFENDING ASSUMPTIONS --> ESTIMATION**
 
 ## Estimation of causal effects  
 
 Estimation of causal effects refers to the process of using statistical methods to quantify the size and direction of a causal relationship between an exposure and an outcome. Once a causal effect has been identified—meaning that, under certain assumptions, it can be expressed in terms of observed variables—estimation allows us to compute a numerical value for that effect using data. Common estimation techniques include linear regression, inverse probability weighting, and matching. The goal is not just to observe an association, but to measure how much changing the exposure would change the outcome, assuming the identification conditions are satisfied.  
 
-In the simulation above, we estimate the causal effect of smoking on lung cancer. Because age is a confounder that affects both smoking and lung cancer, the naive model (which includes only smoking) gives a biased estimate. By adjusting for age in the regression model, we account for this confounding and can validly estimate the causal effect of smoking. This demonstrates the key idea of estimation: once we’ve identified the correct adjustment set (in this case, age), we can use statistical modeling to derive an accurate effect size that reflects the true causal relationship.  
 
 ## Taxonomy of estimation models  
 
 The taxonomy of estimation models refers to the classification of different statistical approaches used to estimate causal effects based on the structure of the data and the assumptions made. Broadly, estimation models fall into categories such as outcome regression (e.g., linear or logistic regression), exposure modeling (e.g., propensity scores), and doubly robust methods that combine both. These models vary in how they handle confounding, missing data, and complexity of relationships between variables. Choosing the appropriate estimation model depends on the research question, the nature of the confounding, and how well the model's assumptions align with the underlying causal structure.  
-
-In the simulation above, we use a basic outcome regression model, which is one type in the taxonomy of estimation models. The naive model includes only the exposure (smoking), while the adjusted model includes both smoking and the confounder (age). This approach assumes that the model correctly specifies the relationship between the variables and that confounding is fully captured by age. Although simple, this kind of model is foundational in causal inference, and it illustrates how estimation can be implemented once the appropriate variables have been identified for adjustment.  

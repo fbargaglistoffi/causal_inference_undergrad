@@ -236,7 +236,6 @@ ggplot(results, aes(x = a, y = b, fill = smoking_estimate)) +
 
 ```
 
-
 When identifying a causal effect by assuming conditional exchangeability, sensitivity analysis is incredibly important to defending claims of causality. For example, based off this graph, one could argue that the strength of the genetic marker is likely not strong enough to change our result that smoking increases the chance of lung cancer.
 
 ## How to Adjust for Confounding
