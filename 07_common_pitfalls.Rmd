@@ -83,7 +83,7 @@ plot(
 
 So far we have assumed that the examples with randomized experiments that we have covered went as intended. In real experiments, sometimes participants might not comply with the treatment they are assigned to. For example, if our example is about the effect of a heart transplant on 5-year mortality, some patients might not undergo surgery even if they were assigned the surgery.
 
-To account for the potential mismatch between the treatment assigned and the treatment received for a patient in DAG notation, we use two variables. $Z$ represents the assigned treatment, and $W$ represents the received treatment. This is different from how we denote measurement error because $Z$ can have a causal effect on $Y$.
+To account for the potential mismatch between the treatment assigned and the treatment received for a patient in DAG notation, we use two variables. $Z$ represents the assigned treatment, and $W$ represents the received treatment. This is different from how we denote measurement bias because $Z$ can have a causal effect on $Y$.
 
 ```{r, echo = FALSE}
 
