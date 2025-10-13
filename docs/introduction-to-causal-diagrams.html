@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5 Introduction to Causal Diagrams | Causal-Inference-Graduate.knit</title>
   <meta name="description" content="An undergraduate course on causal inference" />
-  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5 Introduction to Causal Diagrams | Causal-Inference-Graduate.knit" />
   <meta property="og:type" content="book" />
@@ -193,6 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#basic-principles-of-directed-acyclic-graphs-dags"><i class="fa fa-check"></i><b>5.1</b> Basic principles of directed acyclic graphs (DAGs)</a></li>
 <li class="chapter" data-level="5.2" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#common-causal-structures-in-public-health"><i class="fa fa-check"></i><b>5.2</b> Common Causal Structures in Public Health</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#application-drawing-dags-for-public-health-scenarios"><i class="fa fa-check"></i><b>5.3</b> Application: drawing DAGs for public health scenarios</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="confounding-and-selection-bias.html"><a href="confounding-and-selection-bias.html"><i class="fa fa-check"></i><b>6</b> Confounding and Selection Bias</a>
 <ul>
@@ -313,6 +314,17 @@ Examples from public health studies involving confounding adjustment</p>
 <p>A <strong>backdoor path</strong> is any path from the exposure to the outcome with an arrow pointing towards the exposure. For example, in the ice cream and murder rate DAG, there is a backdoor path Ice Cream Sales <span class="math inline">\(\rightarrow\)</span> Outside Temperature <span class="math inline">\(\leftarrow\)</span> Murder Rate since the arrow between Outside Temperature and Murder Rate points back at Ice Cream Sales.</p>
 <p>Paths can either be closed or open. Opening a path allows association to flow from one variable to another, while closing does not. In general, we want to close all backdoor paths keep all other paths open by conditioning on set of specific variables. This will guarantee conditional exchangeability, allowing us to identify the causal effect.</p>
 <p>In our first simulation, we modeled a classic confounding structure, where diet influences both exercise and heart health. This mirrors real-world public health situations where health behaviors and biological outcomes are shaped by shared underlying factors like nutrition, socioeconomic status, or genetics. If we were to estimate the effect of exercise on heart health without adjusting for diet, we would risk attributing some of diet’s impact to exercise — a classic confounding problem. By visualizing the relationships using a DAG and including diet as a covariate in our regression model, we can block the backdoor path and isolate the true causal effect of exercise. This illustrates how understanding and modeling common causal structures is critical to producing valid and meaningful results in public health research.</p>
+</div>
+<div id="application-drawing-dags-for-public-health-scenarios" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Application: drawing DAGs for public health scenarios<a href="introduction-to-causal-diagrams.html#application-drawing-dags-for-public-health-scenarios" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When modeling a relationship such as the effect of a doctor’s visit on sickness level, there are so many factors that can make a causal diagram extremely complex. In this example, there can be so many confounders such as whether the person has insurance, whether the patient was sick before, whether the person can afford to live in a clean area, whether they can take time off work to go to the doctor’s office, and so on.</p>
+<p>There appear to be too many factors that we would have to control for to identify the causal effect, but we can follow some steps to simplify and create our causal diagram. We apply steps to the examples below:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>List out all factors</strong> - Going to the doctor’s office, insurance status, sickness level before treatment, cleanliness of living area, available time to take off work to go to doctor’s office.</p></li>
+<li><p><strong>Prune and combine factors based on domain knowledge</strong> - Using domain knowledge, some of the factors are related in similar ways. For example, a person’s insurance status, the quality of their living area, and whether or not they have time to take off work and go to the doctor’s all affect whether they go to the doctor’s office and their sickness level after going to the doctor’s in similar ways. Namely, the higher quality the insurance, living area, and amount of time off available, the more likely the person is going to go to a doctor’s office and be in better health on average. We can simplify these three factors into a single one such as economic status. After simplification, we now have four variables: doctor’s office visit, economic status, sickness status before visit, sickness level after visit.</p></li>
+<li><p><strong>Add causal relationships</strong> - After simplifying our factors, we then start drawing arrows that represent the direction that causation flows from one variable to another. For example, we can hypothesize that visiting a doctor will affect a person’s sickness level, and economic status and pre-sickness level are confounders. The direction of these arrows is based on our assumptions and domain knowledge.</p></li>
+</ol>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 
 </div>
 </div>

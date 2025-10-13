@@ -21,6 +21,7 @@ effect-modification-vs-interaction
 introduction-to-causal-diagrams
 basic-principles-of-directed-acyclic-graphs-dags
 common-causal-structures-in-public-health
+application-drawing-dags-for-public-health-scenarios
 confounding-and-selection-bias
 the-form-of-selection-bias
 how-to-adjust-for-selection-bias
