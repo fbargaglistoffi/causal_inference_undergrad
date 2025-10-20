@@ -120,3 +120,27 @@ A **backdoor path** is any path from the exposure to the outcome with an arrow p
 Paths can either be closed or open. Opening a path allows association to flow from one variable to another, while closing does not. In general, we want to close all backdoor paths keep all other paths open by conditioning on set of specific variables. This will guarantee conditional exchangeability, allowing us to identify the causal effect.
 
 In our first simulation, we modeled a classic confounding structure, where diet influences both exercise and heart health. This mirrors real-world public health situations where health behaviors and biological outcomes are shaped by shared underlying factors like nutrition, socioeconomic status, or genetics. If we were to estimate the effect of exercise on heart health without adjusting for diet, we would risk attributing some of diet’s impact to exercise — a classic confounding problem. By visualizing the relationships using a DAG and including diet as a covariate in our regression model, we can block the backdoor path and isolate the true causal effect of exercise. This illustrates how understanding and modeling common causal structures is critical to producing valid and meaningful results in public health research.
+
+## Application: drawing DAGs for public health scenarios
+
+When modeling a relationship such as the effect of a doctor's visit on sickness level, there are so many factors that can make a causal diagram extremely complex. In this example, there can be so many confounders such as whether the person has insurance, whether the patient was sick before, whether the person can afford to live in a clean area, whether they can take time off work to go to the doctor's office, and so on. 
+
+There appear to be too many factors that we would have to control for to identify the causal effect, but we can follow some steps to simplify and create our causal diagram. We apply steps to the examples below:
+
+1. **List out all factors** - Going to the doctor's office, insurance status, sickness level before treatment, cleanliness of living area, available time to take off work to go to doctor's office.
+
+2. **Prune and combine factors based on domain knowledge** - Using domain knowledge, some of the factors are related in similar ways. For example, a person's insurance status, the quality of their living area, and whether or not they have time to take off work and go to the doctor's all affect whether they go to the doctor's office and their sickness level after going to the doctor's in similar ways. Namely, the higher quality the insurance, living area, and amount of time off available, the more likely the person is going to go to a doctor's office and be in better health on average. We can simplify these three factors into a single one such as economic status. After simplification, we now have four variables: doctor's office visit, economic status, sickness status before visit, sickness level after visit.
+
+3. **Add causal relationships** - After simplifying our factors, we then start drawing arrows that represent the direction that causation flows from one variable to another. For example, we can hypothesize that visiting a doctor will affect a person's sickness level, and economic status and pre-sickness level are confounders. The direction of these arrows is based on our assumptions and domain knowledge.
+
+```{r, echo = FALSE}
+example_dag <- model2network("[Doctor's_Office|Economic_Status:Pre-Sick][Sickness_Level|Doctor's_Office:Economic_Status:Pre-Sick][Economic_Status][Pre-Sick]")
+
+g <- bnlearn::as.igraph(example_dag)
+plot(
+  g,
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1
+)
+```

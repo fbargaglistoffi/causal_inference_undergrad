@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6 Confounding and Selection Bias | Causal-Inference-Graduate.knit</title>
   <meta name="description" content="An undergraduate course on causal inference" />
-  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6 Confounding and Selection Bias | Causal-Inference-Graduate.knit" />
   <meta property="og:type" content="book" />
@@ -193,6 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#basic-principles-of-directed-acyclic-graphs-dags"><i class="fa fa-check"></i><b>5.1</b> Basic principles of directed acyclic graphs (DAGs)</a></li>
 <li class="chapter" data-level="5.2" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#common-causal-structures-in-public-health"><i class="fa fa-check"></i><b>5.2</b> Common Causal Structures in Public Health</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-causal-diagrams.html"><a href="introduction-to-causal-diagrams.html#application-drawing-dags-for-public-health-scenarios"><i class="fa fa-check"></i><b>5.3</b> Application: drawing DAGs for public health scenarios</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="confounding-and-selection-bias.html"><a href="confounding-and-selection-bias.html"><i class="fa fa-check"></i><b>6</b> Confounding and Selection Bias</a>
 <ul>
@@ -277,7 +278,7 @@ Real-world public health examples of effect modification</p>
 <p><strong>Selection bias</strong> occurs when the probability of being included in the study or analysis depends on a factor that affects the association between the treatment and the outcome. Selection bias occurs when we condition (by stratifying or controlling) on a collider or mediator. When we unintentionally condition on these causal structures, we make our estimates biased. Conditioning on a collider opens up a backdoor path, biasing our estimate. Conditioning on a mediator blocks a path that captures the effect an exposure can have on an outcome through the mediator, also biasing our estimate.</p>
 <p>In our simulation, we are interested in studying the effect of having a high income on whether a person gets regular exercise or not. We also have data on healthcare visits for each patient, which is affected both by whether they have high income and whether they exercise. For this example, assume that we do not know the true effect of income on exercise, but in reality, there is no causal effect. Since we believe there is an effect, we will show this causal relationship in our DAG.</p>
 <p>The DAG for this scenario is shown below.</p>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>We introduce selection bias by adjusting on healthcare visits (a collider) in our regression. By conditioning on healthcare visits, our estimated effect will contain the association from the backdoor path.</p>
 <p>The code below estimates the effect of heart health on exercise using two models. The first model does not control for healthcare visits and unbiasedly estimates the true causal effect of 0. The second model controls for healthcare visits and suffers from selection bias.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="confounding-and-selection-bias.html#cb50-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
@@ -312,7 +313,7 @@ Real-world public health examples of effect modification</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="confounding-and-selection-bias.html#cb52-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Coefficient with collider adjustment (biased):&quot;</span>, coef_adjusted, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## Coefficient with collider adjustment (biased): -0.3942755</code></pre>
 <p>The previous scenario where we condition on a collider is more specifically known as <strong>collider bias</strong>. Had we conditioned on a mediator, this would have been <strong>mediator bias</strong>. In the example about the effect of exercise on diabetes risk, if we were to condition on weight loss when estimating our causal effect, we would block the causal path of exercise <span class="math inline">\(\rightarrow\)</span> weight loss <span class="math inline">\(\rightarrow\)</span> diabetes risk and not be able to estimate the effect of exercise on diabetes risk, mediated by weight loss.</p>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
 <div id="how-to-adjust-for-selection-bias" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> How to Adjust for Selection Bias<a href="confounding-and-selection-bias.html#how-to-adjust-for-selection-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -323,7 +324,7 @@ Real-world public health examples of effect modification</p>
 <p>Confounding occurs when an external variable influences both the exposure and the outcome, making it difficult to determine whether the observed association is truly causal. This third variable — the confounder — can create a misleading impression that the exposure causes the outcome, when in fact, the association may be driven entirely or partially by the confounder. The key structural feature of confounding is that the confounder must be related to both the exposure and the outcome. To obtain an accurate estimate of the exposure’s causal effect, researchers must adjust for confounding variables using methods like stratification, regression, or matching.</p>
 <p>In our simulation, age acts as a confounder because it affects both smoking behavior and lung cancer risk. Older individuals are more likely to smoke and also more likely to develop lung cancer, which can make smoking appear more harmful (or even less harmful) than it actually is if age isn’t taken into account. The naive model, which includes only smoking, produces a biased estimate because it doesn’t separate the effect of smoking from the effect of age. The adjusted model includes both smoking and age and provides a more accurate estimate of smoking’s effect by accounting for this confounding influence. This example highlights how confounding can distort findings and why controlling for related background variables is essential in observational research. For this simulation, assume smoking has a true effect of 3 on lung cancer.</p>
 <p>The DAG for this scenario is below:</p>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="confounding-and-selection-bias.html#cb54-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb54-2"><a href="confounding-and-selection-bias.html#cb54-2" tabindex="-1"></a></span>
 <span id="cb54-3"><a href="confounding-and-selection-bias.html#cb54-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
@@ -358,7 +359,7 @@ Real-world public health examples of effect modification</p>
 <p>Through this simulation, we learned that controlling for confounders via adjusting for them in the regression model helps prevent our estimates from being biased. Practically, in the context of public health, there will always be unobserved confounders that we can’t control for. This makes it impossible to control for all confounders. This does not mean that it is impossible to have credible causal estimates. Instead of trying to get an unbiased estimate by controlling for all confounders (which is infeasible), researchers acknowledge that unobserved confounders exist and can affect their estimates. Through a process called <strong>sensitivity analysis</strong> researchers can observe how strong a confounder has to be in order to invalidate their results.</p>
 <p>In the example above, our estimated effect after properly controlling for age is around 3. However, it is possible that we forgot to account for a genetic marker that is a confounder of smoking and lung cancer. In practice, it is infeasible to control for the genetic marker of each individual in our study, so we use sensitivity analysis to see how robust our estimates are. In the code below, we simulate how strong the association between genetic marker on smoking and the association between genetic marker and lung cancer has to be in order to invalidate our results. The heatmap shows the effect estimates for varying strengths of confounding on the exposure and outcome.</p>
 <p>Our new DAG including the genetic marker would look like the following:</p>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="confounding-and-selection-bias.html#cb58-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb58-2"><a href="confounding-and-selection-bias.html#cb58-2" tabindex="-1"></a></span>
 <span id="cb58-3"><a href="confounding-and-selection-bias.html#cb58-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
@@ -402,7 +403,7 @@ Real-world public health examples of effect modification</p>
 <span id="cb58-41"><a href="confounding-and-selection-bias.html#cb58-41" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb58-42"><a href="confounding-and-selection-bias.html#cb58-42" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb58-43"><a href="confounding-and-selection-bias.html#cb58-43" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>()</span></code></pre></div>
-<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p>When identifying a causal effect by assuming conditional exchangeability, sensitivity analysis is incredibly important to defending claims of causality. For example, based off this graph, one could argue that the strength of the genetic marker is likely not strong enough to change our result that smoking increases the chance of lung cancer.</p>
 </div>
 <div id="how-to-adjust-for-confounding" class="section level2 hasAnchor" number="6.4">
