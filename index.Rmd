@@ -26,9 +26,7 @@ In this course, students will:
 - Understand and apply experimental and observational study designs, causal diagrams (DAGs), and bias adjustment methods.  
 - Develop practical skills through R-based tutorials and case studies.  
 
-This course is ideal for undergraduates interested in public health, epidemiology, biostatistics, or social science research.  
-
-[Syllabus](https://drive.google.com/file/d/1BX3TzItawFqx8ejSJK2UkUtC2VJxEZ6h/view?usp=sharing)  
+This course is ideal for undergraduates interested in public health, epidemiology, biostatistics, or social science research. 
 
 ## Instructor {.unnumbered}
 
@@ -65,7 +63,7 @@ Will be shared throughout the course.
 
 ## Learning Objectives {.unnumbered}  
 
-> [**Syllabus**](https://docs.google.com/document/d/17_kJcFCyRMHCMWIgOoCczqUh12HBkO7z/edit?tab=t.0)  
+> [**Syllabus**](https://drive.google.com/file/d/1BX3TzItawFqx8ejSJK2UkUtC2VJxEZ6h/view?usp=sharing)  
 
 This course introduces students to the foundations of causal inference in public health and medical sciences, with a strong emphasis on the difference between **association and causation**. Students will learn to critically evaluate causal claims, understand causal diagrams (DAGs), and assess study design choices in both randomized and observational studies.  
 
