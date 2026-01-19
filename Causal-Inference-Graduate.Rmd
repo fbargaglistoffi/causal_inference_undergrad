@@ -1,0 +1,1713 @@
+---
+# title: "The Science of Why: Causal Inference for Public Health"
+# author: "Falco J. Bargagli-Stoffi"
+# date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+# bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  An undergraduate course on causal inference
+# biblio-style: apalike
+# csl: chicago-fullnote-bibliography.csl
+---
+
+# Welcome {.unnumbered}
+
+Welcome to the course website for **The Science of Why: Causal Inference for Public Health**. This course introduces the foundations of causal inference in public health and medical sciences, with an emphasis on distinguishing between association and causation in real-world research.
+
+## Course Description {.unnumbered}
+
+In this course, students will: 
+
+- Explore foundational concepts such as counterfactuals, causal estimands, and identification strategies.  
+- Learn how to critically evaluate causal claims in public health literature.  
+- Understand and apply experimental and observational study designs, causal diagrams (DAGs), and bias adjustment methods.  
+- Develop practical skills through R-based tutorials and case studies.  
+
+This course is ideal for undergraduates interested in public health, epidemiology, biostatistics, or social science research.  
+
+[Syllabus](https://drive.google.com/file/d/1BX3TzItawFqx8ejSJK2UkUtC2VJxEZ6h/view?usp=sharing)  
+
+## Instructor {.unnumbered}
+
+**Falco J. Bargagli-Stoffi**  
+Assistant Professor  
+Department of Biostatistics  
+UCLA Fielding School of Public Health  
+[falco\@ucla.edu](mailto:falco@ucla.edu)  
+
+Office hours: By appointment. (Book via the scheduling link on this website.)  
+
+## Teaching Assistants {.unnumbered}  
+
+TBD — will be announced on the course website.  
+
+## Course Logistics {.unnumbered}  
+
+-   **Offered**: Fall Term  
+-   **Meetings**: Lecture (3 hours), Discussion (1 hour) — in-person unless otherwise announced  
+-   **Assignments**: Posted on the course website, due before 8 PM on specified dates  
+-   **Final Project**: Group presentation + written report during finals week  
+
+## Required Materials {.unnumbered}  
+
+**Primary Textbook**:  
+Hernán MA, Robins JM. (2023) *Causal Inference: What If*  
+[Free PDF available here](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)  
+
+**Secondary (Recommended) Texts**: - Rosenbaum PR. *Causal Inference*. MIT Press.  
+- Pearl J., Mackenzie D. *The Book of Why*. Basic Books.  
+
+**Supplementary Readings**:  
+Will be shared throughout the course.  
+
+## Learning Objectives {.unnumbered}  
+
+> [**Syllabus**](https://docs.google.com/document/d/17_kJcFCyRMHCMWIgOoCczqUh12HBkO7z/edit?tab=t.0)  
+
+This course introduces students to the foundations of causal inference in public health and medical sciences, with a strong emphasis on the difference between **association and causation**. Students will learn to critically evaluate causal claims, understand causal diagrams (DAGs), and assess study design choices in both randomized and observational studies.  
+
+We will explore how causal effects are identified and estimated, how to detect and adjust for biases (like confounding and selection bias), and how to use critical thinking tools when reviewing public health research. Students will also be introduced to concepts like effect modification, interaction, and systems thinking through real-world applications.  
+
+## Upon successful completion of this course, students will be able to: {.unnumbered}  
+
+-   Communicate public health findings and causal claims in written and oral forms  
+-   Evaluate causal claims in academic and public health literature  
+-   Design and assess both randomized trials and observational studies  
+-   Construct and analyze causal diagrams (DAGs) for identifying sources of bias  
+-   Apply concepts of effect modification, interaction, and confounding  
+-   Interpret findings within the context of public health policy and practice  
+-   Work independently and collaboratively to assess causal research  
+
+## Tools {.unnumbered}  
+
+This course will make use of:   
+- **R** and **RStudio**   
+- Interactive R tutorials and guided analysis   
+- GitHub for accessing materials and submitting assignments    
+
+## Useful Links {.unnumbered}  
+
+-   [UCLA Center for Accessible Education](http://www.cae.ucla.edu)  
+-   [UCLA Equity, Diversity, and Inclusion](https://equity.ucla.edu)  
+-   [FSPH EDI Initiative](https://ph.ucla.edu/about-fsph/fsph-equity-diversity-and-inclusion-taking-action-together) 
+
+## Acknowledgments {-}
+
+Special thanks to Charlie Wang, Shravani Chiddarwar and Kevin Ngo for their invaluable help in preparing this course.
+
+<!--chapter:end:index.Rmd-->
+
+# Setup {.unnumbered}  
+
+## Installing and Using Required Packages {.unnumbered}  
+Throughout this tutorial, we’ll use a few essential R packages to manipulate data, run models, and create plots.   
+Below are the core packages, what they do, and how to install them.  
+
+Packages we’ll use:  
+
+**ggplot2** – For plotting (e.g., scatterplots, regression lines)    
+**dplyr** – For data wrangling (filtering, mutating, summarizing, etc.)     
+**gridExtra** – To combine multiple plots into one figure    
+**stats** – Comes with base R and used for regression (lm())    
+**pacman** – Simplifies package management in R
+**broom (optional)** – Makes model summaries easier to work with    
+
+```{r}
+
+# install.packages(c("ggplot2", "dplyr", "gridExtra", "pacman", "broom"))
+
+```
+
+## Loading Packages {.unnumbered}  
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
+
+# Optional if using tidy model outputs:
+# library(broom)
+
+```
+
+## Difference Between install.packages() and library() {.unnumbered}
+
+- install.packages("dplyr") downloads and installs the package — you only need to do this once per computer.  
+- library(dplyr) loads the package into your R session — you need to run this each time you use it.  
+
+## Session Information {.unnumbered}
+
+It's always good practice to include your session info at the end of your analysis. This gives a snapshot of:  
+
+- Your R version and system details  
+- All the packages that were loaded  
+- The versions of those packages  
+
+This is especially useful when:  
+- You're debugging errors  
+- You're submitting assignments  
+- You're collaborating with others  
+
+## Why include this? {.unnumbered}
+
+Sometimes code behaves differently depending on the version of a package or even the version of R itself. Including your session info makes your work **reproducible and easier to troubleshoot**.
+
+## Base R version (simple) {.unnumbered}
+
+This function comes with R and gives you basic session details.
+
+```{r}
+
+sessionInfo()
+
+```
+
+<!--chapter:end:setup.Rmd-->
+
+# Causal Dictionary {.unnumbered} 
+
+We compiled a list of important terms or common questions you might have! This page is useful to refer to throughout the course.
+
+**Conditioning** - A statistical operation to analyze relationships of variables while holding values of other variables constant. For example, if we are analyzing the relationship between $X$ and $Y$ while conditioning on $Z$, we are asking "What is the relationship of $X$ and $Y$ when holding $Z$ constant?"
+
+**Controlling/Adjusting** - Controlling or adjusting for a variable is one way to implement conditioning, particularly in regression contexts. We control for a variable by adding it as a covariate to our regression model. The regression coefficient for $X$ then represents the association between $X$ and $Y$ when $Z$ is held constant.
+
+**Stratifying/Selecting** - Stratifying or selecting is a different way to implement conditioning by subsetting the data to observations that meets certain criteria. We then only analyze that subset of the data. For example, if we are interested in the effect of an energy drink on a person's awareness levels and we only include college students in the study, then we are stratifying.
+
+
+**What is the difference between controlling and stratifying for Z?** - For example let $Z$ = sex assigned at birth. Both controlling and stratifying are forms of conditioning. When we control, we add $Z$ as a covariate to our regression model, but our data still contains both males and females. When we stratify for males, then only males are included in our analysis. Though they are both forms of conditioning, controlling or stratifying have different implications for what causal quantity we are actually estimating.
+
+
+**Selection bias** - Selection bias occurs when the probability of being included in the analysis depends on a factor that affects the association between the treatment and outcome.
+
+<!--chapter:end:causal_dictionary.Rmd-->
+
+# Foundations of Causal Thinking in Public Health
+
+> ## Class materials
+>
+> Slides: [**Module 1**](https://drive.google.com/file/d/1ujOsEenrQy1sjIX4Zt_CfAqeF0o-KfY-/view?usp=sharing)
+>
+> Recording: [**Module 1, Part 1.1**](https://drive.google.com/file/d/14yxdT8so1w2LQV2pwoGm1ys3Ek5yuLET/view?usp=sharing)
+>
+> Recording: [**Module 1, Part 2.1**](https://drive.google.com/file/d/1rUQnbOTkVk5DPu8Ghbu2W80NJ008Auyt/view?usp=sharing)
+>
+> Recording: [**Module 1, Part 2.2**](https://drive.google.com/file/d/1hsA1CZ0jpVycsNmuH0A7C5AHmlvBpOvM/view?usp=sharing)
+
+> ## Textbook reading
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapters 1**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading
+>
+> [**Pearl, J. and Mackenzie, D. (2018) The Book of Why: The New Science of Cause and Effect. Basic Books.**](https://bayes.cs.ucla.edu/WHY/why-ch1.pdf) Selected public health news articles (provided on the course site).
+
+> ## Topics covered
+>
+> -   Association vs. Causation\
+> -   Introduction to Counterfactuals and Potential Outcomes\
+> -   Causal Estimands and Identification\
+> -   Measuring Effects for Binary Outcomes
+> -   Critical reading exercise: analyzing causal claims in public health news
+
+## Association vs. Causation
+
+**Association** refers to a statistical relationship where two variables move together, but one doesn’t necessarily cause the other. For instance, ice cream sales and drowning incidents both rise in the summer, not because one causes the other, but because they share a third factor: temperature. In contrast, **causation** implies a direct cause-and-effect relationship, where changing one variable leads to changes in another. Establishing causation requires rigorous methods, such as randomized controlled trials, to rule out confounding factors.
+
+**Simpson’s Paradox** occurs when a trend appears in separate groups but reverses when the data are combined. This paradox is driven by **confounding variables**—unaccounted factors that influence both the treatment and the outcome. It illustrates how aggregated data can be misleading and emphasizes the importance of analyzing relationships within subgroups to avoid drawing incorrect conclusions.
+
+To demonstrate this paradox, I simulated a study comparing two pneumonia treatments across 2,000 people Treatment A was mostly given to mild cases, while Treatment B was given to severe cases. When data were analyzed without considering severity, Treatment A seemed more effective. However, when stratified by severity, Treatment B consistently showed lower death rates in both mild and severe groups. This was visualized through two plots: one showing the misleading overall trend, and another stratified by severity revealing the true relationship. 
+
+```{r}
+
+# library(ggplot2)
+# library(dplyr)
+
+set.seed(123)
+
+n <- 2050
+
+severity <- rep(c("Mild", "Severe"), times = c(1450, 600))
+
+treatment <- c(rep("Treatment A", 1400), rep("Treatment B", 50), 
+               rep("Treatment A", 100), rep("Treatment B", 500)) 
+
+outcome <- c(rbinom(1400, 1, 0.15),  # Mild + A (15% death rate)
+             rbinom(50, 1, 0.10),    # Mild + B (10% death rate)
+             rbinom(100, 1, 0.30),   # Severe + A (30% death rate)
+             rbinom(500, 1, 0.20))   # Severe + B (20% death rate)
+
+df <- data.frame(
+  Severity = severity,
+  Treatment = treatment,
+  Outcome = outcome
+)
+
+death_counts <- tapply(df$Outcome, list(df$Severity, df$Treatment), sum)
+table_counts <- table(df$Severity, df$Treatment)
+death_rates <- round(death_counts / table_counts, 3)
+
+overall_a <- sum(df$Outcome[df$Treatment == "Treatment A"]) / sum(df$Treatment == "Treatment A")
+overall_b <- sum(df$Outcome[df$Treatment == "Treatment B"]) / sum(df$Treatment == "Treatment B")
+
+print("Death rates by severity and treatment:")
+print(death_rates)
+
+cat("Overall death rate (Treatment A):", round(overall_a, 3), "\n")
+cat("Overall death rate (Treatment B):", round(overall_b, 3), "\n")
+
+```
+
+```{r}
+
+overall_plot_data <- data.frame(
+  X_Pos = c(1, 2),
+  Death_rate = c(overall_a, overall_b),
+  Treatment = c("Treatment A", "Treatment B")
+)
+
+p1 <- ggplot(overall_plot_data, aes(x = X_Pos, y = Death_rate, color = Treatment)) +
+  geom_point(size = 5) +
+  geom_line(aes(group = 1), color = "black", linewidth = 1.2) +
+  scale_x_continuous(breaks = c(1, 2), labels = c("Treatment A", "Treatment B")) +
+  scale_color_manual(values = c("Treatment A" = "red", "Treatment B" = "blue")) +
+  labs(title = "Overall Trend (Simpson's Paradox)", x = "", y = "Risk of Death") +
+  theme_minimal() +
+  guides(color = "none")
+
+print(p1)
+
+```
+
+If we only compare the death rates between groups that received treatment A against groups that received treatment B, treatment A seems to be more effective at treating patients.
+
+```{r}
+
+group_means <- df %>%
+  group_by(Severity, Treatment) %>%
+  summarize(Death_rate = mean(Outcome), .groups = "drop") %>%
+  mutate(X_Pos = case_when(
+    Severity == "Mild" & Treatment == "Treatment A" ~ 1,
+    Severity == "Mild" & Treatment == "Treatment B" ~ 2,
+    Severity == "Severe" & Treatment == "Treatment A" ~ 3,
+    Severity == "Severe" & Treatment == "Treatment B" ~ 4
+  ),
+  Group = paste(Severity, "-", Treatment),
+  Treatment_Color = Treatment
+)
+p2 <- ggplot(group_means, aes(x = X_Pos, y = Death_rate, color = Treatment_Color)) +
+  geom_point(size = 5) +
+  geom_line(aes(group = Severity), color = "black", linewidth = 1.2) +
+  scale_x_continuous(
+    breaks = 1:4,
+    labels = c("Mild - A", "Mild - B", "Severe - A", "Severe - B")
+  ) +
+  scale_color_manual(
+    values = c("Treatment A" = "red", "Treatment B" = "blue"),
+    name = "Treatment"
+  ) +
+  labs(title = "Risk by Severity (Mild vs. Severe)", y = "Risk of Death", x = "") +
+  theme_minimal()
+
+print(p2)
+
+```
+
+Only after stratifying by the severity of the case are we able to observe that treatment B is actually more effective than treatment A for both mild and severe pneumonia cases.
+
+## Introduction to Counterfactuals and Potential Outcomes
+
+At the heart of causal inference lies a simple yet powerful idea: counterfactuals — what would have happened if something else had occurred. However, we can never observe both outcomes for the same person. This is known as the Fundamental Problem of Causal Inference. We only observe the outcome under the condition that actually occurred — everything else is unobserved, or counterfactual.
+
+Building on the concept of counterfactuals, the Average Treatment Effect (ATE) provides a formal way to quantify the impact of a treatment or intervention across a population. Since we cannot observe both potential outcomes (treated and untreated) for the same individual, ATE instead compares the average outcome we would see if everyone received the treatment versus if no one did. Mathematically, it is the difference between the expected value of the potential outcome under treatment and the expected value under control. While individual causal effects remain unobservable, the ATE offers a population-level summary of the treatment's impact — a cornerstone of policy evaluation, randomized experiments, and observational causal analysis.
+
+Counterfactuals can be represented using potential outcomes notation. Here is the basic notation:
+
+- $Y\;=\;$ the observed outcome
+- $Y(0)\;=\;$ the potential outcome under no treatment  
+- $Y(1)\;=\;$ the potential outcome under treatment  
+- $W\;=\;$ a binary variable that represents whether a unit was treated or not. If $W = 1$, then the unit was treated. If $W = 0$, then the unit was not treated.  
+Notice that the observed outcome can be expressed in terms of potential outcomes: $Y = (W)Y(1) + (1-W)Y(0)$. So $Y = Y(1)$ if the unit was treated and $Y = Y(0)$ if the unit was not treated. The previous equation is known as consistency.
+
+The simulation below is testing the effect of a treatment on 2000 patients. The treatment was assigned to older people with higher levels of cholesterol. If we simply take the difference of the average outcome of the treated group and average outcome of the control group, then our estimate of the average treatment effect will be biased because age and cholesterol levels are confounding the effect of the treatment. This is shown by how the true average treatment effect differs from naive average treatment effect estimate.
+
+```{r}
+
+set.seed(123)
+
+n <- 2000
+
+age <- rnorm(n, mean = 50, sd = 10)
+bmi <- rnorm(n, mean = 25, sd = 4)
+cholesterol <- rnorm(n, mean = 200, sd = 30)
+
+# More extreme treatment assignment: strong bias toward older, high-cholesterol people
+treatment <- rbinom(n, 1, plogis(0.2 * age + 0.05 * cholesterol - 25))
+
+# True untreated outcome
+y_0 <- 140 - 1.5 * age + 0.3 * bmi + 0.5 * cholesterol + rnorm(n, sd = 5)
+
+# True treated outcome: better, but depends on age & cholesterol
+y_1 <- y_0 - (40 + 1.5 * age - 0.8 * cholesterol) + rnorm(n, sd = 2)
+
+# Observed outcome
+y <- ifelse(treatment == 1, y_1, y_0)
+
+# True ATE: average of individual-level effects
+true_ate <- mean(y_1 - y_0)
+
+df <- data.frame(age, bmi, cholesterol, treatment, y)
+
+# Naive estimate: difference in means
+naive_ate <- mean(df$y[df$treatment == 1]) - mean(df$y[df$treatment == 0])
+cat("True ATE:", round(true_ate, 3), "\n")
+cat("Naive (unadjusted) ATE estimate:", round(naive_ate, 3), "\n")
+
+```
+
+## Causal Estimands and Identification
+
+Causal estimands are the quantities we aim to estimate to understand the effect of a treatment or intervention. The most common estimands include:\
+
+- Average Treatment Effect (ATE): Measures the average difference in outcomes if everyone received the treatment versus if no one did.\
+
+$$
+ATE = E[Y(1)-Y(0)]
+$$
+
+- Average Treatment Effect on the Treated (ATT): Measures the effect of treatment for those who actually received the treatment.\
+
+$$
+ATT = E[Y(1) - Y(0)\ | \ W = 1]
+$$
+
+- Average Treatment Effect on the Controls (ATC): Measures the effect for those who did not receive the treatment.\
+
+$$
+ATC = E[Y(1) - Y(0)\ | \ W = 0]
+$$
+
+- Conditional Average Treatment Effect (CATE): Measures the treatment effect for subgroups defined by observed characteristics (e.g., older vs. younger patients). 
+
+$$
+CATE = E[Y(1) - Y(0)\ | \ X = x] 
+$$
+Think of $X=x$ where $X$ is some form of age classification and $x$ could be a value of the age classifcation, such as younger or older.
+
+Identification is the process of linking a causal estimand (like ATE) to observable data. Without valid identification, any estimates we produce may be biased or incorrect. One major challenge in causal inference is that we can never observe both potential outcomes for the same person — only the outcome under the actual treatment they received. This is the Fundamental Problem of Causal Inference.
+
+##  Measuring Effects for Binary Outcomes
+
+Often times in public health settings, we have to estimate the causal effect on a binary outcome such as survival. For example, if we are trying to measure the effect of a heart surgery on a patient's survival status, we can say that the outcome $Y = 1$ means that the patient died and $Y = 0$ means that the patient survived. There are only two possible outcomes. In this case, we try to quantify or measure the causal effect using two main **effect measures**.
+
+$$
+Pr[Y(1) = 1] - Pr[Y(0) = 1] \quad \text{(Risk Difference)} \\
+$$
+
+The risk difference measures average individual causal effects additively. For example, if we estimated the heart surgery to have a risk difference of -0.5, then on average, the surgery reduced the probability of death by 0.5.
+
+$$
+\frac{Pr[Y(1) = 1]}{Pr[Y(0) = 1]} \quad \text{(Risk Ratio)} \\
+$$
+
+The risk ratio measures causal effects multiplicatively. For example if the heart surgery was estimated to have a risk ratio of 0.5, then the risk of death under surgery is half compared to the risk of death under no surgery.
+
+Since we are working with binary outcomes, we can model these probabilities using a logistic regression. Let's consider the example about measuring the effect of heart surgery. To estimate the risk difference using a logistic regression, we follow a set of steps called **g-computation**:
+
+1. Fit a logistic regression model to the observed data
+
+2. Set the treatment status of all units to 1 and predict $Y(1)$. This gets the probability of $Y = 1$ had each unit been treated.
+
+3. Set the treatment status of all units to 0 and predict $Y(0)$. This gets the probability of $Y = 1$ had each unit been untreated.
+
+4. Use (2) and (3) to estimate a risk difference or risk ratio
+
+In the example below, we are trying to measure the causal effect of a heart transplant on a patient's survival status. Our study includes 200 total patients. We have data on the patient's age, health score (ranging from 0 to 100, where a higher score means more healthy), whether they are diabetic, and whether they have had a prior heart attack. Patients that tend to be older, less healthy, have had diabetes, or have had a prior heart attack are more likely to receive the surgery. Out of 200 patients, 127 did not receive heart surgery, while 73 did.
+
+For simulation purposes, the true risk difference is -0.093 and the risk ratio is 0.76. This means that the heart surgery reduces chance of death by 9.3 percentage points on average according to the risk difference. The risk ratio of 0.76 means that the probability of death under surgery is 76% of the probability of death under no surgery, which is a 28% decrease relative to the probability of death under no surgery.
+
+[Visual Steps for g-computation](https://github.com/kathoffman/causal-inference-visual-guides/blob/master/visual-guides/G-Computation.pdf)
+
+
+```{r}
+
+#library(e1071)
+#library(dplyr)
+
+### Step 1: Data Generating Process
+
+set.seed(123)
+
+n <- 200 # 200 subjects in study
+
+# simulate covariates
+age <- rnorm(n, 60, 12)
+age <- pmax(25, pmin(90, age)) # cap age to range from 25 to 90
+health_score <- rnorm(n , 60, 15)
+health_score <- pmax(0, pmin(100, health_score)) # cap health scores between 0 and 100
+diabetic <- rbinom(n, 1, 0.25) # 25% chance of diabetes
+prior_heart_attack <- rbinom(n, 1, 0.3) # 30% chance of heart attack
+
+# generate potential linear predictions for all units (lp0 = untreated, lp1 = treated)
+lp0 <- -0.98 + 0.034*age - 0.036*health_score + 0.53*diabetic + 0.79*prior_heart_attack 
+lp1 <- lp0 - 0.51
+
+# convert linear predictions to probabilites using sigmoid function
+p0 <- plogis(lp0)
+p1 <- plogis(lp1)
+
+# generate probabilites of getting treated based on covariates to assign treatment status to each unit
+W_linear <- -1 + 0.03*age - 0.03*health_score + 0.7*diabetic + 0.6*prior_heart_attack
+W_prob <- plogis(W_linear)
+W <- rbinom(n, 1, W_prob)
+
+# generate observed outcomes
+Y0 <- rbinom(n, 1, p0)
+Y1 <- rbinom(n, 1, p1)
+Y <- ifelse(W == 1, Y1, Y0)
+
+df <- data.frame(age, health_score, diabetic, prior_heart_attack, W, Y) # observed data
+
+### Step 2: Estimating causal effects using g-computation
+
+model <- glm(Y~W+age+health_score+diabetic+prior_heart_attack, 
+             data = df, 
+             family = binomial(link = "logit")) # fit logistic regression model
+
+df_treat <- df |> mutate(W = 1) # create a copy of observed data where all units are treated
+
+df_untreat <- df |> mutate(W = 0) # create a copy of observed data where all units are not treated
+
+# predict potential outcomes (in probabilities) using model
+p0_hat <- predict(model, newdata = df_untreat, type = "response") 
+p1_hat <- predict(model, newdata = df_treat, type = "response")
+
+cat("True Risk Difference: ", mean(p1) - mean(p0), "\n")
+cat("True Risk Ratio: ", mean(p1) / mean(p0), "\n")
+cat("\n")
+cat("Estimated Risk Difference: ", mean(p1_hat) - mean(p0_hat), "\n")
+cat("Estimated Risk Ratio: ", mean(p1_hat) / mean(p0_hat), "\n")
+
+```
+
+Though they are not perfect estimates, we were able to estimate the risk differences and ratios using g-computation.
+
+<!--chapter:end:01_potential_outcomes.Rmd-->
+
+# Randomized Control Trials  
+
+> ## Class materials  
+>
+> Slides: [**Module 2**](https://drive.google.com/file/d/1lseBc7nuJOFFTBKwjDdK7OLf0CLr3_10/view)  
+>
+> Recording: [**Module 2, Part 1**](https://your-recording-link.com)  
+>
+> Recording: [**Module 2, Part 2**](https://your-recording-link.com)  
+
+> ## Textbook reading  
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapters 2*](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)  
+
+> ## Supplementary reading  
+>
+> [**Pearl, J. (2009). Causal inference in statistics: An overview.   Statistics Surveys, 3, 96–146.**](https://projecteuclid.org/journals/statistics-surveys/volume-3/issue-none/Causal-inference-in-statistics-An-overview/10.1214/09-SS057.full)\  
+> Selected DAG examples from public health studies (provided in class)  
+
+> ## Topics covered  
+>
+> -   Randomized controlled trials: the gold standard  
+> -   Basic experimental design principles  
+> -   Limitations of RCTs in public health contexts  
+> -   Common threats to internal and external validity  
+> -   Causal Quantities: SATE vs PATE
+> -   Critical reading exercise: evaluating a published RCT  
+
+## Randomized controlled trials: the gold standard  
+
+Randomized Controlled Trials (RCTs) are widely considered the gold standard in causal inference because they offer the most rigorous way to establish whether a treatment or intervention truly causes an outcome. The key feature that sets RCTs apart is randomization: participants are randomly assigned to treatment or control groups, which ensures that—on average—all other characteristics (like age, health status, and behaviors) are equally distributed across groups. This process breaks any systematic link between confounders and treatment assignment, making the groups exchangeable and allowing us to interpret differences in outcomes as causal effects of the treatment. 
+
+**Exchangeability** is the key assumption for RCTs, and random assignment of the treatment in RCTs allows us to defend this assumption. Mathematically, exchangeability is written as:  
+
+$$
+(Y(1), Y(0)) \perp W
+$$
+To understand this consider an single person. Exchangeability says that if we have information about what treatment they received, then that doesn't give us any information about what their potential outcome will be. We use exchangeability to identify the average treatment effect (ATE). Identifying the ATE means we are using some assumptions to express the ATE which is expressed in counterfactual outcomes as something that can be expressed using observed data. In this case, the ATE can be written as a difference in means between the treated and control groups.
+
+$$
+\begin{align*}
+ATE &= E[Y(1) - Y(0)] \\
+&= E[Y(1)] - E[Y(0)] \quad \text{by linearity of expectation} \\
+&= E[Y(1) \ | \ W=1] - E[Y(0) \ | \  W = 0] \quad \text{by exchangeability} \\
+&= E[Y \ | \ W = 1] - E[Y \ | \ W = 0] \quad \text{by consistency}
+\end{align*}
+$$
+
+
+Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.  
+
+In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on a patient's blood pressure (mmHg). I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. In this example, the baseline characteristics that were measured were age, BMI, cholesterol (mg/dL), and daily sodium intake (mg/day). After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.  
+
+**Simulated Baseline Data and Treatment Assignment**  
+
+```{r}
+
+# pacman::p_load("dplyr", "ggplot2")
+
+set.seed(123)
+
+n <- 2000
+
+age <- rnorm(n, 50, 10)
+
+bmi <- rnorm(n, 27, 4)
+
+cholesterol <- rnorm(n, 200, 30)
+
+sodium_intake <- rnorm(n, 3000, 500)
+
+treatment <- rbinom(n, 1, 0.5)
+
+y_0 <- 90 + 0.4 * age + 0.05 * cholesterol + 0.004 * sodium_intake + 
+  rnorm(n, sd = 10)
+
+y_1 <- y_0 - 10 + rnorm(n, sd = 5)
+
+y <- ifelse(treatment == 1, y_1, y_0)
+
+rct_data <- data.frame(
+  age = age,
+  bmi = bmi,
+  cholesterol = cholesterol,
+  sodium_intake = sodium_intake,
+  treatment = treatment,
+  y = y
+)
+
+head(rct_data)
+
+```
+
+**Estimated the Average Treatment Effect (ATE)**  
+
+```{r}
+
+ate_estimate <- rct_data |>
+  group_by(treatment) |>
+  summarize(mean_outcome = mean(y)) |>
+  summarize(ATE = diff(mean_outcome)) |>
+  pull(ATE)
+
+paste("Estimated ATE: ", round(ate_estimate, 2))
+
+```
+
+Based on our estimate, the treatment reduces blood pressure by 10 mmHg.
+
+**Visualization of the Outcome Distributions**  
+
+```{r}
+
+ggplot(rct_data, aes(x = as.factor(treatment), y = y, fill = as.factor(treatment))) + 
+  geom_boxplot(alpha = 0.7) + 
+  labs(
+    title = "Distribution of Outcomes by Treatment Group", 
+    x = "Treatment: Control (0) vs Treated (1)",
+    y = "Outcome"
+  ) + 
+  scale_fill_manual(values = c("red", "blue")) +
+  theme_minimal()
+
+```
+
+
+```{r}
+
+# library(cobalt)
+
+bal.out <- bal.tab(treatment~age+bmi+cholesterol+sodium_intake, data = rct_data, s.d.denom = "pooled")
+
+set.cobalt.options(binary = "std")
+
+love.plot(bal.out, limits = c(-0.1, 0.1))
+
+```
+
+This visualization is called a **love plot**. It shows how balanced each of the observed characteristics is between the treated and control group. For example, a value of 0.05 for age means that the treated group's mean age is 0.05 standard deviations above the control group's mean age, which is not much. Typically, an absolute standardized difference value of 0.10 or less typically means that the difference between the groups is negligible. 
+
+So in this plot, all the observed characteristics are balanced. This example shows that random assignment of the treatment balances observed and unobserved characteristics. Since the groups are so similar, we say that the treated and control groups are exchangeable.
+
+## Basic Experimental Design Principles  
+
+At the heart of randomized controlled trials (RCTs) lies experimental design, the set of strategies we use to ensure that the comparison between groups is fair, unbiased, and informative. Good experimental design ensures that any differences in outcomes between the treatment and control groups can be confidently attributed to the treatment itself, and not to other confounding variables. Three basic principles guide experimental design: randomization, control, and replication.  
+
+- Randomization is the process of randomly assigning participants to treatment or control groups. This prevents systematic differences between groups at baseline and ensures that confounding variables (both known and unknown) are evenly distributed.  
+- Control involves creating a baseline group (the control group) that does not receive the treatment, allowing for a meaningful comparison.  
+- Replication refers to having enough participants so that random fluctuations even out, providing more precise and reliable estimates of the treatment effect.  
+
+In our previous simulation, we applied these principles by randomly assigning 2,000 individuals to either a treatment or control group, simulating outcomes based only on treatment status and baseline characteristics (age). Because we randomized treatment assignment, we can be confident that any observed difference in outcomes is causally attributable to the treatment, not to age differences, baseline health, or other confounders. Without randomization, we would have needed to control for these factors. This simulation highlights why randomization is considered the gold standard for causal inference.  
+
+## Limitations of RCTs in Public Health Contexts  
+
+While randomized controlled trials (RCTs) are the gold standard for establishing causality, they are not without important limitations when applied to public health settings. First, ethical constraints often limit what interventions can be randomly assigned. For example, it would be unethical to randomly assign people to smoke or not smoke in order to study lung cancer. Public health research must often rely on observational studies where randomization is impossible.  
+
+Second, feasibility and cost can be major barriers. Conducting large-scale RCTs can require enormous resources, making them impractical for studying widespread or long-term public health interventions like school nutrition programs or climate effects on health. Generalizability is another concern. Many RCTs are conducted in tightly controlled environments with selective populations, meaning their results may not apply to broader, more diverse real-world populations.  
+
+In our earlier simulation, randomization guaranteed an unbiased estimate of the average treatment effect (ATE) within the study population. However, in real-world public health research, participants who volunteer for RCTs may differ from the general public, and interventions may behave differently outside of controlled settings. This highlights the importance of thinking critically about how experimental results translate into everyday public health practice.  
+
+## Common Threats to Internal and External Validity  
+
+When evaluating any causal study, it's critical to think about validity, whether the results are accurate (internal validity) and whether they generalize beyond the study setting (external validity).  
+
+Internal validity refers to whether the observed effect truly reflects the causal effect within the study population. Threats to internal validity include:  
+
+- Confounding, if randomization fails or is compromised (e.g., noncompliance with assigned treatment).  
+- Selection bias, if participants drop out or are lost to follow-up in a way that is related to both treatment and outcome.  
+- Measurement error, if outcomes or treatments are recorded inaccurately.  
+
+External validity, on the other hand, concerns whether results from the study can be generalized to other settings, populations, or time periods. Threats to external validity include:  
+
+- Non-representative samples, such as RCTs recruiting only highly motivated individuals who differ from the general population.  
+- Intervention differences, where the way a treatment is delivered in a trial setting doesn't match how it would be implemented in the real world.  
+- Contextual factors, such as cultural, economic, or healthcare system differences that make the same intervention work differently elsewhere.  
+
+In the earlier RCT simulation, we achieved excellent internal validity because treatment was randomized perfectly and outcomes were cleanly measured. However, that simulation assumes an idealized setting; in real public health research, threats to validity often creep in, and careful design and critical thinking are needed to recognize and minimize them.  
+
+## Causal Quantities: SATE vs PATE
+
+When we do an RCT, we must be careful about the causal quantity of interest we are trying to estimate.
+
+If we are interested in understanding the effect of a treatment for just the individuals in our sample, then we are estimating the **Sample Average Treatment Effect (SATE)**.
+
+$$
+\begin{align*}
+  SATE = \frac{1}{n}\sum_{i=1}^n (Y_i(1) - Y_i(0))
+\end{align*}
+$$
+
+Intuitively, the SATE is the average causal effect of individuals in your sample. These results cannot be generalized to a greater population without some assumptions about how sampling was conducted.
+
+If we are trying to understand a causal effect on an entire population beyond just our sample, then we are trying to estimate the **Population Average Treatment Effect (PATE)**. The PATE requires an extra component to the study's design. To estimate the PATE, random sampling must occur to ensure that the sample is representative of the population. This allows us to make conclusions about the population from our sample.
+
+$$
+\begin{align*}
+PATE &= E[Y(1) - Y(0)]
+\end{align*}
+$$
+
+The main difference between the SATE and PATE is that the PATE has an extra assumption about randomly sampling from the population. This assumption let's us make conclusions about the causal effect for the entire population, rather than only the sample.
+
+Both estimands can be estimated using the difference in means estimator $\hat{\tau}$:
+
+$$
+\begin{align*}
+\hat{\tau} &= \frac{1}{n_1} \sum_{i=1}^{n} W_iY_i - \frac{1}{n_0} \sum_{i = 1}^{n}(1-W_i)Y_i
+\end{align*}
+$$
+Since the difference in means estimator is used to estimate both estimands, we have to be extremely careful in specifying whether we are trying to estimate the SATE or PATE.
+
+<!--chapter:end:02_rcts.Rmd-->
+
+# Observational Studies  
+
+> ## Class materials  
+>
+> Slides: [**Module 3**](https://drive.google.com/drive/folders/14Iymvk2FlZqVsWrtbDLmwSzR5aNS-Mcg?usp=sharing)  
+>
+> Recording: [**Module 3, Part 1**](https://your-recording-link.com)  
+>
+> Recording: [**Module 3, Part 2**](https://your-recording-link.com)  
+
+> ## Textbook reading  
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapter 3**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)  
+
+> ## Supplementary reading  
+>
+> [**Greenland, S. (2003). Quantifying biases in causal models: classical confounding vs collider-stratification bias. Epidemiology, 14(3), 300–306.**](https://journals.lww.com/epidem/Fulltext/2003/05000/Quantifying_Biases_in_Causal_Models__Classical.7.aspx)\  
+> Additional DAG exercises provided in class  
+
+> ## Topics covered  
+>
+> -   The challenge of confounding in public health and medical research  
+> -   Exchangeability, positivity, and consistency  
+> -   Effect identification in observational studies  
+> -   Critical reading exercise: evaluating a published observational study  
+
+## The challenge of confounding in public health and medical research  
+
+Confounding is a major challenge in public health and medical research because it can create misleading associations between exposures and outcomes. A confounder is a third variable that is associated with both the exposure and the outcome, potentially distorting the true causal relationship. For example, if we observe that people who carry lighters tend to have higher rates of lung cancer, we might wrongly conclude that carrying a lighter causes cancer. In reality, smoking is the confounding variable: smokers are more likely to carry lighters and also more likely to develop lung cancer. Without properly adjusting for confounders, studies risk producing biased estimates, leading to incorrect conclusions about risk factors, treatments, or interventions.  
+
+Addressing confounding is crucial but not always straightforward. Methods such as stratification, multivariable regression, propensity score matching, and randomized controlled trials (RCTs) are commonly used to try to adjust for or eliminate confounding effects. However, identifying all relevant confounders can be difficult, especially when dealing with observational data where randomization is not possible. Unmeasured or unknown confounders remain a constant threat to validity. Therefore, careful study design, domain knowledge, and sensitivity analyses are essential to minimize the impact of confounding and ensure more reliable and actionable public health research findings.  
+
+**Example Setup** Let’s say we want to study the effect of Exercise (X) on Heart Health (Y), but there’s a Genetic Factor (Z) that causes both Exercise and Heart Health. In this case, Z is a confounder, and we should adjust for it. 
+
+In this simulation we will have two models: a naive model and an adjusted model. The naive model will only regression heart health on exercise. The adjusted model will regress heart health on exercise and genetic factors, which controls for genetic factor being a confounder. Since this is simulated example, we know that the true effect of exercise on heart health is 0.8. We will see in this example that the estimated causal effect coming from the adjusted model is better than the naive model.
+
+```{r}
+
+n <- 2000
+
+genetics <- rnorm(n)
+
+exercise <- 0.6 * genetics + rnorm(n) 
+
+heart_health <- 0.8 * exercise + 0.5 * genetics + rnorm(n)
+
+df <- data.frame(heart_health, exercise, genetics)
+
+model_naive <- lm(heart_health ~ exercise, data = df)
+
+summary(model_naive)$coefficients["exercise", ]
+
+model_adjusted <- lm(heart_health ~ exercise + genetics, data = df)
+
+summary(model_adjusted)$coefficients["exercise", ]
+
+```
+
+```{r}
+
+# library(ggplot2)
+
+naive_estimate <- summary(model_naive)$coefficients["exercise", "Estimate"]
+
+adjusted_estimate <- summary(model_adjusted)$coefficients["exercise", "Estimate"]
+
+estimates <- data.frame(
+  Model = c("Naive", "Adjusted"),
+  Estimate = c(naive_estimate, adjusted_estimate)
+)
+
+ggplot(estimates, aes(x = Model, y = Estimate, fill = Model)) +
+  geom_col(width = 0.5) +
+  labs(title = "Comparison of Naive vs Adjusted Estimates",
+       y = "Estimated Effect of Exercise",
+       x = "") +
+  geom_hline(yintercept = 0.8, linetype = 2) +
+  annotate("text", x = 2.45, y = 0.85, label = "True effect") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+In this simulation, we model a situation where Genetics (Z) is a confounder that influences both Exercise (X) and Heart Health (Y). The naive model, which regresses Heart Health on Exercise without adjusting for Genetics, gives a biased estimate of the effect of Exercise (1.05). This happens because part of the observed association is actually due to Genetics, not Exercise itself. When we adjust for Genetics in the second model, the estimate of Exercise’s effect (0.84) becomes more accurate, isolating its true relationship with Heart Health. This is shown in how the bar for the adjusted graph is closer to the dotted black line, which represents the true causal effect of exercise (0.8). This example highlights how failing to account for confounding can lead researchers to overstate or misinterpret causal effects in public health and medical studies.  
+
+## Exchangeability, positivity, and SUTVA
+
+In causal inference, particularly when analyzing observational data, three critical assumptions must hold for estimates to reflect true causal relationships: **exchangeability, positivity, and SUTVA**. These assumptions ensure that the comparisons we make between groups are valid and that the effects we estimate correspond to real-world interventions. Without them, causal conclusions can be biased or entirely invalid.  
+
+- **Exchangeability** means that after adjusting for confounders, the treatment and comparison groups are similar in all relevant ways except for the exposure itself. In potential outcomes notation, this is written as:
+
+    $$
+    (Y(0), Y(1)) \perp W|X
+    $$
+
+- **Positivity** means that every individual has a nonzero probability of receiving each level of the exposure, regardless of their confounder values. In the notation, the "for any $x \in \mathcal{X}$" is saying that within in each group $x$ that the random variable $X$ can take, the unit has a nonzero chance to receive treatment (and control).
+
+    $$
+    0 < Pr(W = 1 \ | \ X = x) < 1  \quad \text{for any } x \in \mathcal{X}
+    $$
+
+    Positivity is not always an assumption that is satisfied. For example, let's say you are trying to estimate the effect of a new drug. You want to control for the patient's sex assigned at birth (male or female) to try to estimate the causal effect. However, the drug is never given to females. Then this assumption is violated.
+
+- **Stable Unit Treatment Value Assumption (SUTVA)** is our last important assumption. There are two parts to SUTVA:
+
+    1. **Consistency** means that the observed outcome under the observed treatment status of unit $i$ is the same as the potential outcome under the potential treatment status of unit $i$. This usually occurs when there is a single well-defined treatment, such as a drug with a specific dosage.
+
+        Consistency can be violated if there are multiple versions of the treatment, usually because it is not well defined. For example, there could be a treatment that gives 50 mg of the drug and another version that gives 100 mg of the drug. Here, consistency will be violated.
+
+        In potential outcomes notation, this is:
+
+        $$
+        Y = (W)Y(1) + (1-W)Y(0)
+        $$
+
+    2. **No-interference** means that the potential outcomes of unit $i$ are independent of the treatments other units receive. 
+
+        An example of when there is interference is when we are trying to test a vaccine's effectiveness of preventing measles for an individual. Let's say in our study, Falco receives the vaccine, and his friend Chad receives a control. Falco and Chad both interact regularly. Assume the vaccine truly reduces the risk of catching measles. Since Falco received the vaccine, he has a lower risk of catching measles, which lowers Chad's risk of catching measles, even though Chad never received the vaccine. So Chad's potential risk of contracting measles is a function of whether he receives the vaccine or not and whether Falco receives the vaccine or not. Thus, the no-interference assumption is violated in this case.
+
+        In potential outcomes notation, we say the potential outcome for unit $i$ is not a function of the treatment status of another unit $j$: 
+
+        $$
+        Y_i(W_i) = Y_i(W_i,W_j) \quad \text{for all } j \neq i
+        $$
+
+In our previous simulation studying exercise and heart health, adjusting for genetics aimed to restore exchangeability by balancing genetic differences between individuals with different exercise levels. Positivity was satisfied because individuals at all levels of genetics still varied in how much they exercised. Consistency was assumed because the way we measured exercise and heart health accurately reflected the underlying causal relationship. Together, these assumptions allowed us to interpret the adjusted effect of exercise on heart health as a causal effect.  
+
+## Effect Identification in Observational Studies  
+
+In observational studies, identifying causal effects is challenging because researchers do not control exposure assignments. Unlike randomized controlled trials, individuals self-select into exposure groups, leading to potential confounding. Effect identification requires careful strategies to mimic the conditions of randomization and ensure that observed associations reflect true causal relationships rather than biases from confounding or selection.  
+
+- Confounding control: Adjust for confounders through methods like regression, stratification, matching, or weighting to approximate randomization.  
+- Assumptions: Rely on assumptions like exchangeability, positivity, and consistency to justify causal interpretation.  
+- Sensitivity analysis: Explore how robust the estimated effect is to potential unmeasured confounding.   
+
+In our simulation of exercise and heart health, we identified the causal effect of exercise by adjusting for the confounding effect of genetics. Without randomization, genetics could have biased the relationship between exercise and health outcomes. By including genetics as a covariate in our model, we attempted to recreate the conditions needed for causal identification in an observational setting, relying on the assumptions of exchangeability, positivity, and consistency to interpret the adjusted exercise effect as causal.  
+
+<!--chapter:end:03_observational_studies.Rmd-->
+
+# Effect Modification and Interaction
+
+> ## Class materials
+>
+> Slides: [**Module 4**](https://drive.google.com/drive/folders/14Iymvk2FlZqVsWrtbDLmwSzR5aNS-Mcg?usp=sharing)
+>
+> Recording: [**Module 4, Part 1**](https://your-recording-link.com)
+>
+> Recording: [**Module 4, Part 2**](https://your-recording-link.com)
+
+> ## Textbook reading
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapters 4–5**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading
+>
+> [**Freedman, D. A. (2008). On types of scientific inquiry: The role of RCTs in health policy. Journal of the Royal Statistical Society: Series A, 171(2), 359–385.**](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/j.1467-985X.2007.00500.x)  Examples of quasi-experiments from public health and education
+
+> ## Topics covered
+>
+> -   Effect modification and adjustment methods\
+> -   Interaction\
+> -   Identifying interaction\
+> -   Effect modification vs interaction\
+> -   Critical reading exercise: evaluating effect modification and interaction in studies
+
+## Effect Modification and Adjustment Methods
+
+Effect modification occurs when the effect of an exposure on an outcome differs depending on the level of another variable. Unlike confounding, which biases the estimated effect, effect modification reflects a real variation in the causal effect across different subgroups. Recognizing effect modification is important because it can reveal that a treatment or exposure is beneficial for some groups but not for others. Adjustment methods like stratification or including interaction terms in regression models help detect and describe effect modification rather than "control" it away. When we study effect modification, we are asking causal questions such as "What the effect of a treatment for group 1 vs the effect for group 2?"
+
+Adjustment methods typically aim to control for confounding, but they can also be used to detect effect modification when interaction terms are included. When effect modification is present, a single summary effect estimate (like an overall average) can be misleading. Instead, researchers often report subgroup-specific effects. Careful modeling and interpretation are necessary to distinguish between true effect modification and residual confounding.
+
+Simulation to Demonstrate Effect Modification
+
+Let's say we are interested in understanding the effect of new drug on a person's VO2 max for young vs old people. For example, this drug might be more effective for young people. VO2 max is the maximum amount of oxygen your body can utilize during exercise. VO2 max is measured in mL per kg of body weight per minute. In this simulation, the drug increases VO2 max by 4 mL/kg/min for old people, and 7.5 mL/kg/min for young people.
+
+```{r}
+set.seed(123)
+
+n <- 2000
+
+treatment <- rbinom(n, 1, 0.5) # drug
+
+age_group <- rbinom(n, 1, 0.5) # 1 = young, 0 = old
+
+baseline <- 35 # baseline VO2 max is 35 mL/kg/min
+
+vo2_max <- baseline + 
+            4 * treatment + 
+            0.5 * age_group + 
+            3.5 * (treatment * age_group) + 
+            rnorm(n, mean = 0, sd = 1)
+
+df <- data.frame(vo2_max, treatment, age_group)
+
+naive_model <- lm(vo2_max ~ treatment + age_group, data = df)
+
+adjusted_model <- lm(vo2_max ~ treatment + age_group + treatment * age_group, data = df)
+
+summary(naive_model)
+
+summary(adjusted_model)
+
+```
+
+If we look only at the naive model without considering effect modification, then we would have incorrectly concluded that the drug impacts young and old people in the same way, adding 5.76 mL/kg/min to a patient's VO2 max on average. 
+
+If we look at the adjusted model considering effect modification, then we see that we more accurately estimate the ground truths. We also have the correct interpretation that the drug's effect varies depending on whether the patient is young or old. For old people, the drug is estimated to increase the VO2 max by 4.05. For young people, the drug is estimated to increase the VO2 max by 4.05 + 3.43 = 7.48. So the drug is 3.43 units more effective in young people.
+
+The following plot shows how younger patients benefit more from the drug than older patients.
+
+```{r}
+df_grouped <- df |>
+  mutate(age_group = ifelse(age_group == 1, "Young", "Old"))
+
+ggplot(df_grouped, aes(x = treatment, y = vo2_max, color = age_group)) +
+  geom_jitter(width = 0.1, alpha = 0.4) +
+  stat_summary(fun = mean, geom = "point", size = 3, shape = 18) +
+  stat_summary(fun = mean, geom = "line", aes(group = age_group)) +
+  scale_x_continuous(breaks = c(0, 1)) + 
+  labs(title = "Effect Modification: Drug and Age Category",
+       x = "Treatment (0 = Control, 1 = Drug)",
+       y = "VO2 Max (mL/kg/min)",
+       color = "Age Category") +
+  theme_minimal()
+```
+
+
+## Interaction
+
+When we study interactions, we are trying to understand the joint effect of two or more treatments on a certain outcome. So we answer the causal question "What is the combined effect of treatment 1 and treatment 2 on an outcome?".
+
+Simulation to Demonstrate Interaction
+
+Let's say we are interested in understanding the effect of new drug and taking vitamin supplements on a person's VO2 max. Assume for this example that the patients who take vitamin supplements take the same supplements in the same dosage. In this simulation, the drug increases VO2 max by 4 mL/kg/min, vitamins increase VO2 max by 1.5 mL/kg/min, and taking both the drug and vitamins adds an addition 2.5 mL/kg/min to the VO2 max.
+
+```{r}
+set.seed(123)
+
+n <- 2000
+
+A_1 <- rbinom(n, 1, 0.5) # drug
+
+A_2 <- rbinom(n, 1, 0.5) # vitamin supplementation
+
+baseline <- 35 # baseline VO2 max is 35 mL/kg/min
+
+vo2_max <- baseline + 
+            4 * A_1 + 
+            1.5 * A_2 + 
+            2.5 * (A_1 * A_2) + 
+            rnorm(n, mean = 0, sd = 1)
+
+df <- data.frame(vo2_max, A_1, A_2)
+
+naive_model <- lm(vo2_max ~ A_1 + A_2, data = df)
+
+adjusted_model <- lm(vo2_max ~ A_1 + A_2 + A_1 * A_2, data = df)
+
+summary(naive_model)
+
+summary(adjusted_model)
+
+```
+
+If we look at the naive model, we would conclude that the drug increase VO2 max by 5.26 and the vitamins increase VO2 max by 2.69. But this isn't the truth. The naive model doesn't capture the combined effect of taking both the drug and vitamins, which is capture in the adjusted model using an interaction term. 
+
+Based on the adjusted model, we would conclude that the drug increases VO2 max by 4.05, the vitamins increase VO2 max by 1.49, and taking both adds 2.43 mL/kg/min to one's VO2 max on average. This is closer to the ground truth that we established when explaining the simulation.
+
+This plot shows that taking the drug increases VO2 max, but also taking vitamins with the drug has an combined effect that increases VO2 max.
+
+```{r}
+
+# library(ggplot2)
+# library(dplyr)
+
+df_grouped <- df |>
+  mutate(vitamin_group = ifelse(A_2 == 1, "Vitamins", "No Vitamins"))
+
+ggplot(df_grouped, aes(x = A_1, y = vo2_max, color = vitamin_group)) +
+  geom_jitter(width = 0.1, alpha = 0.4) +
+  stat_summary(fun = mean, geom = "point", size = 3, shape = 18) +
+  stat_summary(fun = mean, geom = "line", aes(group = vitamin_group)) +
+  scale_x_continuous(breaks = c(0, 1)) + 
+  labs(title = "Interaction: Drug × Vitamin Supplement",
+       x = "Treatment (0 = Control, 1 = Drug)",
+       y = "VO2 Max (mL/kg/min)",
+       color = "Vitamin Group") +
+  theme_minimal()
+
+```
+
+In this simulation, we learned that when we are interested in measuring the effect of multiple treatments on an outcome, it's important to consider the combined effect of these treatments. We achieve this by adding an interaction term in our regression model.
+
+## Identifying Interaction
+
+Identifying interaction is crucial when studying causal relationships because it tells us whether there is a combined effect of two or more treatments on an outcome. Rather than being a source of bias like confounding, interaction reveals real differences in how subgroups respond to exposures or treatments. Detecting interaction helps researchers understand for whom and under what conditions an intervention works best, allowing for more tailored public health strategies and clinical recommendations.
+
+In our simulation with the drug and vitamin supplements, interaction was present because there was a combined effect of the drug and vitamin supplementation on VO2 max. In particular, patients that took both had the largest increases in VO2 max. By fitting a model with an interaction term between the drug and vitamin use, we were able to identify and quantify this combined interaction effect. Without testing for interaction, we would have incorrectly assumed that the drug and the vitamins independently improve VO2 max.
+
+## Effect Modification vs Interaction
+
+Effect modification and interaction are closely related concepts, but they serve slightly different purposes in causal analysis. The confusing part is when we try to model both effect modification and interaction, we do it the same way with an interaction term in the regression. However, the difference between the two concepts is in the causal questions we are trying to answer.
+
+In effect modification, we are trying to understand how the effect of a single treatment varies based on levels of another factor like age or sex assigned at birth. 
+
+In interaction, we are trying to understand the combined effect of two or more treatments such as a drug and vitamin supplementation.
+
+
+<!--chapter:end:04_effect_modification.Rmd-->
+
+# Introduction to Causal Diagrams
+
+> ## Class materials
+>
+> Slides: [**Module 5**](https://drive.google.com/drive/folders/14Iymvk2FlZqVsWrtbDLmwSzR5aNS-Mcg?usp=sharing)
+>
+> Recording: [**Module 5, Part 1**](https://your-recording-link.com)
+>
+> Recording: [**Module 5, Part 2**](https://your-recording-link.com)
+
+> ## Textbook reading
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapters 6-7**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading
+>
+> [**Rosenbaum, P.R., & Rubin, D.B. (1983). The central role of the propensity score in observational studies for causal effects. Biometrika, 70(1), 41–55.**](https://academic.oup.com/biomet/article/70/1/41/284423)\
+> Examples from public health studies involving confounding adjustment
+
+> ## Topics covered
+>
+> -   Basic principles of directed acyclic graphs (DAGs)
+> -   Common causal structures in public health
+> -   Application: drawing DAGs for public health scenarios
+
+## Basic principles of directed acyclic graphs (DAGs)
+
+Directed acyclic graphs (DAGs) are powerful tools in causal inference that visually represent assumptions about how variables are related. In a DAG, nodes represent variables, and arrows (directed edges) represent causal influences from one variable to another. DAGs are acyclic, meaning you cannot return to the same variable by following a sequence of arrows — this prevents feedback loops. These graphs also are directed, meaning that they show the ways we think the causal relationships flow from one variable to another using the arrows. 
+
+The key strength of DAGs lies in their ability to clarify causal pathways, distinguish between confounding and mediation, and identify the variables we need to control for to estimate causal effects accurately. By encoding assumptions explicitly, DAGs help researchers determine whether observed associations reflect true causal relationships or are biased by omitted variables or incorrect conditioning.
+
+In our simulation, we use a DAG to represent a common public health structure involving diet, exercise, and heart health. Diet is a confounder: it directly influences both how much people exercise and their overall heart health. If we ignore diet when estimating the effect of exercise on heart health, we risk attributing diet's effect to exercise — leading to confounding bias. The DAG for this scenario includes arrows from diet to both exercise and heart health, and from exercise to heart health.
+
+
+```{r}
+
+# library(ggplot2)
+# library(dplyr)
+# library(ggdag)
+# library(dagitty)
+# library(bnlearn)
+# library(igraph)
+
+set.seed(123)
+
+n <- 2000
+
+diet <- rnorm(n)
+
+exercise <- 2 * diet + rnorm(n)
+
+heart_health <- 3 * exercise + 4 * diet + rnorm(n)
+
+df <- data.frame(diet, exercise, heart_health)
+
+dag <- model2network("[diet][exercise|diet][heart_health|diet:exercise]")
+g <- bnlearn::as.igraph(dag)
+plot(g, layout = layout_as_tree(g, root = "diet"),
+     vertex.label.color="black", vertex.size=60, edge.arrow.size=0.5)
+```
+
+
+## Common Causal Structures in Public Health
+
+In public health research, understanding the causal relationships between variables is essential for identifying risk factors, designing interventions, and making policy decisions. Common causal structures include **confounding, mediation, and colliders**, each of which influences how we interpret observed associations. 
+
+A **confounder** is a variable that affects both the exposure and the outcome, potentially biasing the estimated effect if not properly adjusted for. Assume we had a hypothesis that ice cream sales cause murder rates. We would draw the DAG below, and show that outside temperature is a confounder, since it affects both ice cream sales (the exposure) and murder rate (the outcome).
+
+```{r, echo = FALSE}
+
+confounder_dag <- model2network("[Outside_Temperature][Ice_Cream_Sales|Outside_Temperature][Murder_Rate|Outside_Temperature:Ice_Cream_Sales]")
+
+# igraph + plot
+g <- bnlearn::as.igraph(confounder_dag)
+plot(
+  g,
+  layout = layout_as_tree(g, root = "Outside_Temperature"),
+  vertex.size = 60,
+  vertex.label.color = "black",
+  edge.arrow.size = 0.6
+)
+```
+
+A **mediator** lies on the causal pathway between exposure and outcome, helping to explain how the exposure exerts its effect. In the example below, weight loss is the mediator because the exposure exercise causes weight loss, which affects the risk of diabetes. Based on this DAG, we are assuming that the only way exercise affects diabetes risk is through weight loss. In reality, this might not be true, but we kept the structure of this DAG simple for example's sake.
+
+```{r, echo = FALSE}
+
+mediator_dag <- model2network("[Exercise][Weight_Loss|Exercise][Diabetes_Risk|Weight_Loss]")
+
+g <- bnlearn::as.igraph(mediator_dag)
+plot(
+  g,
+  layout = layout_as_tree(g, root = "Exercise"),
+  vertex.size = 60,
+  vertex.label.color = "black",
+  edge.arrow.size = 0.6
+)
+
+```
+
+A **collider**, on the other hand, is influenced by two variables, and conditioning on it can introduce spurious associations. In the example below, the lawn being wet is a collider because it is caused by both by whether the sprinkler turns on and whether it rains outside. An easy way to remember if a variable is a collider is if it is a variable where two arrows point toward (or collide into) the variable.
+
+```{r, echo = FALSE}
+collider_dag <- model2network("[Sprinkler_Turns_On][Rains_Outside][Wet_Lawn|Sprinkler_Turns_On:Rains_Outside]")
+
+g <- bnlearn::as.igraph(collider_dag)
+plot(
+  g,
+  layout = layout_as_tree(g, root = "Wet_Lawn"),
+  vertex.size = 60,
+  vertex.label.color = "black",
+  edge.arrow.size = 0.6
+)
+```
+
+Identifying these structures often requires drawing directed acyclic graphs (DAGs) to map out assumptions and determine which variables to adjust for when estimating causal effects. They also help us understand the flow of associations between the different variables. We use paths to track the flow of association. 
+
+A **backdoor path** is any path from the exposure to the outcome with an arrow pointing towards the exposure. For example, in the ice cream and murder rate DAG, there is a backdoor path Ice Cream Sales $\rightarrow$ Outside Temperature $\leftarrow$ Murder Rate since the arrow between Outside Temperature and Murder Rate points back at Ice Cream Sales.
+
+Paths can either be closed or open. Opening a path allows association to flow from one variable to another, while closing does not. In general, we want to close all backdoor paths keep all other paths open by conditioning on set of specific variables. This will guarantee conditional exchangeability, allowing us to identify the causal effect.
+
+In our first simulation, we modeled a classic confounding structure, where diet influences both exercise and heart health. This mirrors real-world public health situations where health behaviors and biological outcomes are shaped by shared underlying factors like nutrition, socioeconomic status, or genetics. If we were to estimate the effect of exercise on heart health without adjusting for diet, we would risk attributing some of diet’s impact to exercise — a classic confounding problem. By visualizing the relationships using a DAG and including diet as a covariate in our regression model, we can block the backdoor path and isolate the true causal effect of exercise. This illustrates how understanding and modeling common causal structures is critical to producing valid and meaningful results in public health research.
+
+## Application: drawing DAGs for public health scenarios
+
+When modeling a relationship such as the effect of a doctor's visit on sickness level, there are so many factors that can make a causal diagram extremely complex. In this example, there can be so many confounders such as whether the person has insurance, whether the patient was sick before, whether the person can afford to live in a clean area, whether they can take time off work to go to the doctor's office, and so on. 
+
+There appear to be too many factors that we would have to control for to identify the causal effect, but we can follow some steps to simplify and create our causal diagram. We apply steps to the examples below:
+
+1. **List out all factors** - Going to the doctor's office, insurance status, sickness level before treatment, cleanliness of living area, available time to take off work to go to doctor's office.
+
+2. **Prune and combine factors based on domain knowledge** - Using domain knowledge, some of the factors are related in similar ways. For example, a person's insurance status, the quality of their living area, and whether or not they have time to take off work and go to the doctor's all affect whether they go to the doctor's office and their sickness level after going to the doctor's in similar ways. Namely, the higher quality the insurance, living area, and amount of time off available, the more likely the person is going to go to a doctor's office and be in better health on average. We can simplify these three factors into a single one such as economic status. After simplification, we now have four variables: doctor's office visit, economic status, sickness status before visit, sickness level after visit.
+
+3. **Add causal relationships** - After simplifying our factors, we then start drawing arrows that represent the direction that causation flows from one variable to another. For example, we can hypothesize that visiting a doctor will affect a person's sickness level, and economic status and pre-sickness level are confounders. The direction of these arrows is based on our assumptions and domain knowledge.
+
+```{r, echo = FALSE}
+example_dag <- model2network("[Doctor's_Office|Economic_Status:Pre-Sick][Sickness_Level|Doctor's_Office:Economic_Status:Pre-Sick][Economic_Status][Pre-Sick]")
+
+g <- bnlearn::as.igraph(example_dag)
+plot(
+  g,
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1
+)
+```
+
+<!--chapter:end:05_causal_dags.Rmd-->
+
+# Confounding and Selection Bias
+
+> ## Class materials
+>
+> Slides: [**Module 6**](https://drive.google.com/drive/folders/14Iymvk2FlZqVsWrtbDLmwSzR5aNS-Mcg?usp=sharing)
+>
+> Recording: [**Module 6, Part 1**](https://your-recording-link.com)
+>
+> Recording: [**Module 6, Part 2**](https://your-recording-link.com)
+
+> ## Textbook reading
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapter 7-8**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading
+>
+> [**Knol, M. J., & VanderWeele, T. J. (2012). Recommendations for presenting analyses of effect modification and interaction. International Journal of Epidemiology, 41(2), 514–520.**](https://academic.oup.com/ije/article/41/2/514/709435)\
+> Real-world public health examples of effect modification
+
+> ## Topics Covered
+>
+> -   The form of selection bias
+> -   How to adjust for selection bias
+> -   The structure of confounding
+> -   How to adjust for confounding
+> -   Critical reading exercise: sources of confounding and selection bias in public health
+
+## The Form of Selection Bias
+
+**Selection bias** occurs when the probability of being included in the study or analysis depends on a factor that affects the association between the treatment and the outcome. Selection bias occurs when we condition (by stratifying or controlling) on a collider or mediator. When we unintentionally condition on these causal structures, we make our estimates biased. Conditioning on a collider opens up a backdoor path, biasing our estimate. Conditioning on a mediator blocks a path that captures the effect an exposure can have on an outcome through the mediator, also biasing our estimate.
+
+In our simulation, we are interested in studying the effect of having a high income on whether a person gets regular exercise or not. We also have data on healthcare visits for each patient, which is affected both by whether they have high income and whether they exercise. For this example, assume that we do not know the true effect of income on exercise, but in reality, there is no causal effect. Since we believe there is an effect, we will show this causal relationship in our DAG.
+
+The DAG for this scenario is shown below.
+
+
+```{r, echo = FALSE}
+
+# library(bnlearn)
+# library(igraph)
+
+selection_bias <- model2network("[High_Income][Exercise|High_Income][Healthcare_Visits|Exercise:High_Income]")
+
+g <- bnlearn::as.igraph(selection_bias)
+plot(
+  g,
+  layout = layout_as_tree(g, root = "Healthcare_Visits"),
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1
+)
+```
+
+We introduce selection bias by adjusting on healthcare visits (a collider) in our regression. By conditioning on healthcare visits, our estimated effect will contain the association from the backdoor path.
+
+The code below estimates the effect of heart health on exercise using two models. The first model does not control for healthcare visits and unbiasedly estimates the true causal effect of 0. The second model controls for healthcare visits and suffers from selection bias. 
+
+
+```{r}
+
+set.seed(123)
+
+n <- 20000
+
+# Income and exercise are independent (no true causal effect for this example)
+high_income <- rbinom(n, 1, 0.4)  # 40% have high income
+regular_exercise <- rbinom(n, 1, 0.3)  # 30% exercise regularly
+
+# Healthcare_visits is a collider of high_income and regular_exercise
+healthcare_visits <- 2 + 1.5 * high_income + 1.2 * regular_exercise + rnorm(n, 0, 0.8)
+df <- data.frame(
+  high_income = high_income,
+  regular_exercise = regular_exercise,
+  healthcare_visits = healthcare_visits
+)
+
+# Model 1 — No adjustment (baseline)
+model_unadjusted <- lm(regular_exercise ~ high_income, data = df)
+
+# Model 2 — Adjusting for the collider (bad)
+model_adjusted_collider <- lm(regular_exercise ~ high_income + healthcare_visits, data = df)
+
+# Extract coefficients
+coef_unadjusted <- summary(model_unadjusted)$coefficients["high_income", "Estimate"]
+coef_adjusted <- summary(model_adjusted_collider)$coefficients["high_income", "Estimate"]
+
+# Compare results
+cat("Coefficient without adjustment (true effect):", coef_unadjusted, "\n")
+cat("Coefficient with collider adjustment (biased):", coef_adjusted, "\n")
+
+```
+
+The previous scenario where we condition on a collider is more specifically known as **collider bias**. Had we conditioned on a mediator, this would have been **mediator bias**. In the example about the effect of exercise on diabetes risk, if we were to condition on weight loss when estimating our causal effect, we would block the causal path of exercise $\rightarrow$ weight loss $\rightarrow$ diabetes risk and not be able to estimate the effect of exercise on diabetes risk, mediated by weight loss.
+
+```{r, echo = FALSE}
+
+mediator_dag <- model2network("[Exercise][Weight_Loss|Exercise][Diabetes_Risk|Weight_Loss]")
+
+g <- bnlearn::as.igraph(mediator_dag)
+plot(
+  g,
+  layout = layout_as_tree(g, root = "Exercise"),
+  vertex.size = 60,
+  vertex.label.color = "black",
+  edge.arrow.size = 1
+)
+
+```
+
+## How to Adjust for Selection Bias
+
+Adjusting for selection bias is more challenging than adjusting for confounding, because selection bias arises when the sample being analyzed is not representative of the target population due to a systematic inclusion process. This often happens when selection into the dataset depends on variables related to both the exposure and the outcome, introducing a spurious association that distorts causal estimates. Unlike confounding, which can often be handled by conditioning on measured variables, selection bias may require more complex strategies such as inverse probability weighting (IPW), sensitivity analysis, or explicitly modeling the selection mechanism. The key to adjusting for selection bias is understanding why and how certain individuals are excluded or included in the analysis — and then incorporating that information to correct the bias.
+
+## The Structure of Confounding
+
+Confounding occurs when an external variable influences both the exposure and the outcome, making it difficult to determine whether the observed association is truly causal. This third variable — the confounder — can create a misleading impression that the exposure causes the outcome, when in fact, the association may be driven entirely or partially by the confounder. The key structural feature of confounding is that the confounder must be related to both the exposure and the outcome. To obtain an accurate estimate of the exposure’s causal effect, researchers must adjust for confounding variables using methods like stratification, regression, or matching.
+
+In our simulation, age acts as a confounder because it affects both smoking behavior and lung cancer risk. Older individuals are more likely to smoke and also more likely to develop lung cancer, which can make smoking appear more harmful (or even less harmful) than it actually is if age isn’t taken into account. The naive model, which includes only smoking, produces a biased estimate because it doesn’t separate the effect of smoking from the effect of age. The adjusted model includes both smoking and age and provides a more accurate estimate of smoking’s effect by accounting for this confounding influence. This example highlights how confounding can distort findings and why controlling for related background variables is essential in observational research. For this simulation, assume smoking has a true effect of 3 on lung cancer. 
+
+The DAG for this scenario is below:
+
+```{r, echo = FALSE}
+dag <- model2network("[Age][Smoking|Age][Lung_Cancer|Smoking:Age]")
+g <- as.igraph(dag)
+plot(
+  g,
+  layout = layout_as_tree(g, root = "Age"),
+  vertex.size = 60,
+  vertex.label.color = "black",
+  edge.arrow.size = 0.6
+)
+```
+
+```{r}
+
+set.seed(123)
+
+n <- 2000
+
+age <- rnorm(2000, mean = 50, sd = 10)
+
+smoking <- 2 * age + rnorm(n)
+
+lung_cancer <- 3 * smoking + 4 * age + rnorm(n)
+
+genetic_marker <- rbinom(n, 1, prob = plogis(0.01 * smoking - 1))
+
+df <- data.frame(
+  Age = age,
+  Smoking = smoking,
+  Lung_Cancer = lung_cancer,
+  Genetic_Marker = genetic_marker
+)
+
+model_naive <- lm(lung_cancer ~ smoking, data = df)
+
+model_adjusted <- lm(lung_cancer ~ smoking + age, data = df)
+
+coef_naive <- summary(model_naive)$coefficients["smoking", "Estimate"]
+
+coef_adjusted <- summary(model_adjusted)$coefficients["smoking", "Estimate"]
+
+coef_naive
+
+coef_adjusted
+
+```
+
+Through this simulation, we learned that controlling for confounders via adjusting for them in the regression model helps prevent our estimates from being biased. Practically, in the context of public health, there will always be unobserved confounders that we can't control for. This makes it impossible to control for all confounders. This does not mean that it is impossible to have credible causal estimates. Instead of trying to get an unbiased estimate by controlling for all confounders (which is infeasible), researchers acknowledge that unobserved confounders exist and can affect their estimates. Through a process called **sensitivity analysis** researchers can observe how strong a confounder has to be in order to invalidate their results. 
+
+In the example above, our estimated effect after properly controlling for age is around 3. However, it is possible that we forgot to account for a genetic marker that is a confounder of smoking and lung cancer. In practice, it is infeasible to control for the genetic marker of each individual in our study, so we use sensitivity analysis to see how robust our estimates are. In the code below, we simulate how strong the association between genetic marker on smoking and the association between genetic marker and lung cancer has to be in order to invalidate our results. The heatmap shows the effect estimates for varying strengths of confounding on the exposure and outcome.
+
+Our new DAG including the genetic marker would look like the following:
+
+```{r, echo = FALSE}
+dag <- model2network("[Age][Genetic_Marker][Smoking|Age:Genetic_Marker][Lung_Cancer|Age:Genetic_Marker:Smoking]")
+g <- bnlearn::as.igraph(dag)
+L <- layout_with_sugiyama(g)$layout          # spreads layers
+plot(g, layout = L,
+     vertex.size = 24, vertex.label.cex = 0.9,
+     edge.arrow.size = 1,
+     edge.curved = 0.2,                      # separate overlapping edges
+     vertex.label.color = "black", asp = 0)  # asp=0 uses full device
+
+```
+
+
+
+```{r}
+
+set.seed(123)
+
+n <- 1000
+age <- rnorm(n)
+results <- data.frame()
+
+a_vals <- seq(0, 10, by = 1)   # strength of genetic_marker on smoking
+b_vals <- seq(0, -20, by = -1)   # strength of genetic_marker on lung_cancer
+
+for (a in a_vals) {
+  for (b in b_vals) {
+    genetic_marker <- rbinom(n, 1, 0.5)
+
+    smoking_resid <- a * genetic_marker + rnorm(n)
+    smoking_resid <- as.numeric(scale(smoking_resid))   # Fix variance to 1 to avoid inflating variance of smoking
+    smoking <- 4 * age + smoking_resid
+
+    lung_cancer <- 3 * smoking + 4 * age + b * genetic_marker + rnorm(n)
+
+    df <- data.frame(lung_cancer, smoking, age)
+    model <- lm(lung_cancer ~ smoking + age, data = df)
+    est <- coef(summary(model))["smoking", "Estimate"]
+    se  <- coef(summary(model))["smoking", "Std. Error"]
+
+    results <- rbind(results, data.frame(a = a, b = b,
+                                         smoking_estimate = est, se = se))
+  }
+}
+
+ggplot(results, aes(x = a, y = b, fill = smoking_estimate)) +
+  geom_tile() +
+  scale_fill_gradient(
+    low = "white", high = "Blue",
+    breaks = seq(3, -6, by = -1.5)
+  ) +
+  labs(
+    x = "Strength of Confounder on Smoking",
+    y = "Strength of Confounder on Lung Cancer",
+    fill = "Smoking Effect",
+    title = "Effect of Smoking Estimate by Confounder Strength"
+  ) +
+  theme_minimal() +
+  scale_y_reverse()
+
+
+
+```
+
+When identifying a causal effect by assuming conditional exchangeability, sensitivity analysis is incredibly important to defending claims of causality. For example, based off this graph, one could argue that the strength of the genetic marker is likely not strong enough to change our result that smoking increases the chance of lung cancer.
+
+## How to Adjust for Confounding
+
+Adjusting for confounding is essential when estimating causal effects from observational data. Since confounders are variables that influence both the exposure and the outcome, failing to account for them can lead to biased and misleading conclusions. One of the most common ways to adjust for confounders is through multiple regression, where confounders are included as covariates in the model. Other methods include stratification, where analyses are performed within levels of the confounder, and matching, where exposed and unexposed individuals are paired based on similar values of the confounding variable. These approaches aim to isolate the effect of the exposure by holding confounders constant, thereby mimicking the balance achieved in randomized experiments.
+
+In our simulation, we demonstrated adjustment for confounding using regression. The variable age was a confounder because it influenced both smoking and lung cancer. When we fit a naive model that only included smoking, the effect estimate was biased because it reflected both smoking’s and age’s contributions to lung cancer. By including age in the model as an additional predictor, we were able to adjust for its influence. This adjustment allowed us to estimate the effect of smoking on lung cancer more accurately, as if age were held constant. This simple regression approach illustrates a key principle in observational research: if you can measure the confounder and include it in your analysis, you can often remove its biasing effect and get closer to the true causal relationship.
+
+
+<!--chapter:end:06_confounding_bias.Rmd-->
+
+# Other Common Pitfalls of Causal Analyses
+
+> ## Class materials
+>
+> Slides: [**Module 7**](https://your-slide-link.com)
+>
+> Recording: [**Module 7, Part 1**](https://your-recording-link.com)
+>
+> Recording: [**Module 7, Part 2**](https://your-recording-link.com)
+
+> ## Textbook reading
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapter 9**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading
+>
+> **ADD RELEVANT READING**  
+> Examples of misclassification and selection bias in public health research
+
+> ## Topics covered
+>
+> -   Measurement bias
+> -   Non-compliance
+> -   Non-causal diagrams
+> -   Publication bias and p-hacking
+> -   Over- and mis-interpretation of statistical analyses
+> -   Application: developing a checklist for critical reading of causal claims
+
+## Measurement Bias
+
+Measurement bias occurs when the method used to collect data leads to systematic errors in the values recorded for a variable. This can happen when an exposure, outcome, or confounder is misclassified or inaccurately measured in a way that consistently overstates or understates the true value. Measurement bias is problematic because it can distort observed associations and lead to incorrect conclusions about the relationships between variables. Unlike random measurement error, which tends to cancel out over large samples, measurement bias introduces consistent errors that don’t disappear with more data. It can arise from faulty instruments, poorly worded survey questions, or inconsistent data collection procedures, and it often goes unnoticed unless explicitly tested for.
+
+In public health and medical research, measurement bias can affect both exposure and outcome variables. For example, if smoking behavior is self-reported and individuals tend to underreport how much they smoke, the study will underestimate the true relationship between smoking and lung cancer. Similarly, if age is recorded in broad categories rather than precise years, it can limit the ability to adjust accurately for confounding. Even adjusting for confounders may not correct measurement bias if those confounders are also measured with error. This makes it critical to use reliable, validated measurement tools and to account for potential misclassification during analysis, especially in observational studies where data quality may vary widely.
+
+This simulation demonstrates measurement bias by comparing the estimated effect of smoking on lung cancer using the true smoking values versus mismeasured (underreported) smoking. The model using mismeasured smoking underestimates the true effect, showing how systematic error in recording an exposure can bias causal estimates toward zero.
+
+```{r}
+
+n <- 2000
+
+age <- rnorm(n, mean = 50, sd = 10)
+
+true_smoking <- 2 * age + rnorm(n)
+
+# no age to isolate measurement bias in smoking
+lung_cancer <- 3 * true_smoking + rnorm(n)
+
+measured_smoking <- true_smoking - rnorm(n, mean = 1, sd = 0.5)
+
+true_model <- lm(lung_cancer ~ true_smoking + age)
+
+biased_model <- lm(lung_cancer ~ measured_smoking + age)
+
+true_coef <- summary(true_model)$coefficients["true_smoking", "Estimate"]
+
+biased_coef <- summary(biased_model)$coefficients["measured_smoking", "Estimate"]
+
+true_coef
+
+biased_coef
+
+```
+
+We can capture measurement bias in DAGs as well by denoting the measured exposure variable as $W^*$. In the example below, the measured treatment $W^*$ is affected both by confounders and the exposure variable $W$. 
+
+```{r, echo = FALSE}
+
+dag <- model2network("[W][Y|W][W*|W:U][U]")
+
+g <- as.igraph(dag)
+
+plot(
+  g,
+  layout = layout_as_tree(g, root = "W*"),
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1
+)
+
+```
+
+## Non-compliance
+
+So far we have assumed that the examples with randomized experiments that we have covered went as intended. In real experiments, sometimes participants might not comply with the treatment they are assigned to. For example, if our example is about the effect of a heart transplant on 5-year mortality, some patients might not undergo surgery even if they were assigned the surgery.
+
+To account for the potential mismatch between the treatment assigned and the treatment received for a patient in DAG notation, we use two variables. $Z$ represents the assigned treatment, and $W$ represents the received treatment. This is different from how we denote measurement bias because $Z$ can have a causal effect on $Y$.
+
+```{r, echo = FALSE}
+
+dag <- model2network("[Z][U][W|Z:U][Y|W:Z:U]")
+
+g <- as.igraph(dag)
+
+lay <- rbind(
+  Z = c(-1.1,  0.6),
+  W = c( 0.0,  0.6),
+  Y = c( 1.2,  0.6),
+  U = c(-1.2, -0.6)
+)[V(g)$name, , drop = FALSE]
+
+lay <- lay * 0.7
+
+edge_names <- apply(ends(g, E(g), names = TRUE), 1, paste, collapse = "->")
+curv <- rep(0, ecount(g))
+curv[edge_names == "Z->Y"] <- 0.65
+curv[edge_names == "U->Y"] <- -0.15
+
+plot(
+  g,
+  layout = lay,
+  vertex.size = 40,
+  vertex.label.color = "black",
+  edge.arrow.size = 1,
+  edge.curved = curv,
+  asp = 0,
+  xlim = c(-1.5, 1.5),   
+  ylim = c(-1.5, 1.5)
+)
+
+```
+
+## Non-Causal Diagrams
+
+Non-causal diagrams represent associations between variables that do not imply direct cause-and-effect relationships. These diagrams are useful for illustrating statistical relationships that arise from shared causes, correlations due to bias, or measurement artifacts. In non-causal diagrams, arrows may still indicate directional influence, but they are used to reflect associations or data-generating processes, not claims about interventions. Unlike causal diagrams, which are designed to identify and estimate the effects of manipulating one variable on another, non-causal diagrams help clarify patterns in the data without asserting that changing one variable will necessarily change another.
+
+In the context of our simulation, we can use a non-causal diagram to represent the observed association between age and lung cancer without assuming a direct causal relationship. While age and lung cancer may be strongly correlated — older individuals tend to have higher cancer risk — this relationship does not imply that age causes lung cancer in an interventional sense. Instead, age may be acting as a proxy for other underlying factors like cumulative exposure to smoking or environmental risks. A non-causal diagram helps us visualize this statistical association without attributing it to a direct, manipulable pathway, highlighting that not all observed relationships in data should be interpreted as causal.
+
+## Publication Bias and P-Hacking
+
+Publication bias occurs when the likelihood of a study being published depends on the nature or direction of its results — typically favoring studies with statistically significant or “positive” findings. This creates a distorted picture of the evidence in a field, because null or contradictory results are less likely to be seen. P-hacking refers to the practice of manipulating statistical analyses or data collection until a desired (usually statistically significant) result is achieved. This can include selectively reporting outcomes, running many analyses and only publishing those with low p-values, or stopping data collection once a significant result appears. Both practices inflate false-positive rates and undermine the credibility of scientific findings.
+
+In the context of the simulation we ran — whether it involves confounding, selection bias, or measurement error — it’s easy to see how p-hacking or publication bias could skew interpretations. For example, imagine rerunning the simulation many times and only reporting the version where the naive model shows a significant effect of smoking on lung cancer (even if the underlying data or causal structure doesn’t support it). Or selectively reporting only the adjusted model that produces a "clean" result while hiding others. These practices can make even a carefully designed simulation appear misleading. The simulation reinforces the idea that statistical significance is not the same as truth, and that transparency in modeling choices and full reporting of results are critical for avoiding biased conclusions.
+
+## Over- and Mis-Interpretation of Statistical Analyses
+
+Over-interpretation occurs when researchers draw stronger conclusions from statistical results than the data can justify, while mis-interpretation involves misunderstanding what the results actually mean. A common example is interpreting a statistically significant association as proof of causation, even when the study design or model does not support that claim. Another frequent error is overstating the practical importance of a small effect size or assuming that a non-significant result means "no effect." These issues are often driven by pressure to produce definitive conclusions, even when the data are limited, noisy, or confounded. Careful interpretation requires understanding the limits of the methods used and being transparent about uncertainty, assumptions, and alternative explanations.
+
+In the simulations we've conducted — such as estimating the effect of smoking on lung cancer under different types of bias — it's easy to see how results can be over- or mis-interpreted. For instance, in a model affected by measurement bias or confounding, one might find a statistically significant association between smoking and lung cancer, but incorrectly conclude that the estimated effect size reflects the true causal effect. Alternatively, if the biased model appears significant and the true model does not, someone might misinterpret that as evidence that adjustment "eliminated" the effect, when in fact it corrected for bias. These examples highlight how even simple models can be misunderstood or overstated, and underscore the importance of grounding interpretation in study design, data limitations, and causal reasoning — not just statistical output.
+
+<!--chapter:end:07_common_pitfalls.Rmd-->
+
+# From Identification to Estimation  
+
+> ## Class materials  
+>
+> Slides: [**Module 8**](https://your-slide-link.com)  
+>
+> Recording: [**Module 8, Part 1**](https://your-recording-link.com)  
+>
+> Recording: [**Module 8, Part 2**](https://your-recording-link.com)  
+
+> ## Textbook reading  
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapter 10**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading  
+>
+> **ADD RELEVANT READING**  
+> Case studies on unmeasured confounding and robustness of findings  
+  
+> ## Topics covered   
+>
+> -   Identification versus estimation  
+> -   Estimation of causal effects
+> -   Taxonomy of estimation models
+> -   Critical reading exercise: evaluating identification and estimation in a published study
+
+## Identification and Estimation  
+
+In causal inference, identification refers to the theoretical question of whether a causal effect can be determined from the observed data and the assumptions encoded in the study design or model. It answers the question: "Can we, in principle, express the causal effect of interest as a function of the observed variables?" Identification depends on assumptions such as exchangeability (no unmeasured confounding), positivity, and consistency, and often involves tools like potential outcomes or directed acyclic graphs (DAGs). If a causal effect is not identifiable, no amount of statistical analysis will yield a valid estimate — because the data alone cannot disentangle the causal effect from bias or confounding.  
+
+Once identification is established, the next step is estimation, which involves applying statistical methods to calculate the size of the effect using real data. Estimation uses techniques like regression, inverse probability weighting, or matching to quantify the identified causal relationship. In our simulations, for example, once we specify that the causal effect of smoking on lung cancer is identifiable by adjusting for age, we use regression to estimate that effect. If we skip the identification step and go straight to estimation without accounting for confounding or bias, our estimates may be precise — but wrong. Together, identification and estimation form the backbone of credible causal analysis: one ensures that we're asking the right question, and the other that we're answering it correctly.  
+
+**ADD AN EXAMPLE OF GOING END-TO-END FROM CAUSAL QUESTION -> IDENTIFICATION STRATEGY -> DEFENDING ASSUMPTIONS --> ESTIMATION**
+
+## Estimation of causal effects  
+
+Estimation of causal effects refers to the process of using statistical methods to quantify the size and direction of a causal relationship between an exposure and an outcome. Once a causal effect has been identified—meaning that, under certain assumptions, it can be expressed in terms of observed variables—estimation allows us to compute a numerical value for that effect using data. Common estimation techniques include linear regression, inverse probability weighting, and matching. The goal is not just to observe an association, but to measure how much changing the exposure would change the outcome, assuming the identification conditions are satisfied.  
+
+
+## Taxonomy of estimation models  
+
+The taxonomy of estimation models refers to the classification of different statistical approaches used to estimate causal effects based on the structure of the data and the assumptions made. Broadly, estimation models fall into categories such as outcome regression (e.g., linear or logistic regression), exposure modeling (e.g., propensity scores), and doubly robust methods that combine both. These models vary in how they handle confounding, missing data, and complexity of relationships between variables. Choosing the appropriate estimation model depends on the research question, the nature of the confounding, and how well the model's assumptions align with the underlying causal structure.  
+
+<!--chapter:end:08_identification_estimation.Rmd-->
+
+# Applications of Causal Inference in Public Health and Medical Research
+
+> ## Class materials
+>
+> Slides: [**Module 9**](https://your-slide-link.com)
+>
+> Recording: [**Module 9, Part 1**](https://your-recording-link.com)
+>
+> Recording: [**Module 9, Part 2**](https://your-recording-link.com)
+
+> ## Textbook reading
+>
+> [**Hernán & Robins, Causal Inference: What If – Chapter 15**](https://static1.squarespace.com/static/675db8b0dd37046447128f5f/t/677676888e31cc50c2c33877/1735816881944/hernanrobins_WhatIf_2jan25.pdf)
+
+> ## Supplementary reading
+>
+> [**Sterman, J. D. (2006). Learning from evidence in a complex world. American Journal of Public Health, 96(3), 505–514.**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1470480/)\
+> Examples of systems-level interventions in public health and policy
+
+> ## Topics covered
+>
+> -   Public health policy evaluation
+> -   Environmental exposure studies
+> -   Health disparities research
+> -   Prevention program evaluation
+
+## Public health policy evaluation
+
+```{r}
+
+n <- 2000
+
+baseline_health <- rnorm(n, mean = 50, sd = 10)
+
+policy <- ifelse(baseline_health + rnorm(n, 0, 5) < 52, 1, 0)
+
+health_outcome <- 5 * policy + 0.6 * baseline_health + rnorm(n, 0, 5)
+
+df <- data.frame(
+  Policy = factor(policy, labels = c("No Policy", "Policy")),
+  Baseline_Health = baseline_health,
+  Health_Outcome = health_outcome
+)
+
+model_naive <- lm(Health_Outcome ~ Policy, data = df)
+
+model_adjusted <- lm(Health_Outcome ~ Policy + Baseline_Health, data = df)
+
+summary(model_naive)$coefficients["PolicyPolicy", ]
+
+summary(model_adjusted)$coefficients["PolicyPolicy", ]
+
+```
+```{r}
+
+library(ggplot2)
+ggplot(df, aes(x = Policy, y = Health_Outcome, fill = Policy)) +
+  geom_boxplot(alpha = 0.6) +
+  labs(title = "Simulated Impact of Public Health Policy",
+       x = "Policy Implemented",
+       y = "Health Outcome After 1 Year") +
+  theme_minimal()
+
+```
+
+## Environmental exposure studies
+
+Environmental exposure studies investigate how exposure to environmental factors—such as air pollution, contaminated water, radiation, or hazardous chemicals—affects human health. These studies aim to establish causal links between environmental conditions and outcomes like respiratory illness, cancer, or developmental disorders. Because randomizing exposure is often unethical or impractical, these studies typically rely on observational data, making careful adjustment for confounders and sources of bias essential. Tools like causal diagrams, regression models, and sensitivity analyses are often employed to assess whether the observed health effects are truly caused by the environmental exposure.
+
+In the policy simulation, the setup closely resembles an environmental exposure study where "policy" could be interpreted as an intervention to reduce environmental harm (e.g., enforcing clean air regulations). The simulation demonstrated how individuals exposed to the policy had lower average health outcomes, not because the policy failed, but because those individuals started with worse baseline health. This reflects a common challenge in environmental health research: exposure is often non-random and associated with other risk factors. Just like in environmental exposure studies, it is crucial to adjust for baseline differences—such as pre-existing health or socioeconomic status—to avoid incorrectly concluding that the exposure (or policy) caused harm.
+
+## Health disparities research
+
+Health disparities research focuses on understanding and addressing differences in health outcomes across population groups defined by factors such as race, ethnicity, socioeconomic status, geography, gender, or disability. These disparities often stem from unequal access to care, systemic discrimination, environmental exposures, and social determinants of health. The goal is not only to document these differences but also to identify causal pathways and implement interventions that promote health equity. Causal inference tools are especially valuable in this field because they help distinguish between mere correlations and actual structural inequalities that can be targeted through policy and intervention.
+
+The simulation of public health policy can be directly applied to health disparities research by modeling how an intervention affects different subgroups. For instance, if a health policy is implemented in lower-income neighborhoods, those individuals might begin with worse baseline health, as shown by lower health outcomes in the policy group. Without adjusting for these baseline differences, the simulation might misleadingly suggest that the policy worsens outcomes. In reality, this reflects the importance of stratifying or adjusting for social determinants when evaluating interventions aimed at reducing disparities. The simulation thus highlights how easily misleading conclusions can arise if disparities are not properly accounted for in causal analysis.
+
+## Prevention program evaluation
+
+Prevention program evaluation involves assessing the effectiveness of initiatives designed to reduce the risk of adverse health outcomes before they occur. These programs might target behaviors (e.g., smoking cessation), environmental risks (e.g., air quality improvement), or access to services (e.g., vaccination campaigns). Evaluators aim to determine whether the program caused measurable changes in outcomes such as disease incidence, risk factor reduction, or health equity. This requires careful consideration of confounding factors, selection bias, and whether the observed differences can be attributed to the intervention itself — making causal inference tools central to prevention research.
+
+In our simulation, the public health policy acts like a prevention program aimed at improving long-term health outcomes. By comparing the health trajectories of individuals in the policy versus no-policy groups, we can estimate the effect of the intervention. However, the simulation also reveals a key challenge: even if a program targets at-risk populations, initial disparities (like poorer baseline health) may mask its true benefits unless we adjust for those differences. This mirrors real-world prevention evaluations, where randomized trials or proper covariate adjustment are essential to distinguish actual program impact from background variability.
+
+<!--chapter:end:09_public_health.Rmd-->
+
+# Presentation of Final Projects
+
+> ## Class materials
+>
+> Slides: [**Final Project Overview**](https://your-slide-link.com)
+>
+> Recording: [**Project Presentation Session**](https://your-recording-link.com)
+
+> ## Guidelines
+>
+> -   Presentation of Final Projects
+> -   Review of group projects
+
+## Final Project
+
+The final project is a group-based assignment designed to assess your ability to critically evaluate causal claims in real-world public health or epidemiological research. Working in teams of 3–4, you will select a published study and analyze it through the lens of causal inference. This includes clearly identifying the causal question the authors are attempting to answer, articulating the assumptions underlying their analysis, and evaluating whether the study’s design supports a valid causal interpretation. You’ll be expected to consider the use of tools like directed acyclic graphs (DAGs), potential confounders, selection bias, and whether the identification strategy is sound.
+
+In addition to identifying strengths and weaknesses in the study, your team will propose potential improvements or alternative approaches that could enhance causal validity. This might involve suggesting better adjustment strategies, different data collection designs, or more transparent modeling techniques. Ultimately, your goal is to interpret the study’s findings not just statistically, but causally — and explain their relevance for real-world public health policy or interventions. Your work will culminate in a 10-minute group presentation during Week 10 and a 3–4 page written report submitted during finals week, both of which demonstrate your ability to apply course concepts to actual scientific literature.
+
+<!--chapter:end:10_final_project.Rmd-->
+

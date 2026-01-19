@@ -28,6 +28,8 @@ In this course, students will:
 
 This course is ideal for undergraduates interested in public health, epidemiology, biostatistics, or social science research.  
 
+[Syllabus](https://drive.google.com/file/d/1BX3TzItawFqx8ejSJK2UkUtC2VJxEZ6h/view?usp=sharing)  
+
 ## Instructor {.unnumbered}
 
 **Falco J. Bargagli-Stoffi**  
@@ -90,4 +92,8 @@ This course will make use of:
 
 -   [UCLA Center for Accessible Education](http://www.cae.ucla.edu)  
 -   [UCLA Equity, Diversity, and Inclusion](https://equity.ucla.edu)  
--   [FSPH EDI Initiative](https://ph.ucla.edu/about-fsph/fsph-equity-diversity-and-inclusion-taking-action-together)  
+-   [FSPH EDI Initiative](https://ph.ucla.edu/about-fsph/fsph-equity-diversity-and-inclusion-taking-action-together) 
+
+## Acknowledgments {-}
+
+Special thanks to Charlie Wang, Shravani Chiddarwar and Kevin Ngo for their invaluable help in preparing this course.
