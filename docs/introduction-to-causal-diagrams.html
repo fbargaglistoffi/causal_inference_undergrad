@@ -276,29 +276,29 @@ Examples from public health studies involving confounding adjustment</p>
 <p>Directed acyclic graphs (DAGs) are powerful tools in causal inference that visually represent assumptions about how variables are related. In a DAG, nodes represent variables, and arrows (directed edges) represent causal influences from one variable to another. DAGs are acyclic, meaning you cannot return to the same variable by following a sequence of arrows — this prevents feedback loops. These graphs also are directed, meaning that they show the ways we think the causal relationships flow from one variable to another using the arrows.</p>
 <p>The key strength of DAGs lies in their ability to clarify causal pathways, distinguish between confounding and mediation, and identify the variables we need to control for to estimate causal effects accurately. By encoding assumptions explicitly, DAGs help researchers determine whether observed associations reflect true causal relationships or are biased by omitted variables or incorrect conditioning.</p>
 <p>In our simulation, we use a DAG to represent a common public health structure involving diet, exercise, and heart health. Diet is a confounder: it directly influences both how much people exercise and their overall heart health. If we ignore diet when estimating the effect of exercise on heart health, we risk attributing diet’s effect to exercise — leading to confounding bias. The DAG for this scenario includes arrows from diet to both exercise and heart health, and from exercise to heart health.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="introduction-to-causal-diagrams.html#cb49-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb49-2"><a href="introduction-to-causal-diagrams.html#cb49-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
-<span id="cb49-3"><a href="introduction-to-causal-diagrams.html#cb49-3" tabindex="-1"></a><span class="co"># library(ggdag)</span></span>
-<span id="cb49-4"><a href="introduction-to-causal-diagrams.html#cb49-4" tabindex="-1"></a><span class="co"># library(dagitty)</span></span>
-<span id="cb49-5"><a href="introduction-to-causal-diagrams.html#cb49-5" tabindex="-1"></a><span class="co"># library(bnlearn)</span></span>
-<span id="cb49-6"><a href="introduction-to-causal-diagrams.html#cb49-6" tabindex="-1"></a><span class="co"># library(igraph)</span></span>
-<span id="cb49-7"><a href="introduction-to-causal-diagrams.html#cb49-7" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="introduction-to-causal-diagrams.html#cb49-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb49-9"><a href="introduction-to-causal-diagrams.html#cb49-9" tabindex="-1"></a></span>
-<span id="cb49-10"><a href="introduction-to-causal-diagrams.html#cb49-10" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb49-11"><a href="introduction-to-causal-diagrams.html#cb49-11" tabindex="-1"></a></span>
-<span id="cb49-12"><a href="introduction-to-causal-diagrams.html#cb49-12" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb49-13"><a href="introduction-to-causal-diagrams.html#cb49-13" tabindex="-1"></a></span>
-<span id="cb49-14"><a href="introduction-to-causal-diagrams.html#cb49-14" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb49-15"><a href="introduction-to-causal-diagrams.html#cb49-15" tabindex="-1"></a></span>
-<span id="cb49-16"><a href="introduction-to-causal-diagrams.html#cb49-16" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> exercise <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb49-17"><a href="introduction-to-causal-diagrams.html#cb49-17" tabindex="-1"></a></span>
-<span id="cb49-18"><a href="introduction-to-causal-diagrams.html#cb49-18" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(diet, exercise, heart_health)</span>
-<span id="cb49-19"><a href="introduction-to-causal-diagrams.html#cb49-19" tabindex="-1"></a></span>
-<span id="cb49-20"><a href="introduction-to-causal-diagrams.html#cb49-20" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">model2network</span>(<span class="st">&quot;[diet][exercise|diet][heart_health|diet:exercise]&quot;</span>)</span>
-<span id="cb49-21"><a href="introduction-to-causal-diagrams.html#cb49-21" tabindex="-1"></a>g <span class="ot">&lt;-</span> bnlearn<span class="sc">::</span><span class="fu">as.igraph</span>(dag)</span>
-<span id="cb49-22"><a href="introduction-to-causal-diagrams.html#cb49-22" tabindex="-1"></a><span class="fu">plot</span>(g, <span class="at">layout =</span> <span class="fu">layout_as_tree</span>(g, <span class="at">root =</span> <span class="st">&quot;diet&quot;</span>),</span>
-<span id="cb49-23"><a href="introduction-to-causal-diagrams.html#cb49-23" tabindex="-1"></a>     <span class="at">vertex.label.color=</span><span class="st">&quot;black&quot;</span>, <span class="at">vertex.size=</span><span class="dv">60</span>, <span class="at">edge.arrow.size=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="introduction-to-causal-diagrams.html#cb57-1" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
+<span id="cb57-2"><a href="introduction-to-causal-diagrams.html#cb57-2" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
+<span id="cb57-3"><a href="introduction-to-causal-diagrams.html#cb57-3" tabindex="-1"></a><span class="co"># library(ggdag)</span></span>
+<span id="cb57-4"><a href="introduction-to-causal-diagrams.html#cb57-4" tabindex="-1"></a><span class="co"># library(dagitty)</span></span>
+<span id="cb57-5"><a href="introduction-to-causal-diagrams.html#cb57-5" tabindex="-1"></a><span class="co"># library(bnlearn)</span></span>
+<span id="cb57-6"><a href="introduction-to-causal-diagrams.html#cb57-6" tabindex="-1"></a><span class="co"># library(igraph)</span></span>
+<span id="cb57-7"><a href="introduction-to-causal-diagrams.html#cb57-7" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="introduction-to-causal-diagrams.html#cb57-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb57-9"><a href="introduction-to-causal-diagrams.html#cb57-9" tabindex="-1"></a></span>
+<span id="cb57-10"><a href="introduction-to-causal-diagrams.html#cb57-10" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb57-11"><a href="introduction-to-causal-diagrams.html#cb57-11" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="introduction-to-causal-diagrams.html#cb57-12" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb57-13"><a href="introduction-to-causal-diagrams.html#cb57-13" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="introduction-to-causal-diagrams.html#cb57-14" tabindex="-1"></a>exercise <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb57-15"><a href="introduction-to-causal-diagrams.html#cb57-15" tabindex="-1"></a></span>
+<span id="cb57-16"><a href="introduction-to-causal-diagrams.html#cb57-16" tabindex="-1"></a>heart_health <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> exercise <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> diet <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb57-17"><a href="introduction-to-causal-diagrams.html#cb57-17" tabindex="-1"></a></span>
+<span id="cb57-18"><a href="introduction-to-causal-diagrams.html#cb57-18" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(diet, exercise, heart_health)</span>
+<span id="cb57-19"><a href="introduction-to-causal-diagrams.html#cb57-19" tabindex="-1"></a></span>
+<span id="cb57-20"><a href="introduction-to-causal-diagrams.html#cb57-20" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">model2network</span>(<span class="st">&quot;[diet][exercise|diet][heart_health|diet:exercise]&quot;</span>)</span>
+<span id="cb57-21"><a href="introduction-to-causal-diagrams.html#cb57-21" tabindex="-1"></a>g <span class="ot">&lt;-</span> bnlearn<span class="sc">::</span><span class="fu">as.igraph</span>(dag)</span>
+<span id="cb57-22"><a href="introduction-to-causal-diagrams.html#cb57-22" tabindex="-1"></a><span class="fu">plot</span>(g, <span class="at">layout =</span> <span class="fu">layout_as_tree</span>(g, <span class="at">root =</span> <span class="st">&quot;diet&quot;</span>),</span>
+<span id="cb57-23"><a href="introduction-to-causal-diagrams.html#cb57-23" tabindex="-1"></a>     <span class="at">vertex.label.color=</span><span class="st">&quot;black&quot;</span>, <span class="at">vertex.size=</span><span class="dv">60</span>, <span class="at">edge.arrow.size=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <div id="common-causal-structures-in-public-health" class="section level2 hasAnchor" number="5.2">

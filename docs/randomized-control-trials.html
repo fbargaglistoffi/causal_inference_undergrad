@@ -297,39 +297,39 @@ ATE &amp;= E[Y(1) - Y(0)] \\
 <p>Because of this design, RCTs eliminate the need to adjust for confounders or worry about selection bias in the same way observational studies do. They provide clean estimates of the average treatment effect (ATE) with high internal validity, especially when they are well-executed and have minimal loss to follow-up. However, RCTs are not without limitations. They can be expensive, time-consuming, and sometimes unethical or impractical—such as when withholding treatment would cause harm. Despite these limitations, RCTs serve as the benchmark against which other study designs are compared, and understanding their strengths helps us interpret both experimental and non-experimental evidence more critically.</p>
 <p>In this simulation, I will recreate a simple randomized controlled trial (RCT) to estimate the effect of a new treatment on a patient’s blood pressure (mmHg). I randomly assigned 2,000 individuals to either a treatment or control group and simulate their outcomes based on their assignment. Because of randomization, I expected the two groups to be similar in baseline characteristics, allowing for an unbiased estimate of the treatment effect. In this example, the baseline characteristics that were measured were age, BMI, cholesterol (mg/dL), and daily sodium intake (mg/day). After simulating the data, I estimated the Average Treatment Effect (ATE) by comparing mean outcomes between the groups, and visualized the distribution of outcomes to confirm the treatment impact.</p>
 <p><strong>Simulated Baseline Data and Treatment Assignment</strong></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="randomized-control-trials.html#cb28-1" tabindex="-1"></a><span class="co"># pacman::p_load(&quot;dplyr&quot;, &quot;ggplot2&quot;)</span></span>
-<span id="cb28-2"><a href="randomized-control-trials.html#cb28-2" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="randomized-control-trials.html#cb28-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb28-4"><a href="randomized-control-trials.html#cb28-4" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="randomized-control-trials.html#cb28-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb28-6"><a href="randomized-control-trials.html#cb28-6" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="randomized-control-trials.html#cb28-7" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)</span>
-<span id="cb28-8"><a href="randomized-control-trials.html#cb28-8" tabindex="-1"></a></span>
-<span id="cb28-9"><a href="randomized-control-trials.html#cb28-9" tabindex="-1"></a>bmi <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">27</span>, <span class="dv">4</span>)</span>
-<span id="cb28-10"><a href="randomized-control-trials.html#cb28-10" tabindex="-1"></a></span>
-<span id="cb28-11"><a href="randomized-control-trials.html#cb28-11" tabindex="-1"></a>cholesterol <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">200</span>, <span class="dv">30</span>)</span>
-<span id="cb28-12"><a href="randomized-control-trials.html#cb28-12" tabindex="-1"></a></span>
-<span id="cb28-13"><a href="randomized-control-trials.html#cb28-13" tabindex="-1"></a>sodium_intake <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">3000</span>, <span class="dv">500</span>)</span>
-<span id="cb28-14"><a href="randomized-control-trials.html#cb28-14" tabindex="-1"></a></span>
-<span id="cb28-15"><a href="randomized-control-trials.html#cb28-15" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
-<span id="cb28-16"><a href="randomized-control-trials.html#cb28-16" tabindex="-1"></a></span>
-<span id="cb28-17"><a href="randomized-control-trials.html#cb28-17" tabindex="-1"></a>y_0 <span class="ot">&lt;-</span> <span class="dv">90</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fl">0.05</span> <span class="sc">*</span> cholesterol <span class="sc">+</span> <span class="fl">0.004</span> <span class="sc">*</span> sodium_intake <span class="sc">+</span> </span>
-<span id="cb28-18"><a href="randomized-control-trials.html#cb28-18" tabindex="-1"></a>  <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">10</span>)</span>
-<span id="cb28-19"><a href="randomized-control-trials.html#cb28-19" tabindex="-1"></a></span>
-<span id="cb28-20"><a href="randomized-control-trials.html#cb28-20" tabindex="-1"></a>y_1 <span class="ot">&lt;-</span> y_0 <span class="sc">-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">5</span>)</span>
-<span id="cb28-21"><a href="randomized-control-trials.html#cb28-21" tabindex="-1"></a></span>
-<span id="cb28-22"><a href="randomized-control-trials.html#cb28-22" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(treatment <span class="sc">==</span> <span class="dv">1</span>, y_1, y_0)</span>
-<span id="cb28-23"><a href="randomized-control-trials.html#cb28-23" tabindex="-1"></a></span>
-<span id="cb28-24"><a href="randomized-control-trials.html#cb28-24" tabindex="-1"></a>rct_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb28-25"><a href="randomized-control-trials.html#cb28-25" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
-<span id="cb28-26"><a href="randomized-control-trials.html#cb28-26" tabindex="-1"></a>  <span class="at">bmi =</span> bmi,</span>
-<span id="cb28-27"><a href="randomized-control-trials.html#cb28-27" tabindex="-1"></a>  <span class="at">cholesterol =</span> cholesterol,</span>
-<span id="cb28-28"><a href="randomized-control-trials.html#cb28-28" tabindex="-1"></a>  <span class="at">sodium_intake =</span> sodium_intake,</span>
-<span id="cb28-29"><a href="randomized-control-trials.html#cb28-29" tabindex="-1"></a>  <span class="at">treatment =</span> treatment,</span>
-<span id="cb28-30"><a href="randomized-control-trials.html#cb28-30" tabindex="-1"></a>  <span class="at">y =</span> y</span>
-<span id="cb28-31"><a href="randomized-control-trials.html#cb28-31" tabindex="-1"></a>)</span>
-<span id="cb28-32"><a href="randomized-control-trials.html#cb28-32" tabindex="-1"></a></span>
-<span id="cb28-33"><a href="randomized-control-trials.html#cb28-33" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="randomized-control-trials.html#cb36-1" tabindex="-1"></a><span class="co"># pacman::p_load(&quot;dplyr&quot;, &quot;ggplot2&quot;)</span></span>
+<span id="cb36-2"><a href="randomized-control-trials.html#cb36-2" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="randomized-control-trials.html#cb36-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb36-4"><a href="randomized-control-trials.html#cb36-4" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="randomized-control-trials.html#cb36-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb36-6"><a href="randomized-control-trials.html#cb36-6" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="randomized-control-trials.html#cb36-7" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)</span>
+<span id="cb36-8"><a href="randomized-control-trials.html#cb36-8" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="randomized-control-trials.html#cb36-9" tabindex="-1"></a>bmi <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">27</span>, <span class="dv">4</span>)</span>
+<span id="cb36-10"><a href="randomized-control-trials.html#cb36-10" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="randomized-control-trials.html#cb36-11" tabindex="-1"></a>cholesterol <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">200</span>, <span class="dv">30</span>)</span>
+<span id="cb36-12"><a href="randomized-control-trials.html#cb36-12" tabindex="-1"></a></span>
+<span id="cb36-13"><a href="randomized-control-trials.html#cb36-13" tabindex="-1"></a>sodium_intake <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">3000</span>, <span class="dv">500</span>)</span>
+<span id="cb36-14"><a href="randomized-control-trials.html#cb36-14" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="randomized-control-trials.html#cb36-15" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb36-16"><a href="randomized-control-trials.html#cb36-16" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="randomized-control-trials.html#cb36-17" tabindex="-1"></a>y_0 <span class="ot">&lt;-</span> <span class="dv">90</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="fl">0.05</span> <span class="sc">*</span> cholesterol <span class="sc">+</span> <span class="fl">0.004</span> <span class="sc">*</span> sodium_intake <span class="sc">+</span> </span>
+<span id="cb36-18"><a href="randomized-control-trials.html#cb36-18" tabindex="-1"></a>  <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb36-19"><a href="randomized-control-trials.html#cb36-19" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="randomized-control-trials.html#cb36-20" tabindex="-1"></a>y_1 <span class="ot">&lt;-</span> y_0 <span class="sc">-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb36-21"><a href="randomized-control-trials.html#cb36-21" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="randomized-control-trials.html#cb36-22" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(treatment <span class="sc">==</span> <span class="dv">1</span>, y_1, y_0)</span>
+<span id="cb36-23"><a href="randomized-control-trials.html#cb36-23" tabindex="-1"></a></span>
+<span id="cb36-24"><a href="randomized-control-trials.html#cb36-24" tabindex="-1"></a>rct_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb36-25"><a href="randomized-control-trials.html#cb36-25" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
+<span id="cb36-26"><a href="randomized-control-trials.html#cb36-26" tabindex="-1"></a>  <span class="at">bmi =</span> bmi,</span>
+<span id="cb36-27"><a href="randomized-control-trials.html#cb36-27" tabindex="-1"></a>  <span class="at">cholesterol =</span> cholesterol,</span>
+<span id="cb36-28"><a href="randomized-control-trials.html#cb36-28" tabindex="-1"></a>  <span class="at">sodium_intake =</span> sodium_intake,</span>
+<span id="cb36-29"><a href="randomized-control-trials.html#cb36-29" tabindex="-1"></a>  <span class="at">treatment =</span> treatment,</span>
+<span id="cb36-30"><a href="randomized-control-trials.html#cb36-30" tabindex="-1"></a>  <span class="at">y =</span> y</span>
+<span id="cb36-31"><a href="randomized-control-trials.html#cb36-31" tabindex="-1"></a>)</span>
+<span id="cb36-32"><a href="randomized-control-trials.html#cb36-32" tabindex="-1"></a></span>
+<span id="cb36-33"><a href="randomized-control-trials.html#cb36-33" tabindex="-1"></a><span class="fu">head</span>(rct_data)</span></code></pre></div>
 <pre><code>##        age      bmi cholesterol sodium_intake treatment        y
 ## 1 44.39524 24.95359    205.8965      2650.386         1 139.3092
 ## 2 47.69823 27.94775    219.5034      3498.226         0 127.8826
@@ -338,33 +338,33 @@ ATE &amp;= E[Y(1) - Y(0)] \\
 ## 5 51.29288 27.69654    139.2167      3301.933         0 157.9980
 ## 6 67.15065 24.53893    266.1598      2695.978         1 125.1818</code></pre>
 <p><strong>Estimated the Average Treatment Effect (ATE)</strong></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="randomized-control-trials.html#cb30-1" tabindex="-1"></a>ate_estimate <span class="ot">&lt;-</span> rct_data <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="randomized-control-trials.html#cb30-2" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="randomized-control-trials.html#cb30-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_outcome =</span> <span class="fu">mean</span>(y)) <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="randomized-control-trials.html#cb30-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ATE =</span> <span class="fu">diff</span>(mean_outcome)) <span class="sc">|&gt;</span></span>
-<span id="cb30-5"><a href="randomized-control-trials.html#cb30-5" tabindex="-1"></a>  <span class="fu">pull</span>(ATE)</span>
-<span id="cb30-6"><a href="randomized-control-trials.html#cb30-6" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="randomized-control-trials.html#cb30-7" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Estimated ATE: &quot;</span>, <span class="fu">round</span>(ate_estimate, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="randomized-control-trials.html#cb38-1" tabindex="-1"></a>ate_estimate <span class="ot">&lt;-</span> rct_data <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href="randomized-control-trials.html#cb38-2" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="randomized-control-trials.html#cb38-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_outcome =</span> <span class="fu">mean</span>(y)) <span class="sc">|&gt;</span></span>
+<span id="cb38-4"><a href="randomized-control-trials.html#cb38-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ATE =</span> <span class="fu">diff</span>(mean_outcome)) <span class="sc">|&gt;</span></span>
+<span id="cb38-5"><a href="randomized-control-trials.html#cb38-5" tabindex="-1"></a>  <span class="fu">pull</span>(ATE)</span>
+<span id="cb38-6"><a href="randomized-control-trials.html#cb38-6" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="randomized-control-trials.html#cb38-7" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Estimated ATE: &quot;</span>, <span class="fu">round</span>(ate_estimate, <span class="dv">2</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;Estimated ATE:  -10.01&quot;</code></pre>
 <p>Based on our estimate, the treatment reduces blood pressure by 10 mmHg.</p>
 <p><strong>Visualization of the Outcome Distributions</strong></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="randomized-control-trials.html#cb32-1" tabindex="-1"></a><span class="fu">ggplot</span>(rct_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> y, <span class="at">fill =</span> <span class="fu">as.factor</span>(treatment))) <span class="sc">+</span> </span>
-<span id="cb32-2"><a href="randomized-control-trials.html#cb32-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
-<span id="cb32-3"><a href="randomized-control-trials.html#cb32-3" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb32-4"><a href="randomized-control-trials.html#cb32-4" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribution of Outcomes by Treatment Group&quot;</span>, </span>
-<span id="cb32-5"><a href="randomized-control-trials.html#cb32-5" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Treatment: Control (0) vs Treated (1)&quot;</span>,</span>
-<span id="cb32-6"><a href="randomized-control-trials.html#cb32-6" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Outcome&quot;</span></span>
-<span id="cb32-7"><a href="randomized-control-trials.html#cb32-7" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb32-8"><a href="randomized-control-trials.html#cb32-8" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb32-9"><a href="randomized-control-trials.html#cb32-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="randomized-control-trials.html#cb40-1" tabindex="-1"></a><span class="fu">ggplot</span>(rct_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> y, <span class="at">fill =</span> <span class="fu">as.factor</span>(treatment))) <span class="sc">+</span> </span>
+<span id="cb40-2"><a href="randomized-control-trials.html#cb40-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb40-3"><a href="randomized-control-trials.html#cb40-3" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb40-4"><a href="randomized-control-trials.html#cb40-4" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribution of Outcomes by Treatment Group&quot;</span>, </span>
+<span id="cb40-5"><a href="randomized-control-trials.html#cb40-5" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Treatment: Control (0) vs Treated (1)&quot;</span>,</span>
+<span id="cb40-6"><a href="randomized-control-trials.html#cb40-6" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Outcome&quot;</span></span>
+<span id="cb40-7"><a href="randomized-control-trials.html#cb40-7" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb40-8"><a href="randomized-control-trials.html#cb40-8" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb40-9"><a href="randomized-control-trials.html#cb40-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="randomized-control-trials.html#cb33-1" tabindex="-1"></a><span class="co"># library(cobalt)</span></span>
-<span id="cb33-2"><a href="randomized-control-trials.html#cb33-2" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="randomized-control-trials.html#cb33-3" tabindex="-1"></a>bal.out <span class="ot">&lt;-</span> <span class="fu">bal.tab</span>(treatment<span class="sc">~</span>age<span class="sc">+</span>bmi<span class="sc">+</span>cholesterol<span class="sc">+</span>sodium_intake, <span class="at">data =</span> rct_data, <span class="at">s.d.denom =</span> <span class="st">&quot;pooled&quot;</span>)</span>
-<span id="cb33-4"><a href="randomized-control-trials.html#cb33-4" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="randomized-control-trials.html#cb33-5" tabindex="-1"></a><span class="fu">set.cobalt.options</span>(<span class="at">binary =</span> <span class="st">&quot;std&quot;</span>)</span>
-<span id="cb33-6"><a href="randomized-control-trials.html#cb33-6" tabindex="-1"></a></span>
-<span id="cb33-7"><a href="randomized-control-trials.html#cb33-7" tabindex="-1"></a><span class="fu">love.plot</span>(bal.out, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="randomized-control-trials.html#cb41-1" tabindex="-1"></a><span class="co"># library(cobalt)</span></span>
+<span id="cb41-2"><a href="randomized-control-trials.html#cb41-2" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="randomized-control-trials.html#cb41-3" tabindex="-1"></a>bal.out <span class="ot">&lt;-</span> <span class="fu">bal.tab</span>(treatment<span class="sc">~</span>age<span class="sc">+</span>bmi<span class="sc">+</span>cholesterol<span class="sc">+</span>sodium_intake, <span class="at">data =</span> rct_data, <span class="at">s.d.denom =</span> <span class="st">&quot;pooled&quot;</span>)</span>
+<span id="cb41-4"><a href="randomized-control-trials.html#cb41-4" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="randomized-control-trials.html#cb41-5" tabindex="-1"></a><span class="fu">set.cobalt.options</span>(<span class="at">binary =</span> <span class="st">&quot;std&quot;</span>)</span>
+<span id="cb41-6"><a href="randomized-control-trials.html#cb41-6" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="randomized-control-trials.html#cb41-7" tabindex="-1"></a><span class="fu">love.plot</span>(bal.out, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>))</span></code></pre></div>
 <p><img src="Causal-Inference-Graduate_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>This visualization is called a <strong>love plot</strong>. It shows how balanced each of the observed characteristics is between the treated and control group. For example, a value of 0.05 for age means that the treated group’s mean age is 0.05 standard deviations above the control group’s mean age, which is not much. Typically, an absolute standardized difference value of 0.10 or less typically means that the difference between the groups is negligible.</p>
 <p>So in this plot, all the observed characteristics are balanced. This example shows that random assignment of the treatment balances observed and unobserved characteristics. Since the groups are so similar, we say that the treated and control groups are exchangeable.</p>
